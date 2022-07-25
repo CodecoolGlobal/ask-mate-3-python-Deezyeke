@@ -1,6 +1,7 @@
 from flask import Flask,render_template, request, redirect
 import data_operations
 from datetime import datetime
+from collections import OrderedDict
 
 app = Flask(__name__)
 
@@ -25,7 +26,19 @@ def add_question():
 @app.route('/list')
 def list():
     questions = data_operations.load_questions()
-    return render_template('list.html', questions = questions)
+    questions_ordered = orderby(questions)
+    return render_template('list.html', questions = questions_ordered)
+
+
+def orderby(questions):
+    question_list = []
+    for id in questions.keys():
+        question_list.append([ id, questions[id]['timestamp'] ])
+    question_list.sort(reverse=True, key=lambda x : x[1])
+    questions_ordered = OrderedDict()
+    for item in question_list:
+        questions_ordered[item[0]]=questions[item[0]]
+    return questions_ordered
 
 
 if __name__ == "__main__":
