@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Questions list </title>
+</head>
+<body>
+    <a href="/add_question"> Add a new question</a> <br> <br>
+    <table>
+        <tr>
+            <th> iD </th>
+            <th> Submission time </th>
+            <th> Question </th>
+        </tr>
+        {% for id in questions.keys()  %}
+            <tr>
+            <td> {{ id }}</td>
+            {% for key in questions[id].keys() %}
+                <td> {{ questions[id][key] }} </td>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
