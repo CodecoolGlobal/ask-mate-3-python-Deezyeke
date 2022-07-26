@@ -12,14 +12,16 @@
                 <th> <a href= "{{ "/list?action=" + header }}"> {{header}} </a> </th>
             {% endfor %}
         </tr>
-        {% for id in questions.keys()  %}
+        {% block id_field %}
+        {% for id in questions.keys() %}
             <tr>
-            {% block qid %} <td> {{ id }} </td> {% endblock %}
-            {% for key in questions[id].keys() %}
-                <td> {{ questions[id][key] }} </td>
-            {% endfor %}
+                <td> {{ id }} </td>
+                {% for key in questions[id].keys() %}
+                    <td> {{ questions[id][key] }} </td>
+                {% endfor %}
             </tr>
         {% endfor %}
+        {% endblock %}
     </table>
 </body>
 </html>

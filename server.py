@@ -1,4 +1,4 @@
-from flask import Flask,render_template, request, redirect
+from flask import Flask, render_template, request, redirect
 import data_operations
 from datetime import datetime
 from collections import OrderedDict
@@ -43,20 +43,31 @@ def add_question():
 @app.route('/')
 @app.route('/list')
 def list():
+    questions = data_operations.load_questions()
     if request.args.get('action') == None:
-        questions = data_operations.load_questions()
-        questions_ordered = orderby(questions)
-        return render_template('list.html', questions = questions_ordered, question_header = data_operations.QUESTION_HEADER)
+        return render_template('list.html', questions = questions, question_header = data_operations.QUESTION_HEADER)
+    else:
+        questions_ordered = orderby(questions, request.args.get('action'))
+        return render_template('list.html', questions=questions_ordered, question_header=data_operations.QUESTION_HEADER)
 
 
-def orderby(questions):
+def orderby(questions, orderby):
     question_list = []
-    for id in questions.keys():
-        question_list.append([ id, questions[id]['submission_time'] ])
-    question_list.sort(reverse=True, key=lambda x : x[1])
+
+    if orderby != 'id':
+        for id in questions.keys():
+            question_list.append([ questions[id][orderby], id ])
+            id = 1
+    else:
+        for id in questions.keys():
+            question_list.append([id])
+            id = 0
+
+    question_list.sort(reverse=True, key=lambda x : x[0])
     questions_ordered = OrderedDict()
     for item in question_list:
-        questions_ordered[item[0]]=questions[item[0]]
+        questions_ordered[item[id]]=questions[item[id]]
+
     return questions_ordered
 
 
