@@ -5,7 +5,32 @@
     <title> Add a question </title>
 </head>
 <body>
-<h1>Title:</h1>
-
+<h2>Title:</h2>
+{% for q_id, value in question.items() %}
+    {% if q_id == id %}
+        {% if value['title'] == ' ' %}
+            <h4><i>This title is empty</i></h4>
+        {% endif %}
+        <h4>{{ value['title'] }}</h4>
+    {% endif %}
+{% endfor %}
+<h2>Question:</h2>
+{% for q_id, value in question.items() %}
+    {% if q_id == id %}
+        {% if value['message'] == ' ' %}
+            <h4><i>There is no question added</i></h4>
+        {% endif %}
+        <h4>{{ value['message'] }}</h4>
+    {% endif %}
+{% endfor %}
+<h2>Answer(s):</h2>
+{% for a_id, value in answer.items()%}
+    {% if value['questionid'] == id %}
+        {% if value['message'] == ' ' %}
+            <h4><i>There is no answer added</i></h4>
+        {% endif %}
+        <h4>{{ value['message'] }}</h4>
+    {% endif %}
+{% endfor %}
 </body>
 </html>

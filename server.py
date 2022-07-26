@@ -43,7 +43,7 @@ def add_question():
 @app.route('/')
 @app.route('/list')
 def list():
-    questions = data_operations.load_questions()
+    questions = data_operations.load_csv(data_operations.FILENAME_QUESTIONS)
     if request.args.get('action') == None:
         return render_template('list.html', questions = questions, question_header = data_operations.QUESTION_HEADER)
     else:
@@ -73,8 +73,11 @@ def orderby(questions, orderby):
 
 @app.route('/questions/<id>')
 def questions_and_answers(id):
-    questions = data_operations.load_questions()
-    return render_template('display_question.html', question=questions, id=id)
+    questions = data_operations.load_csv(data_operations.FILENAME_QUESTIONS)
+    answers = data_operations.load_csv(data_operations.FILENAME_ANSWERS)
+    print(questions.values())
+    print(answers.values())
+    return render_template('display_question.html', question=questions, answer=answers, id=id)
 
 
 if __name__ == "__main__":
