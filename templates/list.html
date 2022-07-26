@@ -8,9 +8,9 @@
     <a href="/add_question"> Add a new question</a> <br> <br>
     <table>
         <tr>
-            <th> <a href="/list?id"> iD </a> </th>
-            <th> <a href="/proba"> Submission time </a> </th>
-            <th> <a href="/proba"> Question </a> </th>
+            {% for header in question_header  %}
+            <th> <a href="/list?id"> {{ header }}</a> </th>
+            {% endfor %}
         </tr>
         {% for id in questions.keys()  %}
             <tr>

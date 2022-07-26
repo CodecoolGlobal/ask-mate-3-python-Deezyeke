@@ -16,9 +16,11 @@ def init_questions():
 
 def init_question():
     question = {}
-    question[id] = data_operations.create_id()
     for field in data_operations.QUESTION_HEADER:
-        question[field] = ' '
+        if field == 'id':
+            question[field] = data_operations.create_id()
+        else:
+            question[field] = ' '
     return question
 
 
@@ -28,7 +30,9 @@ def add_question():
         return render_template('add_question.html')
     elif request.method == 'POST':
         question = init_question()
+        now = datetime.now()
         question['submission_time'] = now.strftime("%Y/%m/%d %H:%M:%S")
+        question['title'] = request.form.get('title')
         question['message'] = request.form.get('text')
         data_operations.save_question(question)
 
@@ -41,13 +45,13 @@ def add_question():
 def list():
     questions = data_operations.load_questions()
     questions_ordered = orderby(questions)
-    return render_template('list.html', questions = questions_ordered)
+    return render_template('list.html', questions = questions_ordered, question_header = data_operations.QUESTION_HEADER)
 
 
 def orderby(questions):
     question_list = []
     for id in questions.keys():
-        question_list.append([ id, questions[id]['timestamp'] ])
+        question_list.append([ id, questions[id]['submission_time'] ])
     question_list.sort(reverse=True, key=lambda x : x[1])
     questions_ordered = OrderedDict()
     for item in question_list:
