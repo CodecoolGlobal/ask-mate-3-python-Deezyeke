@@ -43,7 +43,7 @@ def add_question():
 @app.route('/')
 @app.route('/list', methods = ['GET'])
 def list():
-    questions = data_operations.load_questions()
+    questions = data_operations.load_csv(data_operations.FILENAME_QUESTIONS)
     if request.args.get('orderby') == None:
         return render_template('list.html', orderby='id', questions = questions, question_header = data_operations.QUESTION_HEADER)
     else:
@@ -68,6 +68,7 @@ def orderby(questions, orderby, order):
 
     question_list.sort(reverse=True if order=='asc' else False, key=lambda x : x[0])
     questions_ordered = OrderedDict()
+
     for item in question_list:
         questions_ordered[item[id]]=questions[item[id]]
 

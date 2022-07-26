@@ -1,35 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title> Questions list </title>
 </head>
+
 <body>
-    <form action="/list" method="POST">
-        <a href="/add_question"> Add a new question</a> <br> <br>
-        <label for="AscDesc"> Order by: </label> <br>
-        <button type="submit" name="AscDesc" id="AscDesc" value ='asc'> Ascending </button> <br> <br>
-        <table>
-            <tr>
-                {% block question_list %}
-                {% for header in question_header  %}
-                    {% if header == orderby %}
-                        <th> <a href= "{{ "/list?orderby=" + header + "&order=asc"}}"> >>+{{header}}+<< </a> </th>
-                    {% else %}
-                        <th> <a href= "{{ "/list?orderby=" + header + "&order=asc"}}"> {{header}} </a> </th>
-                    {% endif %}
-                {% endfor %}
-                {% endblock %}
-            </tr>
-            {% for id in questions.keys() %}
-                <tr>
-                    <td> {{ id }} </td>
-                    {% for key in questions[id].keys() %}
-                        <td> {{ questions[id][key] }} </td>
-                    {% endfor %}
-                </tr>
+    <a href="/add_question"> Add a new question </a> <br> <br>
+    <table>
+        <tr>
+            {% block question_list %}
+            {% for header in question_header  %}
+                {% if header == orderby %}
+                    <th> <a href= "{{ "/list?orderby=" + header + "&order=asc"}}"> >>+{{header}}+<< </a> </th>
+                {% else %}
+                    <th> <a href= "{{ "/list?orderby=" + header + "&order=asc"}}"> {{header}} </a> </th>
+                {% endif %}
             {% endfor %}
-        </table>
-    </form>
+            {% endblock %}
+        </tr>
+        {% for id in questions.keys() %}
+            <tr>
+                <td> {{ id }} </td>
+                {% for key in questions[id].keys() %}
+                    <td> {{ questions[id][key] }} </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
 </body>
+
 </html>
