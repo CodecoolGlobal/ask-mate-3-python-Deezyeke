@@ -3,7 +3,7 @@ import os
 from collections import OrderedDict
 
 FILENAME_QUESTIONS = 'question.csv'
-QUESTION_HEADER = ['id', 'timestamp', 'text']
+QUESTION_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
 
 
 def create_id():

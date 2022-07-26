@@ -6,16 +6,30 @@ from collections import OrderedDict
 app = Flask(__name__)
 
 
+def init_questions():
+    questions = OrderedDict()
+    question = OrderedDict()
+    for field in data_operations.QUESTION_HEADER():
+        question[field] = ' '
+    questions[data_operations.create_id()] = question
+
+
+def init_question():
+    question = {}
+    question[id] = data_operations.create_id()
+    for field in data_operations.QUESTION_HEADER:
+        question[field] = ' '
+    return question
+
+
 @app.route('/add_question', methods=['GET', 'POST'])
 def add_question():
     if request.method == 'GET':
         return render_template('add_question.html')
     elif request.method == 'POST':
-        question ={}
-        now = datetime.now()
-        question['id'] = data_operations.create_id()
-        question['timestamp'] = now.strftime("%Y/%m/%d %H:%M:%S")
-        question['text'] = request.form.get('text')
+        question = init_question()
+        question['submission_time'] = now.strftime("%Y/%m/%d %H:%M:%S")
+        question['message'] = request.form.get('text')
         data_operations.save_question(question)
 
 ## !!!  Ezt át kell majd írni   !!!
