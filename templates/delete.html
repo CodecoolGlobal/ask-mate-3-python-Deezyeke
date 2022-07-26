@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Delete Question</title>
+    </head>
+    <body>
+        <h2>If you want to delete a question.</h2>
+        <p>
+            <table>
+                {% for id in questions.keys()  %}
+                    <tr>
+                    <td> {{ id }}</td>
+                    {% for key in questions[id].keys() %}
+                        <td> {{ questions[id][key] }} </td>
+                    {% endfor %}
+                    <td>
+                        <a href="{{ url_for('list') }}"><button type="button">Delete</button></a>
+                    </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </p>
+    </body>
+</html>

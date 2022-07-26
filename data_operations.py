@@ -33,3 +33,7 @@ def save_question(question):
     with open(FILENAME_QUESTIONS, 'a') as f:
         f_csv = csv.DictWriter(f, fieldnames = QUESTION_HEADER)
         f_csv.writerow(question)
+
+
+def delete_question():
+    pass

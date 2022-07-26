@@ -5,7 +5,8 @@
     <title> Questions list </title>
 </head>
 <body>
-    <a href="/add_question"> Add a new question</a> <br> <br>
+    <a href="/add_question"> Add a new question</a> <br>
+    <a href="{{ url_for('delete_question') }}">Delete Question</a> <br> <br>
     <table>
         <tr>
             {% for header in question_header  %}

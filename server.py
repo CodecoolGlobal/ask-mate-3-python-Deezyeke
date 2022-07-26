@@ -59,6 +59,13 @@ def orderby(questions):
     return questions_ordered
 
 
+@app.route('/delete')
+def delete_question():
+    questions = data_operations.load_questions()
+    questions_ordered = orderby(questions)
+    return render_template('delete.html', questions=questions_ordered, questioins_header=data_operations.QUESTION_HEADER)
+
+
 if __name__ == "__main__":
     app.run(
         host='0.0.0.0',
