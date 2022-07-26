@@ -41,17 +41,17 @@ def add_question():
 
 
 @app.route('/')
-@app.route('/list', methods = ['GET'])
+@app.route('/list')
 def list():
     questions = data_operations.load_csv(data_operations.FILENAME_QUESTIONS)
     if request.args.get('orderby') == None:
-        return render_template('list.html', orderby='id', questions = questions, question_header = data_operations.QUESTION_HEADER)
+        return render_template('questions_list.html', orderby='id', questions = questions, question_header = data_operations.QUESTION_HEADER)
     else:
         questions_ordered = orderby( questions, request.args.get('orderby'), request.args.get('order') )
         if request.args.get('order') == 'desc':
-            return render_template('list.html', orderby=request.args.get('orderby'), questions=questions_ordered, question_header=data_operations.QUESTION_HEADER)
+            return render_template('questions_list.html', orderby=request.args.get('orderby'), questions=questions_ordered, question_header=data_operations.QUESTION_HEADER)
         elif request.args.get('order') == 'asc':
-            return render_template('list_desc.html', orderby=request.args.get('orderby'), questions=questions_ordered, question_header=data_operations.QUESTION_HEADER)
+            return render_template('questions_list_desc.html', orderby=request.args.get('orderby'), questions=questions_ordered, question_header=data_operations.QUESTION_HEADER)
 
 
 def orderby(questions, orderby, order):
