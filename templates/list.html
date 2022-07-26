@@ -6,19 +6,18 @@
 </head>
 <body>
     <a href="/add_question"> Add a new question</a> <br>
-    <a href="{{ url_for('delete_question') }}">Delete Question</a> <br> <br>
     <table>
         <tr>
             {% for header in question_header  %}
-            <th> <a href="/list?id"> {{ header }}</a> </th>
+                <th> <a href= "{{ "/list?action=" + header }}"> {{header}} </a> </th>
             {% endfor %}
         </tr>
-        {% for id in questions.keys()  %}
+        {% for id in questions.keys() %}
             <tr>
-            <td> {{ id }}</td>
-            {% for key in questions[id].keys() %}
-                <td> {{ questions[id][key] }} </td>
-            {% endfor %}
+                <td><a href={{ url_for('questions_and_answers', id=id)}}>{{ id }}</a> </td>
+                {% for key in questions[id].keys() %}
+                    <td> {{ questions[id][key] }} </td>
+                {% endfor %}
             </tr>
         {% endfor %}
     </table>
