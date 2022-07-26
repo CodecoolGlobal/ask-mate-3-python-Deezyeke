@@ -1,6 +1,4 @@
-id,timestamp,text
-37f716cb,2022/07/25 20:50:14,Első próba.
-0becd6b8,2022/07/25 20:50:24,Második próba
-159fbbf1,2022/07/25 20:52:14,"Harmadik próba, Ez kicsit hosszabb."
-f70e3b5e,2022/07/25 20:57:55,Transzmutációs relikviaharc.
-a9298062,2022/07/25 20:59:52,Lookup.
+id,submission_time,view_number,vote_number,title,message,image
+e5ebe159,2022/07/26 10:31:38, , , ,Próba kérdés 01., 
+95836f56,2022/07/26 10:32:25, , , ,Próba kérdés 01., 
+77098928,2022/07/26 10:39:36, , ,Title One,Question One, 

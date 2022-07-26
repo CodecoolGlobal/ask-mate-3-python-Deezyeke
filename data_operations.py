@@ -9,6 +9,7 @@ QUESTION_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title
 def create_id():
     return os.urandom(4).hex()
 
+
 def load_questions():
     questions = OrderedDict()
     try:
