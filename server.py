@@ -75,9 +75,12 @@ def orderby(questions, orderby):
 def questions_and_answers(id):
     questions = data_operations.load_csv(data_operations.FILENAME_QUESTIONS)
     answers = data_operations.load_csv(data_operations.FILENAME_ANSWERS)
-    print(questions.values())
-    print(answers.values())
     return render_template('display_question.html', question=questions, answer=answers, id=id)
+
+
+@app.route('/questions/<id>/new-answer')
+def add_new_answer(id):
+    return render_template('new_answer.html', id=id)
 
 
 if __name__ == "__main__":
