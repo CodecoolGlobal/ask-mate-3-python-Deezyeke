@@ -14,7 +14,7 @@
         </tr>
         {% for id in questions.keys()  %}
             <tr>
-            <td> {{ id }}</td>
+            {% block qid %} <td> {{ id }} </td> {% endblock %}
             {% for key in questions[id].keys() %}
                 <td> {{ questions[id][key] }} </td>
             {% endfor %}

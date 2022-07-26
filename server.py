@@ -60,6 +60,11 @@ def orderby(questions):
     return questions_ordered
 
 
+@app.route('/questions/<id>')
+def questions_and_answers():
+    pass
+
+
 if __name__ == "__main__":
     app.run(
         host='0.0.0.0',
