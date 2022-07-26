@@ -41,17 +41,20 @@ def add_question():
 
 
 @app.route('/')
-@app.route('/list')
+@app.route('/list', methods = ['GET'])
 def list():
     questions = data_operations.load_questions()
-    if request.args.get('action') == None:
-        return render_template('list.html', questions = questions, question_header = data_operations.QUESTION_HEADER)
+    if request.args.get('orderby') == None:
+        return render_template('list.html', orderby='id', questions = questions, question_header = data_operations.QUESTION_HEADER)
     else:
-        questions_ordered = orderby(questions, request.args.get('action'))
-        return render_template('list.html', questions=questions_ordered, question_header=data_operations.QUESTION_HEADER)
+        questions_ordered = orderby( questions, request.args.get('orderby'), request.args.get('order') )
+        if request.args.get('order') == 'desc':
+            return render_template('list.html', orderby=request.args.get('orderby'), questions=questions_ordered, question_header=data_operations.QUESTION_HEADER)
+        elif request.args.get('order') == 'asc':
+            return render_template('list_desc.html', orderby=request.args.get('orderby'), questions=questions_ordered, question_header=data_operations.QUESTION_HEADER)
 
 
-def orderby(questions, orderby):
+def orderby(questions, orderby, order):
     question_list = []
 
     if orderby != 'id':
@@ -63,7 +66,7 @@ def orderby(questions, orderby):
             question_list.append([id])
             id = 0
 
-    question_list.sort(reverse=True, key=lambda x : x[0])
+    question_list.sort(reverse=True if order=='asc' else False, key=lambda x : x[0])
     questions_ordered = OrderedDict()
     for item in question_list:
         questions_ordered[item[id]]=questions[item[id]]

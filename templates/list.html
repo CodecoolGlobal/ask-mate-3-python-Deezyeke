@@ -5,23 +5,31 @@
     <title> Questions list </title>
 </head>
 <body>
-    <a href="/add_question"> Add a new question</a> <br> <br>
-    <table>
-        <tr>
-            {% for header in question_header  %}
-                <th> <a href= "{{ "/list?action=" + header }}"> {{header}} </a> </th>
-            {% endfor %}
-        </tr>
-        {% block id_field %}
-        {% for id in questions.keys() %}
+    <form action="/list" method="POST">
+        <a href="/add_question"> Add a new question</a> <br> <br>
+        <label for="AscDesc"> Order by: </label> <br>
+        <button type="submit" name="AscDesc" id="AscDesc" value ='asc'> Ascending </button> <br> <br>
+        <table>
             <tr>
-                <td> {{ id }} </td>
-                {% for key in questions[id].keys() %}
-                    <td> {{ questions[id][key] }} </td>
+                {% block question_list %}
+                {% for header in question_header  %}
+                    {% if header == orderby %}
+                        <th> <a href= "{{ "/list?orderby=" + header + "&order=asc"}}"> >>+{{header}}+<< </a> </th>
+                    {% else %}
+                        <th> <a href= "{{ "/list?orderby=" + header + "&order=asc"}}"> {{header}} </a> </th>
+                    {% endif %}
                 {% endfor %}
+                {% endblock %}
             </tr>
-        {% endfor %}
-        {% endblock %}
-    </table>
+            {% for id in questions.keys() %}
+                <tr>
+                    <td> {{ id }} </td>
+                    {% for key in questions[id].keys() %}
+                        <td> {{ questions[id][key] }} </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    </form>
 </body>
 </html>
