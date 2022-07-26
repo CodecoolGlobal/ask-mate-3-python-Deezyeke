@@ -43,9 +43,10 @@ def add_question():
 @app.route('/')
 @app.route('/list')
 def list():
-    questions = data_operations.load_questions()
-    questions_ordered = orderby(questions)
-    return render_template('list.html', questions = questions_ordered, question_header = data_operations.QUESTION_HEADER)
+    if request.args.get('action') == None:
+        questions = data_operations.load_questions()
+        questions_ordered = orderby(questions)
+        return render_template('list.html', questions = questions_ordered, question_header = data_operations.QUESTION_HEADER)
 
 
 def orderby(questions):

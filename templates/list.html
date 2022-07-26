@@ -9,7 +9,7 @@
     <table>
         <tr>
             {% for header in question_header  %}
-            <th> <a href="/list?id"> {{ header }}</a> </th>
+                <th> <a href= "{{ "/list?action=" + header }}"> {{header}} </a> </th>
             {% endfor %}
         </tr>
         {% for id in questions.keys()  %}
