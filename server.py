@@ -34,6 +34,12 @@ def add_question():
         question['submission_time'] = now.strftime("%Y/%m/%d %H:%M:%S")
         question['title'] = request.form.get('title')
         question['message'] = request.form.get('text')
+
+        uploaded_file = request.files['image_file']
+        if uploaded_file.filename != '':
+            uploaded_file.save('./static/'+uploaded_file.filename)
+        question['image'] = uploaded_file.filename
+
         data_operations.save_question(question)
 
 ## !!!  Ezt át kell majd írni   !!!

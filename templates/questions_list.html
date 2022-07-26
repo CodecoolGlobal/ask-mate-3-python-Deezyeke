@@ -24,7 +24,11 @@
             <tr>
                 <td> {{ id }} </td>
                 {% for key in questions[id].keys() %}
-                    <td> {{ questions[id][key] }} </td>
+                    {%  if key == 'image' %}
+                        <td> <img src="{{"./static/"+questions[id][key]}}" height="30" width="30"</td>
+                    {% else %}
+                        <td> {{ questions[id][key] }} </td>
+                    {% endif %}
                 {% endfor %}
             </tr>
         {% endfor %}
