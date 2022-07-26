@@ -72,8 +72,9 @@ def orderby(questions, orderby):
 
 
 @app.route('/questions/<id>')
-def questions_and_answers():
-    pass
+def questions_and_answers(id):
+    questions = data_operations.load_questions()
+    return render_template('display_question.html', question=questions, id=id)
 
 
 if __name__ == "__main__":
