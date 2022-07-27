@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect
 
 import data_operations
 import connection
+
+import os
 from datetime import datetime
 from collections import OrderedDict
 
@@ -44,8 +46,9 @@ def add_question():
 
         uploaded_file = request.files['image_file']
         if uploaded_file.filename != '':
-            uploaded_file.save('/static/'+uploaded_file.filename)
-        question['image'] = uploaded_file.filename
+  ##          uploaded_file.save('/static/'+uploaded_file.filename)
+            uploaded_file.save(os.path.join('static', uploaded_file.filename))
+            question['image'] = uploaded_file.filename
         data_operations.save_data(question, data_operations.FILENAME_QUESTIONS, data_operations.QUESTION_HEADER)
 
 ## !!!  Ezt át kell majd írni   !!!
@@ -93,9 +96,6 @@ def questions_and_answers(id):
     answers = data_operations.load_csv(data_operations.FILENAME_ANSWERS)
     if request.method == 'GET':
         return render_template('display_question.html', question=questions, answer=answers, id=id)
-    elif request.method == 'POST':
-        connection.add_data_for_csv(id)
-        return render_template('display_question.html', question=questions, answer=answers, id=id)
     return redirect('display_question.html')
 
 
@@ -118,7 +118,9 @@ def add_new_answer(id):
         return render_template('new_answer.html', id=id)
     elif request.method == 'POST':
         connection.add_data_for_csv(id)
-        return render_template('new_answer.html', id=id)
+        questions = data_operations.load_csv(data_operations.FILENAME_QUESTIONS)
+        answers = data_operations.load_csv(data_operations.FILENAME_ANSWERS)
+        return render_template('display_question.html', question=questions, answer=answers, id=id)
 
 
 if __name__ == "__main__":
