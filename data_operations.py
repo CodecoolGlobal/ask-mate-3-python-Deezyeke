@@ -31,9 +31,9 @@ def load_csv(csv_file):
             return questions
 
 
-def save_data(datas, csv_file):
+def save_data(datas, csv_file, header):
     with open(csv_file, 'a') as f:
-        f_csv = csv.DictWriter(f, fieldnames = QUESTION_HEADER)
+        f_csv = csv.DictWriter(f, fieldnames = header)
         f_csv.writerow(datas)
 
 

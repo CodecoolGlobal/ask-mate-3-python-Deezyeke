@@ -46,7 +46,7 @@ def add_question():
         if uploaded_file.filename != '':
             uploaded_file.save('./static/'+uploaded_file.filename)
         question['image'] = uploaded_file.filename
-        data_operations.save_data(question, data_operations.FILENAME_QUESTIONS)
+        data_operations.save_data(question, data_operations.FILENAME_QUESTIONS, data_operations.QUESTION_HEADER)
 
 ## !!!  Ezt át kell majd írni   !!!
         return redirect('/list')

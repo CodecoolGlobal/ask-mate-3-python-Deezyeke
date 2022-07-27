@@ -21,4 +21,4 @@ def add_data_for_csv(q_id):
     if uploaded_file.filename != '':
         uploaded_file.save('./static/' + uploaded_file.filename)
     answer['image'] = uploaded_file.filename
-    data_operations.save_data(answer, data_operations.FILENAME_ANSWERS)
+    data_operations.save_data(answer, data_operations.FILENAME_ANSWERS, data_operations.ANSWER_HEADER)
