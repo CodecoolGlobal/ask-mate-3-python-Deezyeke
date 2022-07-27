@@ -11,7 +11,7 @@ def add_question():
     if request.method == 'GET':
         return render_template('add_question.html')
     elif request.method == 'POST':
-        question ={}
+        question = {}
         now = datetime.now()
         question['id'] = data_operations.create_id()
         question['timestamp'] = now.strftime("%Y/%m/%d %H:%M:%S")
