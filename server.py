@@ -29,11 +29,8 @@ def add_question():
     if request.method == 'GET':
         return render_template('add_question.html')
     elif request.method == 'POST':
-<<<<<<< HEAD
-        question = {}
-=======
+
         question = init_question()
->>>>>>> e349ecba2cca4690989b563b788cdb860a1ffec6
         now = datetime.now()
         question['submission_time'] = now.strftime("%Y/%m/%d %H:%M:%S")
         question['title'] = request.form.get('title')
@@ -47,7 +44,7 @@ def add_question():
         data_operations.save_question(question)
 
 ## !!!  Ezt át kell majd írni   !!!
-        return redirect('/list')
+        return ('/list')
 
 
 @app.route('/')
