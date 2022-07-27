@@ -88,9 +88,11 @@ def questions_and_answers(id):
     return render_template('display_question.html', question=questions, answer=answers, id=id)
 
 
-@app.route('/questions/<id>/new-answer')
+@app.route('/questions/<id>/new-answer', methods=['GET', 'POST'])
 def add_new_answer(id):
-    return render_template('new_answer.html', id=id)
+    if request.method == 'GET':
+        return render_template('new_answer.html', id=id)
+    elif request.method == 'POST':
 
 
 if __name__ == "__main__":
