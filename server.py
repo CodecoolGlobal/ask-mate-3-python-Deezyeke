@@ -11,16 +11,21 @@ def init_questions():
     question = OrderedDict()
     for field in data_operations.QUESTION_HEADER():
         question[field] = ' '
+    question[view_number] = '0'
+    question[vote_number] = '0'
     questions[data_operations.create_id()] = question
 
 
 def init_question():
     question = {}
+
     for field in data_operations.QUESTION_HEADER:
-        if field == 'id':
-            question[field] = data_operations.create_id()
-        else:
-            question[field] = ' '
+        question[field] = ' '
+
+    question['id'] = data_operations.create_id()
+    question['view_number'] = 0
+    question['vote_number'] = 0
+
     return question
 
 
@@ -51,7 +56,7 @@ def add_question():
 def list():
     questions = data_operations.load_csv(data_operations.FILENAME_QUESTIONS)
     if request.args.get('orderby') == None:
-        return render_template('questions_list.html', orderby='id', questions=questions, question_header=data_operations.QUESTION_HEADER)
+        return render_template('questions_list.html', orderby='id', questions = questions, question_header = data_operations.QUESTION_HEADER)
     else:
         questions_ordered = orderby( questions, request.args.get('orderby'), request.args.get('order') )
         if request.args.get('order') == 'desc':
@@ -96,8 +101,11 @@ def delete_question(id):
 
 
 @app.route('/questions/<id>/new-answer')
+@app.route('/questions/<id>/new-answer', methods=['GET', 'POST'])
 def add_new_answer(id):
-    return render_template('new_answer.html', id=id)
+    if request.method == 'GET':
+        return render_template('new_answer.html', id=id)
+    elif request.method == 'POST':
 
 
 if __name__ == "__main__":
