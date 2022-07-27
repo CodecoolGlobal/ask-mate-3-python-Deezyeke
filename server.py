@@ -96,6 +96,7 @@ def questions_and_answers(id):
     elif request.method == 'POST':
         connection.add_data_for_csv(id)
         return render_template('display_question.html', question=questions, answer=answers, id=id)
+    return redirect('display_question.html')
 
 
 @app.route('/questions/<id>/new-answer')
