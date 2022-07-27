@@ -97,7 +97,7 @@ def add_new_answer(id):
     if request.method == 'GET':
         return render_template('new_answer.html', id=id)
     elif request.method == 'POST':
-
+        return render_template('new_answer.html', id=id)
 
 if __name__ == "__main__":
     app.run(
