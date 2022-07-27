@@ -1,10 +1,9 @@
 from flask import Flask, render_template, request, redirect
 
 import data_operations
+import connection
 from datetime import datetime
 from collections import OrderedDict
-import connection
-
 
 app = Flask(__name__)
 
@@ -98,6 +97,19 @@ def questions_and_answers(id):
         connection.add_data_for_csv(id)
         return render_template('display_question.html', question=questions, answer=answers, id=id)
     return redirect('display_question.html')
+
+
+@app.route('/questions/<id>/delete')
+def delete_question(id):
+    return render_template('delete.html', id=id)
+
+
+@app.route('/questions/<id>/delete/deleted')
+def deleted_question(id):
+    questions = connection.read_question(data_operations.FILENAME_QUESTIONS)
+    deleted_file = data_operations.delete_id_question(id, questions)
+    connection.write_questions(data_operations.FILENAME_QUESTIONS, deleted_file)
+    return render_template('deleted.html', id=id)
 
 
 @app.route('/questions/<id>/new-answer', methods=['GET', 'POST'])

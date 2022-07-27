@@ -2,6 +2,9 @@ import csv
 import os
 from collections import OrderedDict
 
+import connection
+from connection import read_question
+
 FILENAME_QUESTIONS = 'question.csv'
 FILENAME_ANSWERS = 'answers.csv'
 QUESTION_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
@@ -37,5 +40,12 @@ def save_data(datas, csv_file, header):
         f_csv.writerow(datas)
 
 
+def delete_id_question(id, dict):
+    dict.pop(id)
+    return dict
+
+
+
 def load_answers():
     pass
+
