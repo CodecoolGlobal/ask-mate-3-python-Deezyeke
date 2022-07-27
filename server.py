@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect
 import data_operations
 from datetime import datetime
 from collections import OrderedDict
+import connection
+
 
 app = Flask(__name__)
 
@@ -102,7 +104,7 @@ def add_new_answer(id):
     if request.method == 'GET':
         return render_template('new_answer.html', id=id)
     elif request.method == 'POST':
-
+        pass
 
 if __name__ == "__main__":
     app.run(
