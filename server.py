@@ -106,7 +106,9 @@ def add_new_answer(id):
         return render_template('new_answer.html', id=id)
     elif request.method == 'POST':
         connection.add_data_for_csv(id)
-        return render_template('new_answer.html', id=id)
+        questions = data_operations.load_csv(data_operations.FILENAME_QUESTIONS)
+        answers = data_operations.load_csv(data_operations.FILENAME_ANSWERS)
+        return render_template('display_question.html', question=questions, answer=answers, id=id)
 
 
 if __name__ == "__main__":
