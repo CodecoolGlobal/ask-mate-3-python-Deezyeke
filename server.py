@@ -100,7 +100,7 @@ def questions_and_answers(id):
     return redirect('display_question.html')
 
 
-@app.route('/questions/<id>/new-answer')
+@app.route('/questions/<id>/new-answer', methods=['GET', 'POST'])
 def add_new_answer(id):
     if request.method == 'GET':
         return render_template('new_answer.html', id=id)
