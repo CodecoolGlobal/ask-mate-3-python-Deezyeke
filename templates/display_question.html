@@ -25,7 +25,7 @@
 {% endfor %}
 <h2>Answer(s):</h2>
 {% for a_id, value in answer.items()%}
-    {% if value['questionid'] == id %}
+    {% if value['question_id'] == id %}
         {% if value['message'] == ' ' %}
             <h4><i>There is no answer added</i></h4>
         {% endif %}

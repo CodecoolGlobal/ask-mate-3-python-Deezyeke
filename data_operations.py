@@ -30,10 +30,10 @@ def load_csv(csv_file):
             return questions
 
 
-def save_question(question):
-    with open(FILENAME_QUESTIONS, 'a') as f:
+def save_data(datas, csv_file):
+    with open(csv_file, 'a') as f:
         f_csv = csv.DictWriter(f, fieldnames = QUESTION_HEADER)
-        f_csv.writerow(question)
+        f_csv.writerow(datas)
 
 
 def load_answers():

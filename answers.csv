@@ -1,4 +1,4 @@
-id,timestamp,votenumber,questionid,message,image
-d8121210,2022/07/25 22:52:22,3,e5ebe159,Here's a test answer.,stock1.jpg
-f422d127,2022/07/26 10:04:04,2,95836f56,Search it on google!,none
-95836f56,2022/07/26 12:00:18,-3,95836f56,You noob!,none
+id,submission_time,vote_number,question_id,message,image
+d8121210,2022/07/25 22:52:22,3,bbee202a,Here's a test answer.,stock1.jpg
+f422d127,2022/07/26 10:04:04,2,bbee202a,Search it on google!,none
+95836f56,2022/07/26 12:00:18,-3,3c9ff047,You noob!,none
