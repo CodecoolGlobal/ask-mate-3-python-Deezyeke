@@ -5,39 +5,43 @@
     <title> Question details </title>
 </head>
 <body bgcolor="33c4a1">
-<h2>Title:</h2>
-{% for q_id, value in question.items() %}
-    {% if q_id == id %}
-        {% if value['title'] == ' ' %}
-            <h4><i>This title is empty</i></h4>
+    <h2>Title:</h2>
+    {% for q_id, value in question.items() %}
+        {% if q_id == id %}
+            {% if value['title'] == ' ' %}
+                <h4><i>This title is empty</i></h4>
+            {% endif %}
+            <h4>{{ value['title'] }}</h4>
         {% endif %}
-        <h4>{{ value['title'] }}</h4>
-    {% endif %}
-{% endfor %}
-<h2>Question:</h2>
-{% for q_id, value in question.items() %}
-    {% if q_id == id %}
-        {% if value['message'] == ' ' %}
-            <h4><i>There is no question added</i></h4>
+    {% endfor %}
+    <h2>Question:</h2>
+    {% for q_id, value in question.items() %}
+        {% if q_id == id %}
+            {% if value['message'] == ' ' %}
+                <h4><i>There is no question added</i></h4>
+            {% endif %}
+            <h4>{{ value['message'] }}</h4>
         {% endif %}
-        <h4>{{ value['message'] }}</h4>
-    {% endif %}
-{% endfor %}
-<img src="{{"/static/"+question[id]['image']}}" width="320">
-<br>
-<a href="{{ url_for('delete_question', id=id) }}"><button type="button">Delete question</button></a>
-<br>
+    {% endfor %}
+    {% if question[id]['image'] == ' ' %}
+        <img src="{{ url_for("static", filename='no_file_02.png') }}" width="320">
+    {% else %}
+        <img src="{{ url_for("static", filename=question[id]['image']) }}" width="320">
+    {%  endif %}
+    <br>
+    <a href="{{ url_for('delete_question', id=id) }}"><button type="button">Delete question</button></a>
+    <br>
 
-<h2>Answer(s):</h2>
-{% for a_id, value in answer.items()%}
-    {% if value['question_id'] == id %}
-        {% if value['message'] == ' ' %}
-            <h4><i>There is no answer added</i></h4>
+    <h2>Answer(s):</h2>
+    {% for a_id, value in answer.items() %}
+        {% if value['question_id'] == id %}
+            {% if value['message'] == ' ' %}
+                <h4><i>There is no answer added</i></h4>
+            {% endif %}
+            <h4>{{ value['message'] }}</h4>
         {% endif %}
-        <h4>{{ value['message'] }}</h4>
-    {% endif %}
-{% endfor %}
-<a href="{{ url_for('add_new_answer', id=id)}}">Add a new answer</a><br><br>
-<a href="/">Home page</a>
+    {% endfor %}
+    <a href="{{ url_for('add_new_answer', id=id)}}">Add a new answer</a><br><br>
+    <a href="/">Home page</a>
 </body>
 </html>

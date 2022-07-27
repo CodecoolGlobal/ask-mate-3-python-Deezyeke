@@ -1,7 +1,7 @@
 import csv
 import os
 from collections import OrderedDict
-
+import server
 import data_operations
 
 
@@ -17,19 +17,17 @@ def read_question(csv_file):
             questions[row['id']] = question
     return questions
 
-def write_questions(csv_file, dict):
+
+def write_questions(csv_file, questions):
     temp_dict = {}
     with open(csv_file, 'w') as f:
         f_csv = csv.DictWriter(f, fieldnames=data_operations.QUESTION_HEADER)
         f_csv.writeheader()
-        for id in dict.keys():
+        for id in questions.keys():
             temp_dict['id'] = id
             for item in range(1, len(data_operations.QUESTION_HEADER)):
-                temp_dict[data_operations.QUESTION_HEADER[item]] = dict[id][data_operations.QUESTION_HEADER[item]]
+                temp_dict[data_operations.QUESTION_HEADER[item]] = questions[id][data_operations.QUESTION_HEADER[item]]
             f_csv.writerow(temp_dict)
-
-import data_operations
-import server
 
 
 def init_answer(header):
