@@ -11,6 +11,13 @@ QUESTION_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title
 ANSWER_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
 
 
+'''if Linux + Win:
+QUESTION_FILE_PATH = os.getenv(
+    'DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'question.csv'
+ANSWER_FILE_PATH = os.getenv(
+    'DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'answers.csv'''
+
+
 def create_id():
     return os.urandom(4).hex()
 

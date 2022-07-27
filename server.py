@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-
+import util
 import data_operations
 import connection
 import os
@@ -98,9 +98,19 @@ def questions_and_answers(id):
     return redirect('display_question.html')
 
 
+@app.route('/question/<question_id>/vote-up')
+def question_vote_up(question_id):
+    questions = util.read_questions()
+    data = util.choose_data(question_id)
+    current_vote_number = util.change_votenum(data, "+")
+    util.update_data(questions, question_id, "vote_number", current_vote_number, "question")
+    return redirect('/')
+
+
 @app.route('/questions/<id>/delete')
 def delete_question(id):
     return render_template('delete.html', id=id)
+
 
 
 @app.route('/questions/<id>/delete/deleted')
