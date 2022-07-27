@@ -1,9 +1,10 @@
 id,submission_time,view_number,vote_number,title,message,image
-6add94db,2022/07/26 22:34:39, , ,QT5,YQ5,400834.png
-8fa7299b,2022/07/26 22:45:37, , ,QT1,A1 Nagyon hosszú szóveg.,kid_presidents.png
-7a57de3a,2022/07/26 22:49:18, , ,SW,What is The Matrix?,The.Matrix.glmatrix.2.png
+6add94db,2022/07/26 22:34:39,0,0,QT5,YQ5,400834.png
+8fa7299b,2022/07/26 22:45:37,0,0,UTF-8,How to display unicode?,kid_presidents.png
+7a57de3a,2022/07/26 22:49:18, , ,Matrix,What is The Matrix?,The.Matrix.glmatrix.2.png
 0c06852e,2022/07/26 22:50:27, , ,2001,The Best Movie Ever Made!,FP12087P-1.jpeg
 2172aeff,2022/07/26 22:54:37, , ,Star Wars,Star Wars IV: The New Hope,StarWarsE4.jpeg
 0ee621f3,2022/07/26 22:55:11, , ,BTTF,Back to the Future,BTTF01.jpeg
 
 70a2af37,2022/07/26 23:01:39, , ,Indy,Indiana Jones and The Last Crusader,1147709.jpg
+"b3abddb4,2022/07/27 09:33:37, , ,Szim's HTTP Question,""Hi, what does HTTP 418 status code mean?"","
