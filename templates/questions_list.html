@@ -22,7 +22,7 @@
         </tr>
         {% for id in questions.keys() %}
             <tr>
-                <td> {{ id }} </td>
+                <td><a href={{ url_for('questions_and_answers', id=id)}}>{{ id }}</a></td>
                 {% for key in questions[id].keys() %}
                     {%  if key == 'image' %}
                         <td> <img src="{{"./static/"+questions[id][key]}}" height="30" width="30"</td>
