@@ -23,6 +23,7 @@
         <h4>{{ value['message'] }}</h4>
     {% endif %}
 {% endfor %}
+<img src="{{"/static/"+question[id]['image']}}" width="320">
 <h2>Answer(s):</h2>
 {% for a_id, value in answer.items()%}
     {% if value['questionid'] == id %}

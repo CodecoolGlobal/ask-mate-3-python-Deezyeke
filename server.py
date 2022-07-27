@@ -44,7 +44,6 @@ def add_question():
         if uploaded_file.filename != '':
             uploaded_file.save('./static/'+uploaded_file.filename)
         question['image'] = uploaded_file.filename
-
         data_operations.save_question(question)
 
 ## !!!  Ezt át kell majd írni   !!!
