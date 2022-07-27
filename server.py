@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect
+
 import data_operations
 from datetime import datetime
 from collections import OrderedDict
@@ -104,6 +105,8 @@ def add_new_answer(id):
     if request.method == 'GET':
         return render_template('new_answer.html', id=id)
     elif request.method == 'POST':
+        connection.add_data_for_csv(id)
+        return render_template('new_answer.html', id=id)
 
 
 if __name__ == "__main__":
