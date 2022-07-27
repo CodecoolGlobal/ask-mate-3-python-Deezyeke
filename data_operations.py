@@ -15,6 +15,10 @@ def create_id():
     return os.urandom(4).hex()
 
 
+def delete_image_file(filename):
+    os.remove (os.path.join('static', filename))
+
+
 def load_csv(csv_file):
     questions = OrderedDict()
     try:

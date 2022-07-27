@@ -1,5 +1,3 @@
-import data_operations
-import server
 import csv
 import os
 from collections import OrderedDict
@@ -29,6 +27,9 @@ def write_questions(csv_file, dict, headers):
             for item in range(1, len(data_operations.QUESTION_HEADER)):
                 temp_dict[headers[item]] = dict[id][headers[item]]
             f_csv.writerow(temp_dict)
+
+import data_operations
+import server
 
 
 def init_answer(header):

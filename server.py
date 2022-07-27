@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 
 import data_operations
 import connection
@@ -45,7 +45,6 @@ def add_question():
 
         uploaded_file = request.files['image_file']
         if uploaded_file.filename != '':
-  ##          uploaded_file.save('/static/'+uploaded_file.filename)
             uploaded_file.save(os.path.join('static', uploaded_file.filename))
             question['image'] = uploaded_file.filename
         data_operations.save_data(question, data_operations.FILENAME_QUESTIONS, data_operations.QUESTION_HEADER)
@@ -80,7 +79,7 @@ def orderby(questions, orderby, order):
             question_list.append([id])
             id = 0
 
-    question_list.sort(reverse=True if order=='asc' else False, key=lambda x : x[0])
+    question_list.sort(reverse=True if order=='asc' else False, key=lambda x : x[0].lower() )
     questions_ordered = OrderedDict()
 
     for item in question_list:
@@ -109,6 +108,8 @@ def deleted_question(id):
     deleted_answers = data_operations.delet_answer_with_question(id, answers)
     connection.write_questions(data_operations.FILENAME_QUESTIONS, deleted_answers, data_operations.ANSWER_HEADER)
     questions = connection.read_question(data_operations.FILENAME_QUESTIONS)
+    if questions[id]['image'] != ' ':
+        data_operations.delete_image_file(questions[id]['image'])
     deleted_file = data_operations.delete_id_question(id, questions)
     connection.write_questions(data_operations.FILENAME_QUESTIONS, deleted_file, data_operations.QUESTION_HEADER)
     return render_template('deleted.html', id=id)
@@ -120,9 +121,7 @@ def add_new_answer(id):
         return render_template('new_answer.html', id=id)
     elif request.method == 'POST':
         connection.add_data_for_csv(id)
-        questions = data_operations.load_csv(data_operations.FILENAME_QUESTIONS)
-        answers = data_operations.load_csv(data_operations.FILENAME_ANSWERS)
-        return render_template('display_question.html', question=questions, answer=answers, id=id)
+        return redirect(url_for('questions_and_answers', id=id))
 
 
 if __name__ == "__main__":
