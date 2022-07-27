@@ -44,6 +44,12 @@ def delete_id_question(id, dict):
     dict.pop(id)
     return dict
 
+def delet_answer_with_question(id, dict):
+    new_dict = {}
+    for key, value in dict.items():
+        if value['question_id'] != id:
+            new_dict[key] = value
+    return new_dict
 
 
 def load_answers():
