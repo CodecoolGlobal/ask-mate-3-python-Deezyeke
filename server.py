@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 
 import connection
 import data_operations
@@ -93,17 +93,14 @@ def questions_and_answers(id):
     answers = data_operations.load_csv(data_operations.FILENAME_ANSWERS)
     if request.method == 'GET':
         return render_template('display_question.html', question=questions, answer=answers, id=id)
-    elif request.method == 'POST':
-        connection.add_data_for_csv(id)
-        return render_template('display_question.html', question=questions, answer=answers, id=id)
-    return redirect('display_question.html')
 
 
-@app.route('/questions/<id>/new-answer')
+@app.route('/questions/<id>/new-answer', methods=['GET', 'POST'])
 def add_new_answer(id):
     if request.method == 'GET':
         return render_template('new_answer.html', id=id)
     elif request.method == 'POST':
+        connection.add_data_for_csv(id)
         return render_template('new_answer.html', id=id)
 
 
