@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
 import data_operations
+import connection
 from datetime import datetime
 from collections import OrderedDict
 
@@ -95,9 +96,15 @@ def questions_and_answers(id):
 
 @app.route('/questions/<id>/delete')
 def delete_question(id):
-    questions = data_operations.load_csv(data_operations.FILENAME_QUESTIONS)
-    return render_template('delete.html', questions=questions, id=id)
+    return render_template('delete.html', id=id)
 
+
+@app.route('/questions/<id>/delete/deleted')
+def deleted_question(id):
+    questions = connection.read_question(data_operations.FILENAME_QUESTIONS)
+    deleted_file = data_operations.delete_id_question(id, questions)
+    connection.write_questions(data_operations.FILENAME_QUESTIONS, deleted_file)
+    return render_template('deleted.html', id=id)
 
 
 @app.route('/questions/<id>/new-answer')
@@ -106,6 +113,8 @@ def add_new_answer(id):
     if request.method == 'GET':
         return render_template('new_answer.html', id=id)
     elif request.method == 'POST':
+        pass
+
 
 
 if __name__ == "__main__":
