@@ -6,7 +6,7 @@
     <title> Questions list </title>
 </head>
 
-<body>
+<body bgcolor="33c455">
     <a href="/add_question"> Add a new question </a> <br> <br>
     <table>
         <tr>
@@ -25,7 +25,11 @@
                 <td><a href={{ url_for('questions_and_answers', id=id)}}>{{ id }}</a></td>
                 {% for key in questions[id].keys() %}
                     {%  if key == 'image' %}
-                        <td> <img src="{{"./static/"+questions[id][key]}}" height="30" width="30"</td>
+                            {%  if questions[id]['image'] != ' ' %}
+                                <td> <img src="{{ url_for("static", filename=questions[id]['image']) }}" height="30" width="30"> </td> -->
+                            {%  else %}
+                                <td> <img src="{{ url_for("static", filename='no_file_02.png') }}" height="30" width="30"> </td>
+                            {%  endif %}
                     {% else %}
                         <td> {{ questions[id][key] }} </td>
                     {% endif %}

@@ -2,9 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Add answer</title>
 </head>
-<body>
-<h2></h2>
+<body bgcolor="33c4a1">
+<h2>Add a new answer</h2>
+<form action="{{ url_for('add_new_answer', id=id)}}" method="post" enctype="multipart/form-data">
+    <label for="message">Your answer:</label><br>
+    <textarea name="message" id="message" cols="40" rows="7"></textarea><br>
+    <label for="image_file"> Upload an image: </label> <br>
+    <input type="file" id="image_file" name="image_file" accept=".png, .jpg, .jpeg"> <br> <br>
+    <button type="submit">Save your answer</button>
+</form>
 </body>
 </html>

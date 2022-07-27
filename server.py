@@ -1,5 +1,8 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
+
 import data_operations
+import connection
+import os
 from datetime import datetime
 from collections import OrderedDict
 
@@ -11,16 +14,21 @@ def init_questions():
     question = OrderedDict()
     for field in data_operations.QUESTION_HEADER():
         question[field] = ' '
+    question['view_number'] = '0'
+    question['vote_number'] = '0'
     questions[data_operations.create_id()] = question
 
 
 def init_question():
     question = {}
+
     for field in data_operations.QUESTION_HEADER:
-        if field == 'id':
-            question[field] = data_operations.create_id()
-        else:
-            question[field] = ' '
+        question[field] = ' '
+
+    question['id'] = data_operations.create_id()
+    question['view_number'] = 0
+    question['vote_number'] = 0
+
     return question
 
 
@@ -38,10 +46,9 @@ def add_question():
 
         uploaded_file = request.files['image_file']
         if uploaded_file.filename != '':
-            uploaded_file.save('./static/'+uploaded_file.filename)
-        question['image'] = uploaded_file.filename
-
-        data_operations.save_question(question)
+            uploaded_file.save(os.path.join('static', uploaded_file.filename))
+            question['image'] = uploaded_file.filename
+        data_operations.save_data(question, data_operations.FILENAME_QUESTIONS, data_operations.QUESTION_HEADER)
 
 ## !!!  Ezt át kell majd írni   !!!
         return ('/list')
@@ -73,7 +80,7 @@ def orderby(questions, orderby, order):
             question_list.append([id])
             id = 0
 
-    question_list.sort(reverse=True if order=='asc' else False, key=lambda x : x[0])
+    question_list.sort(reverse=True if order=='asc' else False, key=lambda x : x[0].lower() )
     questions_ordered = OrderedDict()
 
     for item in question_list:
@@ -82,16 +89,40 @@ def orderby(questions, orderby, order):
     return questions_ordered
 
 
-@app.route('/questions/<id>')
+@app.route('/questions/<id>', methods=['GET', 'POST'])
 def questions_and_answers(id):
     questions = data_operations.load_csv(data_operations.FILENAME_QUESTIONS)
     answers = data_operations.load_csv(data_operations.FILENAME_ANSWERS)
-    return render_template('display_question.html', question=questions, answer=answers, id=id)
+    if request.method == 'GET':
+        return render_template('display_question.html', question=questions, answer=answers, id=id)
+    return redirect('display_question.html')
 
 
-@app.route('/questions/<id>/new-answer')
+@app.route('/questions/<id>/delete')
+def delete_question(id):
+    return render_template('delete.html', id=id)
+
+
+@app.route('/questions/<id>/delete/deleted')
+def deleted_question(id):
+    answers = connection.read_question(data_operations.FILENAME_ANSWERS)
+    deleted_answers = data_operations.delet_answer_with_question(id, answers)
+    connection.write_questions(data_operations.FILENAME_QUESTIONS, deleted_answers, data_operations.ANSWER_HEADER)
+    questions = connection.read_question(data_operations.FILENAME_QUESTIONS)
+    if questions[id]['image'] != ' ':
+        data_operations.delete_image_file(questions[id]['image'])
+    deleted_file = data_operations.delete_id_question(id, questions)
+    connection.write_questions(data_operations.FILENAME_QUESTIONS, deleted_file, data_operations.QUESTION_HEADER)
+    return render_template('deleted.html', id=id)
+
+
+@app.route('/questions/<id>/new-answer', methods=['GET', 'POST'])
 def add_new_answer(id):
-    return render_template('new_answer.html', id=id)
+    if request.method == 'GET':
+        return render_template('new_answer.html', id=id)
+    elif request.method == 'POST':
+        connection.add_data_for_csv(id)
+        return redirect(url_for('questions_and_answers', id=id))
 
 
 if __name__ == "__main__":
