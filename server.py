@@ -11,8 +11,8 @@ def init_questions():
     question = OrderedDict()
     for field in data_operations.QUESTION_HEADER():
         question[field] = ' '
-    question[view_number] = '0'
-    question[vote_number] = '0'
+    question['view_number'] = '0'
+    question['vote_number'] = '0'
     questions[data_operations.create_id()] = question
 
 
@@ -42,7 +42,7 @@ def add_question():
 
         uploaded_file = request.files['image_file']
         if uploaded_file.filename != '':
-            uploaded_file.save('./static/'+uploaded_file.filename)
+            uploaded_file.save('/static/'+uploaded_file.filename)
         question['image'] = uploaded_file.filename
         data_operations.save_question(question)
 
@@ -97,7 +97,7 @@ def add_new_answer(id):
     if request.method == 'GET':
         return render_template('new_answer.html', id=id)
     elif request.method == 'POST':
-
+        pass
 
 if __name__ == "__main__":
     app.run(
