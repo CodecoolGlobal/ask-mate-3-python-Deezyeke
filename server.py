@@ -11,16 +11,21 @@ def init_questions():
     question = OrderedDict()
     for field in data_operations.QUESTION_HEADER():
         question[field] = ' '
+    question[view_number] = '0'
+    question[vote_number] = '0'
     questions[data_operations.create_id()] = question
 
 
 def init_question():
     question = {}
+
     for field in data_operations.QUESTION_HEADER:
-        if field == 'id':
-            question[field] = data_operations.create_id()
-        else:
-            question[field] = ' '
+        question[field] = ' '
+
+    question['id'] = data_operations.create_id()
+    question['view_number'] = 0
+    question['vote_number'] = 0
+
     return question
 
 
