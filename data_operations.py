@@ -28,7 +28,6 @@ def load_csv(csv_file):
             f_csv = csv.DictWriter(f, fieldnames = QUESTION_HEADER)
             f_csv.writeheader()
             return questions
-load_questions()
 
 
 def save_question(question):
@@ -38,8 +37,10 @@ def save_question(question):
 
 
 
-def delete_question():
-    pass
+def delete_question(csv_file):
+    read = load_csv(csv_file)
+    for id_d in read.keys():
+        print(id_d)
 
 
 def load_answers():

@@ -71,19 +71,17 @@ def orderby(questions, orderby):
     return questions_ordered
 
 
-
-@app.route('/questions/<id>/delete')
-def delete_question(id):
-    return render_template('delete.html')
-
-
 @app.route('/questions/<id>')
 def questions_and_answers(id):
     questions = data_operations.load_csv(data_operations.FILENAME_QUESTIONS)
     answers = data_operations.load_csv(data_operations.FILENAME_ANSWERS)
-    print(questions.values())
-    print(answers.values())
     return render_template('display_question.html', question=questions, answer=answers, id=id)
+
+
+@app.route('/questions/<id>/delete')
+def delete_question(id):
+    questions = data_operations.load_csv(data_operations.FILENAME_QUESTIONS)
+    return render_template('delete.html', questions=questions, id=id)
 
 
 
