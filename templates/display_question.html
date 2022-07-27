@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title> Add a question </title>
+    <title> Question details </title>
 </head>
 <body>
 <h2>Title:</h2>
@@ -36,5 +36,6 @@
         <h4>{{ value['message'] }}</h4>
     {% endif %}
 {% endfor %}
+<a href="{{ url_for('add_new_answer', id=id)}}">Add a new answer</a>
 </body>
 </html>

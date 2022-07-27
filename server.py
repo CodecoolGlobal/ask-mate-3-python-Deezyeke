@@ -34,6 +34,12 @@ def add_question():
         question['submission_time'] = now.strftime("%Y/%m/%d %H:%M:%S")
         question['title'] = request.form.get('title')
         question['message'] = request.form.get('text')
+
+        uploaded_file = request.files['image_file']
+        if uploaded_file.filename != '':
+            uploaded_file.save('./static/'+uploaded_file.filename)
+        question['image'] = uploaded_file.filename
+
         data_operations.save_question(question)
 
 ## !!!  Ezt át kell majd írni   !!!
@@ -44,14 +50,17 @@ def add_question():
 @app.route('/list')
 def list():
     questions = data_operations.load_csv(data_operations.FILENAME_QUESTIONS)
-    if request.args.get('action') == None:
-        return render_template('list.html', questions = questions, question_header = data_operations.QUESTION_HEADER)
+    if request.args.get('orderby') == None:
+        return render_template('questions_list.html', orderby='id', questions=questions, question_header=data_operations.QUESTION_HEADER)
     else:
-        questions_ordered = orderby(questions, request.args.get('action'))
-        return render_template('list.html', questions=questions_ordered, question_header=data_operations.QUESTION_HEADER)
+        questions_ordered = orderby( questions, request.args.get('orderby'), request.args.get('order') )
+        if request.args.get('order') == 'desc':
+            return render_template('questions_list.html', orderby=request.args.get('orderby'), questions=questions_ordered, question_header=data_operations.QUESTION_HEADER)
+        elif request.args.get('order') == 'asc':
+            return render_template('questions_list_desc.html', orderby=request.args.get('orderby'), questions=questions_ordered, question_header=data_operations.QUESTION_HEADER)
 
 
-def orderby(questions, orderby):
+def orderby(questions, orderby, order):
     question_list = []
 
     if orderby != 'id':
@@ -63,8 +72,9 @@ def orderby(questions, orderby):
             question_list.append([id])
             id = 0
 
-    question_list.sort(reverse=True, key=lambda x : x[0])
+    question_list.sort(reverse=True if order=='asc' else False, key=lambda x : x[0])
     questions_ordered = OrderedDict()
+
     for item in question_list:
         questions_ordered[item[id]]=questions[item[id]]
 
@@ -83,6 +93,11 @@ def delete_question(id):
     questions = data_operations.load_csv(data_operations.FILENAME_QUESTIONS)
     return render_template('delete.html', questions=questions, id=id)
 
+
+
+@app.route('/questions/<id>/new-answer')
+def add_new_answer(id):
+    return render_template('new_answer.html', id=id)
 
 
 if __name__ == "__main__":

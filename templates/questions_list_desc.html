@@ -1,0 +1,10 @@
+{% extends "questions_list.html" %}
+    {% block question_list %}
+        {% for header in question_header  %}
+            {% if header == orderby %}
+                <th> <a href= "{{ "/list?orderby=" + header + "&order=desc"}}"> >>-{{header}}-<< </a> </th>
+            {% else %}
+                <th> <a href= "{{ "/list?orderby=" + header + "&order=desc"}}"> {{header}} </a> </th>
+            {% endif %}
+        {% endfor %}
+    {% endblock %}
