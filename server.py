@@ -13,8 +13,8 @@ def init_questions():
     question = OrderedDict()
     for field in data_operations.QUESTION_HEADER():
         question[field] = ' '
-    question[view_number] = '0'
-    question[vote_number] = '0'
+    question['view_number'] = '0'
+    question['vote_number'] = '0'
     questions[data_operations.create_id()] = question
 
 
