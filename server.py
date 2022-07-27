@@ -44,7 +44,7 @@ def add_question():
         if uploaded_file.filename != '':
             uploaded_file.save('/static/'+uploaded_file.filename)
         question['image'] = uploaded_file.filename
-        data_operations.save_question(question)
+        data_operations.save_data(question, data_operations.FILENAME_QUESTIONS, data_operations.QUESTION_HEADER)
 
 ## !!!  Ezt át kell majd írni   !!!
         return redirect('/list')
@@ -85,19 +85,24 @@ def orderby(questions, orderby, order):
     return questions_ordered
 
 
-@app.route('/questions/<id>')
+@app.route('/questions/<id>', methods=['GET', 'POST'])
 def questions_and_answers(id):
     questions = data_operations.load_csv(data_operations.FILENAME_QUESTIONS)
     answers = data_operations.load_csv(data_operations.FILENAME_ANSWERS)
-    return render_template('display_question.html', question=questions, answer=answers, id=id)
+    if request.method == 'GET':
+        return render_template('display_question.html', question=questions, answer=answers, id=id)
+    elif request.method == 'POST':
+        connection.add_data_for_csv(id)
+        return render_template('display_question.html', question=questions, answer=answers, id=id)
+    return redirect('display_question.html')
 
 
-@app.route('/questions/<id>/new-answer', methods=['GET', 'POST'])
+@app.route('/questions/<id>/new-answer')
 def add_new_answer(id):
     if request.method == 'GET':
         return render_template('new_answer.html', id=id)
     elif request.method == 'POST':
-        pass
+
 
 if __name__ == "__main__":
     app.run(
