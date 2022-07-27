@@ -8,6 +8,7 @@ from connection import read_question
 FILENAME_QUESTIONS = 'question.csv'
 FILENAME_ANSWERS = 'answers.csv'
 QUESTION_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
+ANSWER_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
 
 
 def create_id():
@@ -33,10 +34,10 @@ def load_csv(csv_file):
             return questions
 
 
-def save_question(question):
-    with open(FILENAME_QUESTIONS, 'a') as f:
-        f_csv = csv.DictWriter(f, fieldnames = QUESTION_HEADER)
-        f_csv.writerow(question)
+def save_data(datas, csv_file, header):
+    with open(csv_file, 'a') as f:
+        f_csv = csv.DictWriter(f, fieldnames = header)
+        f_csv.writerow(datas)
 
 
 def delete_id_question(id, dict):

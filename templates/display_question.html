@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title> Question details </title>
 </head>
-<body>
+<body bgcolor="33c4a1">
 <h2>Title:</h2>
 {% for q_id, value in question.items() %}
     {% if q_id == id %}
@@ -27,15 +27,17 @@
 <br> <br>
 <a href="{{ url_for('delete_question', id=id) }}"><button type="button">Delete question</button> </a>
 
+<img src="{{"/static/"+question[id]['image']}}" width="320">
 <h2>Answer(s):</h2>
 {% for a_id, value in answer.items()%}
-    {% if value['questionid'] == id %}
+    {% if value['question_id'] == id %}
         {% if value['message'] == ' ' %}
             <h4><i>There is no answer added</i></h4>
         {% endif %}
         <h4>{{ value['message'] }}</h4>
     {% endif %}
 {% endfor %}
-<a href="{{ url_for('add_new_answer', id=id)}}">Add a new answer</a>
+<a href="{{ url_for('add_new_answer', id=id)}}">Add a new answer</a><br><br>
+<a href="/">Home page</a>
 </body>
 </html>
