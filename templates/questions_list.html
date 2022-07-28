@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+<meta charset="UTF-8">
 
 <head>
-    <meta charset="UTF-8">
     <title> Questions list </title>
 </head>
 
@@ -22,7 +22,7 @@
         </tr>
         {% for id in questions.keys() %}
             <tr>
-                <td><a href={{ url_for('questions_and_answers', id=id) }}>{{ id }}</a></td>
+                <td><a href={{ url_for('increase_view', question_id=id) }}>{{ id }}</a></td>
                 {% for key in questions[id].keys() %}
                     {%  if key == 'image' %}
                             {%  if questions[id]['image'] != ' ' %}
