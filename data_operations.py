@@ -25,7 +25,10 @@ def create_id():
 
 
 def delete_image_file(filename):
-    os.remove(os.path.join('static', filename))
+    if filename not in os.path.join('static'):
+        pass
+    else:
+        os.remove(os.path.join('static', filename))
 
 
 def load_csv(csv_file):
@@ -61,12 +64,12 @@ def delete_id_question(id, questions):
     return dict
 
 
-def delete_answer_with_question(id, dict):
-    new_dict = {}
-    for key, value in dict.items():
-        if value['question_id'] != id:
-            new_dict[key] = value
-    return new_dict
+def delete_answer_with_question(id, answers):
+    newanswer = OrderedDict()
+    for answers_id, answer in answers.items():
+        if answer['question_id'] != id:
+            newanswer[answers_id] = answer
+    return newanswer
 
 
 def create_empty_question():

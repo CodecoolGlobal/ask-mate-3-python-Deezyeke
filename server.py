@@ -71,10 +71,29 @@ def edit_question(id):
 
 
 @app.route('/question/<question_id>/vote-up')
+@app.route('/questions/<question_id>/view')
+def increase_view(question_id):
+    questions = util.read_questions()
+    data = util.choose_data(question_id)
+    current_view_number = util.add_view(data)
+    util.update_data(questions, question_id, "view_number", current_view_number, "question")
+    return redirect(url_for("questions_and_answers", id=question_id))
+
+
+@app.route('/question/<question_id>/vote-up', methods=['POST'])
 def question_vote_up(question_id):
     questions = util.read_questions()
     data = util.choose_data(question_id)
     current_vote_number = util.change_votenum(data, "+")
+    util.update_data(questions, question_id, "vote_number", current_vote_number, "question")
+    return redirect('/')
+
+
+@app.route('/question/<question_id>/vote-down', methods=['POST'])
+def question_vote_down(question_id):
+    questions = util.read_questions()
+    data = util.choose_data(question_id)
+    current_vote_number = util.change_votenum(data, "-")
     util.update_data(questions, question_id, "vote_number", current_vote_number, "question")
     return redirect('/')
 
@@ -88,13 +107,22 @@ def delete_question(id):
 def deleted_question(id):
     answers = connection.read_questions(data_operations.FILENAME_ANSWERS)
     deleted_answers = data_operations.delete_answer_with_question(id, answers)
-    connection.write_questions(data_operations.FILENAME_QUESTIONS, deleted_answers, data_operations.ANSWER_HEADER)
-    questions = connection.read_questions(data_operations.FILENAME_QUESTIONS)
+    connection.write_questions(data_operations.FILENAME_ANSWERS, deleted_answers, data_operations.ANSWER_HEADER)
+
+    questions = connection.read_question(data_operations.FILENAME_QUESTIONS)
     if questions[id]['image'] != ' ':
         data_operations.delete_image_file(questions[id]['image'])
     deleted_file = data_operations.delete_id_question(id, questions)
     connection.write_questions(data_operations.FILENAME_QUESTIONS, deleted_file, data_operations.QUESTION_HEADER)
     return render_template('deleted.html', id=id)
+
+
+@app.route('/questions/<id>/answer_delete')
+def delete_answer(id):
+    answers = connection.read_question(data_operations.FILENAME_ANSWERS)
+    deleted_answers = data_operations.delete_id_question(id, answers)
+    connection.write_questions(data_operations.FILENAME_ANSWERS, deleted_answers, data_operations.ANSWER_HEADER)
+    return render_template('answer_delete.html', id=id)
 
 
 @app.route('/questions/<id>/new-answer', methods=['GET', 'POST'])

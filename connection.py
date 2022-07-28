@@ -66,3 +66,18 @@ def save_new_question():
     data_operations.save_data(question, data_operations.FILENAME_QUESTIONS, data_operations.QUESTION_HEADER)
 
 
+def orderby(questions, orderby, order):
+    question_list = []
+    if orderby != 'id':
+        for id in questions.keys():
+            question_list.append([questions[id][orderby], id])
+            id = 1
+    else:
+        for id in questions.keys():
+            question_list.append([id])
+            id = 0
+    question_list.sort(reverse=True if order == 'asc' else False, key=lambda x: x[0].lower())
+    questions_ordered = OrderedDict()
+    for item in question_list:
+        questions_ordered[item[id]] = questions[item[id]]
+    return questions_ordered
