@@ -75,7 +75,8 @@ def delete_question(id):
 def deleted_question(id):
     answers = connection.read_question(data_operations.FILENAME_ANSWERS)
     deleted_answers = data_operations.delete_answer_with_question(id, answers)
-    connection.write_questions(data_operations.FILENAME_QUESTIONS, deleted_answers, data_operations.ANSWER_HEADER)
+    connection.write_questions(data_operations.FILENAME_ANSWERS, deleted_answers, data_operations.ANSWER_HEADER)
+
     questions = connection.read_question(data_operations.FILENAME_QUESTIONS)
     if questions[id]['image'] != ' ':
         data_operations.delete_image_file(questions[id]['image'])
