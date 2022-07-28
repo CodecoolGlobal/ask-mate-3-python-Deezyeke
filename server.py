@@ -39,22 +39,22 @@ def questions_and_answers(id):
     return redirect('display_question.html')
 
 
-@app.route('/question/<question_id>/vote-up')
+@app.route('/question/<question_id>/vote-up', methods=['POST'])
 def question_vote_up(question_id):
     questions = util.read_questions()
     data = util.choose_data(question_id)
     current_vote_number = util.change_votenum(data, "+")
     util.update_data(questions, question_id, "vote_number", current_vote_number, "question")
-    return redirect('/', question_id=question_id)
+    return redirect('/')
 
 
-@app.route('/question/<question_id>/vote-down')
+@app.route('/question/<question_id>/vote-down', methods=['POST'])
 def question_vote_down(question_id):
     questions = util.read_questions()
     data = util.choose_data(question_id)
     current_vote_number = util.change_votenum(data, "-")
     util.update_data(questions, question_id, "vote_number", current_vote_number, "question")
-    return redirect('/', question_id=question_id)
+    return redirect('/')
 
 
 @app.route('/questions/<id>/delete')
