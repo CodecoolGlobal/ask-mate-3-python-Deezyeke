@@ -76,6 +76,14 @@ def deleted_question(id):
     return render_template('deleted.html', id=id)
 
 
+@app.route('/questions/<id>/answer_delete')
+def delete_answer(id):
+    answers = connection.read_question(data_operations.FILENAME_ANSWERS)
+    deleted_answers = data_operations.delete_id_question(id, answers)
+    connection.write_questions(data_operations.FILENAME_ANSWERS, deleted_answers, data_operations.ANSWER_HEADER)
+    return render_template('answer_delete.html', id=id)
+
+
 @app.route('/questions/<id>/new-answer', methods=['GET', 'POST'])
 def add_new_answer(id):
     if request.method == 'GET':

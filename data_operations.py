@@ -25,7 +25,10 @@ def create_id():
 
 
 def delete_image_file(filename):
-    os.remove(os.path.join('static', filename))
+    if filename not in os.path.join('static'):
+        pass
+    else:
+        os.remove(os.path.join('static', filename))
 
 
 def load_csv(csv_file):
