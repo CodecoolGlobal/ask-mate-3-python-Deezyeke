@@ -51,7 +51,7 @@ def add_question():
         data_operations.save_data(question, data_operations.FILENAME_QUESTIONS, data_operations.QUESTION_HEADER)
 
 ## !!!  Ezt át kell majd írni   !!!
-        return ('/list')
+        return redirect('/list')
 
 
 @app.route('/')
