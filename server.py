@@ -35,8 +35,19 @@ def questions_and_answers(id):
     questions = data_operations.load_csv(data_operations.FILENAME_QUESTIONS)
     answers = data_operations.load_csv(data_operations.FILENAME_ANSWERS)
     if request.method == 'GET':
+        increase_view(id)
         return render_template('display_question.html', question=questions, answer=answers, id=id)
     return redirect('display_question.html')
+
+
+def increase_view(question_id):
+    questions = util.read_questions()
+    data = util.choose_data(question_id)
+    print(question_id)
+    current_view_number = util.add_view(data)
+    print(current_view_number)
+    util.update_data(questions, question_id, "view_number", current_view_number, "question")
+    return
 
 
 @app.route('/question/<question_id>/vote-up', methods=['POST'])
@@ -66,7 +77,8 @@ def delete_question(id):
 def deleted_question(id):
     answers = connection.read_question(data_operations.FILENAME_ANSWERS)
     deleted_answers = data_operations.delete_answer_with_question(id, answers)
-    connection.write_questions(data_operations.FILENAME_QUESTIONS, deleted_answers, data_operations.ANSWER_HEADER)
+    connection.write_questions(data_operations.FILENAME_ANSWERS, deleted_answers, data_operations.ANSWER_HEADER)
+
     questions = connection.read_question(data_operations.FILENAME_QUESTIONS)
     if questions[id]['image'] != ' ':
         data_operations.delete_image_file(questions[id]['image'])
