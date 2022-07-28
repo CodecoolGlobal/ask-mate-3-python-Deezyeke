@@ -2,9 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 import util
 import data_operations
 import connection
-import os
-from datetime import datetime
-from collections import OrderedDict
+
 
 app = Flask(__name__)
 
@@ -37,20 +35,7 @@ def add_question():
     if request.method == 'GET':
         return render_template('add_question.html')
     elif request.method == 'POST':
-
-        question = init_question()
-        now = datetime.now()
-        question['submission_time'] = now.strftime("%Y/%m/%d %H:%M:%S")
-        question['title'] = request.form.get('title')
-        question['message'] = request.form.get('text')
-
-        uploaded_file = request.files['image_file']
-        if uploaded_file.filename != '':
-            uploaded_file.save(os.path.join('static', uploaded_file.filename))
-            question['image'] = uploaded_file.filename
-        data_operations.save_data(question, data_operations.FILENAME_QUESTIONS, data_operations.QUESTION_HEADER)
-
-## !!!  Ezt át kell majd írni   !!!
+        connection.fill_empty_question()
         return redirect('/list')
 
 
@@ -58,10 +43,10 @@ def add_question():
 @app.route('/list')
 def list():
     questions = data_operations.load_csv(data_operations.FILENAME_QUESTIONS)
-    if request.args.get('orderby') == None:
+    if request.args.get('orderby') is None:
         return render_template('questions_list.html', orderby='id', questions = questions, question_header = data_operations.QUESTION_HEADER)
     else:
-        questions_ordered = orderby( questions, request.args.get('orderby'), request.args.get('order') )
+        questions_ordered = connection.orderby(questions, request.args.get('orderby'), request.args.get('order'))
         if request.args.get('order') == 'desc':
             return render_template('questions_list.html', orderby=request.args.get('orderby'), questions=questions_ordered, question_header=data_operations.QUESTION_HEADER)
         elif request.args.get('order') == 'asc':
@@ -116,13 +101,18 @@ def delete_question(id):
 def deleted_question(id):
     answers = connection.read_question(data_operations.FILENAME_ANSWERS)
     deleted_answers = data_operations.delete_answer_with_question(id, answers)
-    connection.write_questions(data_operations.FILENAME_QUESTIONS, deleted_answers, data_operations.ANSWER_HEADER)
+    connection.write_questions(data_operations.FILENAME_ANSWERS, deleted_answers, data_operations.ANSWER_HEADER)
+
     questions = connection.read_question(data_operations.FILENAME_QUESTIONS)
     if questions[id]['image'] != ' ':
         data_operations.delete_image_file(questions[id]['image'])
     deleted_file = data_operations.delete_id_question(id, questions)
     connection.write_questions(data_operations.FILENAME_QUESTIONS, deleted_file, data_operations.QUESTION_HEADER)
     return render_template('deleted.html', id=id)
+
+
+
+
 
 
 @app.route('/questions/<id>/new-answer', methods=['GET', 'POST'])

@@ -36,10 +36,11 @@
                 {% endfor %}
                 <td>
                     <form action='/question/<question_id>/vote-up' method="POST">
-        <button type="submit"> Vote +1</button>
-    </form>
+                        <button style="background-color:orange; border-color:green;"> Vote +1</button>
+                        <button style="background-color:orange; border-color:green;"> Vote -1</button>
+                    </form>
                 </td>
-add_question
+
             </tr>
         {% endfor %}
     </table>
