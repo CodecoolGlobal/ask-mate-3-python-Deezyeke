@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+<meta charset="UTF-8">
 
 <head>
-    <meta charset="UTF-8">
     <title> Questions list </title>
 </head>
 
 <body bgcolor="33c455">
-    <a href="/add_question"> Add a new question </a> <br> <br>
+    <center><h1>Zsask!</h1></center>
+    <hr width="80%" color="blue">
+    <center><h4>Zsask anything you want!</h4></center>
+    <a href="/add_question"> Add a new question </a><br><br>
     <table>
         <tr>
             {% block question_list %}
@@ -22,14 +25,14 @@
         </tr>
         {% for id in questions.keys() %}
             <tr>
-                <td><a href={{ url_for('questions_and_answers', id=id) }}>{{ id }}</a></td>
+                <td><a href={{ url_for('increase_view', question_id=id) }}>{{ id }}</a></td>
                 {% for key in questions[id].keys() %}
                     {%  if key == 'image' %}
-                            {%  if questions[id]['image'] != ' ' %}
+                            {% if questions[id]['image'] != ' ' %}
                                 <td> <img src="{{ url_for("static", filename=questions[id]['image']) }}" height="30" width="30"> </td>
-                            {%  else %}
+                            {% else %}
                                 <td> <img src="{{ url_for("static", filename='no_file_02.png') }}" height="30" width="30"> </td>
-                            {%  endif %}
+                            {% endif %}
                     {% else %}
                         <td> {{ questions[id][key] }} </td>
                     {% endif %}
