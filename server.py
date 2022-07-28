@@ -1,8 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
-
+import util
 import data_operations
 import connection
-
 import os
 from datetime import datetime
 from collections import OrderedDict
@@ -38,6 +37,7 @@ def add_question():
     if request.method == 'GET':
         return render_template('add_question.html')
     elif request.method == 'POST':
+
         question = init_question()
         now = datetime.now()
         question['submission_time'] = now.strftime("%Y/%m/%d %H:%M:%S")
@@ -51,7 +51,7 @@ def add_question():
         data_operations.save_data(question, data_operations.FILENAME_QUESTIONS, data_operations.QUESTION_HEADER)
 
 ## !!!  Ezt át kell majd írni   !!!
-        return redirect('/list')
+        return ('/list')
 
 
 @app.route('/')
@@ -98,6 +98,15 @@ def questions_and_answers(id):
     return redirect('display_question.html')
 
 
+@app.route('/question/<question_id>/vote-up')
+def question_vote_up(question_id):
+    questions = util.read_questions()
+    data = util.choose_data(question_id)
+    current_vote_number = util.change_votenum(data, "+")
+    util.update_data(questions, question_id, "vote_number", current_vote_number, "question")
+    return redirect('/')
+
+
 @app.route('/questions/<id>/delete')
 def delete_question(id):
     return render_template('delete.html', id=id)
@@ -105,11 +114,14 @@ def delete_question(id):
 
 @app.route('/questions/<id>/delete/deleted')
 def deleted_question(id):
+    answers = connection.read_question(data_operations.FILENAME_ANSWERS)
+    deleted_answers = data_operations.delet_answer_with_question(id, answers)
+    connection.write_questions(data_operations.FILENAME_QUESTIONS, deleted_answers, data_operations.ANSWER_HEADER)
     questions = connection.read_question(data_operations.FILENAME_QUESTIONS)
     if questions[id]['image'] != ' ':
         data_operations.delete_image_file(questions[id]['image'])
     deleted_file = data_operations.delete_id_question(id, questions)
-    connection.write_questions(data_operations.FILENAME_QUESTIONS, deleted_file)
+    connection.write_questions(data_operations.FILENAME_QUESTIONS, deleted_file, data_operations.QUESTION_HEADER)
     return render_template('deleted.html', id=id)
 
 
@@ -128,4 +140,3 @@ if __name__ == "__main__":
         port=5000,
         debug=True,
     )
-
