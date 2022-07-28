@@ -1,8 +1,9 @@
 import csv
-import os
-from collections import OrderedDict
 import server
 import data_operations
+import os
+from datetime import datetime
+from collections import OrderedDict
 
 
 def read_question(csv_file):
@@ -41,7 +42,7 @@ def init_answer(header):
 
 def add_data_for_csv(q_id):
     answer = init_answer(data_operations.ANSWER_HEADER)
-    now = server.datetime.now()
+    now = datetime.now()
     answer['submission_time'] = now.strftime("%Y/%m/%d %H:%M:%S")
     answer['question_id'] = q_id
     answer['message'] = server.request.form.get('message')
@@ -50,3 +51,43 @@ def add_data_for_csv(q_id):
         uploaded_file.save('./static/' + uploaded_file.filename)
     answer['image'] = uploaded_file.filename
     data_operations.save_data(answer, data_operations.FILENAME_ANSWERS, data_operations.ANSWER_HEADER)
+
+
+def create_empty_question():
+    question = {}
+    for field in data_operations.QUESTION_HEADER:
+        question[field] = ' '
+    question['id'] = data_operations.create_id()
+    question['view_number'] = 0
+    question['vote_number'] = 0
+    return question
+
+
+def fill_empty_question():
+    question = create_empty_question()
+    now = datetime.now()
+    question['submission_time'] = now.strftime("%Y/%m/%d %H:%M:%S")
+    question['title'] = server.request.form.get('title')
+    question['message'] = server.request.form.get('text')
+    uploaded_file = server.request.files['image_file']
+    if uploaded_file.filename != '':
+        uploaded_file.save(os.path.join('static', uploaded_file.filename))
+        question['image'] = uploaded_file.filename
+    data_operations.save_data(question, data_operations.FILENAME_QUESTIONS, data_operations.QUESTION_HEADER)
+
+
+def orderby(questions, orderby, order):
+    question_list = []
+    if orderby != 'id':
+        for id in questions.keys():
+            question_list.append([questions[id][orderby], id])
+            id = 1
+    else:
+        for id in questions.keys():
+            question_list.append([id])
+            id = 0
+    question_list.sort(reverse=True if order == 'asc' else False, key=lambda x: x[0].lower())
+    questions_ordered = OrderedDict()
+    for item in question_list:
+        questions_ordered[item[id]] = questions[item[id]]
+    return questions_ordered
