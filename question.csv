@@ -1,11 +1,9 @@
-id,submission_time,view_number,vote_number,title,message,image
-2c1aaf1d,2022/07/27 16:34:45,0,1,QT1,Elso qst,666492.jpg
-5ae0d6bc,2022/07/27 17:01:23,0,0,What is?,Mi az prikézsia!,11533.jpeg
-6aed3b66,2022/07/27 17:07:34,0,0,QT2,YQ2, 
-9ff38967,2022/07/27 17:27:39,0,0,Tüdő,A tüdőd tépen kifelé!,lung.jpeg
-c523233f,2022/07/28 09:49:05,0,0,QT5,YQ1, 
-532ca490,2022/07/28 10:12:39,0,0,Color,How to add colors to my web page?,Screenshot from 2022-06-15 21-07-59.png
-40cd702c,2022/07/28 10:29:47,0,0,Nézz már ide,Dikk more mit nézel?,68844719_2419038838162554_8440962534646743040_n.jpg
-845686b3,2022/07/28 14:34:57,0,0,QT1,Elso qst,Screenshot from 2022-05-10 14-16-59.png
-bb7e617d,2022/07/28 15:57:43,0,0,O1G,Kirántom a tüdődet!!!,Viktor_Orbán_2022.jpg
-5bc0f8c1,2022/07/28 16:19:17,0,0,What,Mi az a lőcsös kefargin?,goodbadugly.jpg
+id,submission_time,view_number,vote_number,title,message,image
+2c1aaf1d,2022/07/27 16:34:45,15,4,QT1,Elso qst,666492.jpg
+9ff38967,2022/07/27 17:27:39,8,-5,Tüdő,A tüdőd tépen kifelé!,lung.jpeg
+5ae0d6bc,2022/07/28 17:45:30,5,2,Hungarian word,Mi az a prikézsia!,11533.jpeg
+5bc0f8c1,2022/07/28 17:48:23,1,-1,Hungarian food,Mi az a lőcsös kefargin?,goodbadugly.jpg
+40cd702c,2022/07/28 17:56:34,4,-1,Mi van he?,Dikk more mi van?,666492.jpg
+1f87ba5a,2022/07/28 17:58:35,4,3,Typo in code,How to fix grammar mistakes in VS code with one click? ,Screenshot from 2022-05-10 14-16-59.png
+bb7e617d,2022/07/28 18:07:46,11,-8,O1G?,Opinions on Orbi? ,Viktor_Orb�n_2022.jpg
+532ca490,2022/07/28 18:10:13,12,4,HTML Color,How to add colors to my web page? ,codecoolcat.png
