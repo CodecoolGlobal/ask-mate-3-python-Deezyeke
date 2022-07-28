@@ -109,7 +109,7 @@ def deleted_question(id):
     deleted_answers = data_operations.delete_answer_with_question(id, answers)
     connection.write_questions(data_operations.FILENAME_ANSWERS, deleted_answers, data_operations.ANSWER_HEADER)
 
-    questions = connection.read_question(data_operations.FILENAME_QUESTIONS)
+    questions = connection.read_questions(data_operations.FILENAME_QUESTIONS)
     if questions[id]['image'] != ' ':
         data_operations.delete_image_file(questions[id]['image'])
     deleted_file = data_operations.delete_id_question(id, questions)
@@ -119,7 +119,9 @@ def deleted_question(id):
 
 @app.route('/questions/<id>/answer_delete')
 def delete_answer(id):
-    answers = connection.read_question(data_operations.FILENAME_ANSWERS)
+    answers = connection.read_questions(data_operations.FILENAME_ANSWERS)
+    if answers[id]['image'] != ' ':
+        data_operations.delete_image_file(answers[id]['image'])
     deleted_answers = data_operations.delete_id_question(id, answers)
     connection.write_questions(data_operations.FILENAME_ANSWERS, deleted_answers, data_operations.ANSWER_HEADER)
     return render_template('answer_delete.html', id=id)

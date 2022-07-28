@@ -25,10 +25,7 @@ def create_id():
 
 
 def delete_image_file(filename):
-    if filename not in os.path.join('static'):
-        pass
-    else:
-        os.remove(os.path.join('static', filename))
+    os.remove(os.path.join('static', filename))
 
 
 def load_csv(csv_file):
@@ -61,7 +58,7 @@ def save_data(datas, csv_file, header):
 
 def delete_id_question(id, questions):
     questions.pop(id)
-    return dict
+    return questions
 
 
 def delete_answer_with_question(id, answers):
@@ -82,6 +79,14 @@ def create_empty_question():
     return question
 
 
+def order_filter(item):
+    print(type(item))
+    if type(item[0]) == str:
+        return item[0].lower()
+    elif type(item[0]) == int:
+        return item[0]
+
+
 def orderby(questions, orderby, order):
     question_list = []
     if orderby != 'id':
@@ -92,7 +97,7 @@ def orderby(questions, orderby, order):
         for id in questions.keys():
             question_list.append([id])
             id = 0
-    question_list.sort(reverse=True if order == 'asc' else False, key=lambda x: x[0].lower())
+    question_list.sort(reverse = True if order == 'asc' else False, key=order_filter)
     questions_ordered = OrderedDict()
     for item in question_list:
         questions_ordered[item[id]] = questions[item[id]]

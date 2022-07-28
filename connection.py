@@ -26,7 +26,7 @@ def write_questions(csv_file, questions, headers):
         f_csv.writeheader()
         for id in questions.keys():
             temp_dict['id'] = id
-            for item in range(1, len(data_operations.QUESTION_HEADER)):
+            for item in range(1, len(headers)):
                 temp_dict[headers[item]] = questions[id][headers[item]]
             f_csv.writerow(temp_dict)
 
@@ -49,7 +49,7 @@ def add_data_for_csv(q_id):
     uploaded_file = server.request.files['image_file']
     if uploaded_file.filename != '':
         uploaded_file.save('./static/' + uploaded_file.filename)
-    answer['image'] = uploaded_file.filename
+        answer['image'] = uploaded_file.filename
     data_operations.save_data(answer, data_operations.FILENAME_ANSWERS, data_operations.ANSWER_HEADER)
 
 
