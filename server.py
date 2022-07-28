@@ -43,8 +43,10 @@ def questions_and_answers(id):
 def increase_view(question_id):
     questions = util.read_questions()
     data = util.choose_data(question_id)
+    print(question_id)
     current_view_number = util.add_view(data)
-    util.update_data(questions, question_id, "vote_number", current_view_number, "question")
+    print(current_view_number)
+    util.update_data(questions, question_id, "view_number", current_view_number, "question")
     return
 
 
