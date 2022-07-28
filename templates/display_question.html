@@ -39,6 +39,11 @@
                 <h4><i>There is no answer added</i></h4>
             {% endif %}
             <h4>{{ value['message'] }}</h4>
+            {% if value['image'] == '' %}
+                <p> <small> No image file had been uploaded! </small> </p>
+            {% else %}
+                <img src="{{ url_for("static", filename=value['image']) }}" width="30"><br>
+            {%  endif %}
         {% endif %}
     {% endfor %}
     <a href="{{ url_for('add_new_answer', id=id)}}">Add a new answer</a><br><br>
