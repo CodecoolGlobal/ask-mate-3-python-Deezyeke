@@ -36,10 +36,14 @@
                 {% endfor %}
                 <td>
                     <form action='/question/<question_id>/vote-up' method="POST">
-        <button type="submit"> Vote +1</button>
-    </form>
+                        <button type="submit"> Vote +1</button>
+                    </form>
                 </td>
-
+                <td>
+                    <form action='/question/<question_id>/vote-up' method="POST">
+                        <button type="submit"> Vote -1</button>
+                    </form>
+                </td>
             </tr>
         {% endfor %}
     </table>
