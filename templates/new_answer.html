@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Add answer</title>
+    <title>Add answer to {{ id }}</title>
 </head>
+
 <body bgcolor="33c4a1">
 <h2>Add a new answer</h2>
 <form action="{{ url_for('add_new_answer', id=id) }}" method="post" enctype="multipart/form-data">

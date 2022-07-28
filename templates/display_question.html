@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title> Question details </title>
 </head>
+
 <body bgcolor="33c4a1">
     <h2>Title:</h2>
     {% for q_id, value in question.items() %}
@@ -50,7 +52,7 @@
     {% endfor %}
     <p>
         <a href="{{ url_for('add_new_answer', id=id)}}">Add a new answer</a>
-    </p><br><br>
+    </p><br>
     <a href="/">Home page</a>
 </body>
 </html>
