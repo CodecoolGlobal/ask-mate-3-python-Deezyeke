@@ -7,7 +7,10 @@
 </head>
 
 <body bgcolor="33c455">
-    <a href="/add_question"> Add a new question </a> <br> <br>
+    <center><h1>Zsask!</h1></center>
+    <hr width="80%" color="blue">
+    <center><h4>Zsask anything you want!</h4></center>
+    <a href="/add_question"> Add a new question </a><br><br>
     <table>
         <tr>
             {% block question_list %}
@@ -25,11 +28,11 @@
                 <td><a href={{ url_for('increase_view', question_id=id) }}>{{ id }}</a></td>
                 {% for key in questions[id].keys() %}
                     {%  if key == 'image' %}
-                            {%  if questions[id]['image'] != ' ' %}
+                            {% if questions[id]['image'] != ' ' %}
                                 <td> <img src="{{ url_for("static", filename=questions[id]['image']) }}" height="30" width="30"> </td>
-                            {%  else %}
+                            {% else %}
                                 <td> <img src="{{ url_for("static", filename='no_file_02.png') }}" height="30" width="30"> </td>
-                            {%  endif %}
+                            {% endif %}
                     {% else %}
                         <td> {{ questions[id][key] }} </td>
                     {% endif %}
