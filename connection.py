@@ -6,7 +6,7 @@ from datetime import datetime
 from collections import OrderedDict
 
 
-def read_question(csv_file):
+def read_questions(csv_file):
     questions = OrderedDict()
     with open(csv_file, 'r') as f:
         f_csv = csv.DictReader(f, delimiter=',')
@@ -19,15 +19,15 @@ def read_question(csv_file):
     return questions
 
 
-def write_questions(csv_file, dict, headers):
+def write_questions(csv_file, questions, headers):
     temp_dict = {}
     with open(csv_file, 'w') as f:
         f_csv = csv.DictWriter(f, fieldnames=headers)
         f_csv.writeheader()
-        for id in dict.keys():
+        for id in questions.keys():
             temp_dict['id'] = id
             for item in range(1, len(data_operations.QUESTION_HEADER)):
-                temp_dict[headers[item]] = dict[id][headers[item]]
+                temp_dict[headers[item]] = questions[id][headers[item]]
             f_csv.writerow(temp_dict)
 
 
@@ -53,18 +53,8 @@ def add_data_for_csv(q_id):
     data_operations.save_data(answer, data_operations.FILENAME_ANSWERS, data_operations.ANSWER_HEADER)
 
 
-def create_empty_question():
-    question = {}
-    for field in data_operations.QUESTION_HEADER:
-        question[field] = ' '
-    question['id'] = data_operations.create_id()
-    question['view_number'] = 0
-    question['vote_number'] = 0
-    return question
-
-
-def fill_empty_question():
-    question = create_empty_question()
+def save_new_question():
+    question = data_operations.create_empty_question()
     now = datetime.now()
     question['submission_time'] = now.strftime("%Y/%m/%d %H:%M:%S")
     question['title'] = server.request.form.get('title')
@@ -76,18 +66,3 @@ def fill_empty_question():
     data_operations.save_data(question, data_operations.FILENAME_QUESTIONS, data_operations.QUESTION_HEADER)
 
 
-def orderby(questions, orderby, order):
-    question_list = []
-    if orderby != 'id':
-        for id in questions.keys():
-            question_list.append([questions[id][orderby], id])
-            id = 1
-    else:
-        for id in questions.keys():
-            question_list.append([id])
-            id = 0
-    question_list.sort(reverse=True if order == 'asc' else False, key=lambda x: x[0].lower())
-    questions_ordered = OrderedDict()
-    for item in question_list:
-        questions_ordered[item[id]] = questions[item[id]]
-    return questions_ordered

@@ -2,20 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title> Add a question </title>
+    <title> {%  block title %} Add a question {% endblock %}</title>
+
 </head>
 <body bgcolor="33c4a1">
-    <form action="/add_question" method="post" enctype="multipart/form-data">
+    <form {% block form_action %} action="/add_question" {% endblock %} method="post" enctype="multipart/form-data">
+
         <label for="title" name="title"> Question's title: </label> <br>
-        <input type="text" id="title" name="title"> <br><br>
+        <input type="text" id="title" name="title" {% block title_text %}{% endblock %}> <br><br>
 
         <label for="text"> Your question: </label> <br>
-        <textarea id="text" name="text" rows="6" cols="50"></textarea> <br> <br>
+        <textarea id="text" name="text" rows="6" cols="50">{% block text %}{% endblock %}</textarea> <br> <br>
 
+    {%  block image  %}
         <label for="image_file"> Upload an image: </label> <br>
-        <input type="file" id="image_file" name="image_file" accept=".png, .jpg, .jpeg"> <br> <br>
+    {%  endblock %}
 
-        <button style="background-color:orange; border-color:turquoise;"> Save question </button>
+        <input type="file" id="image_file" name="image_file" accept=".png, .jpg, .jpeg"> <br> <br>
+        <button style="background-color:orange; border-color:turquoise;"> {% block button_text %} Save question {% endblock %}</button>
     </form>
 </body>
 </html>

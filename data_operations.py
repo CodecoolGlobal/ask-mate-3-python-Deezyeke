@@ -3,7 +3,7 @@ import os
 from collections import OrderedDict
 
 import connection
-from connection import read_question
+from connection import read_questions
 
 FILENAME_QUESTIONS = 'question.csv'
 FILENAME_ANSWERS = 'answers.csv'
@@ -37,7 +37,10 @@ def load_csv(csv_file):
                 question = {}
                 for key in row.keys():
                     if key != 'id':
-                        question[key] = row[key]
+                        if (key == 'vote_number') or (key == 'view_number'):
+                            question[key] = int(row[key])
+                        else:
+                            question[key] = row[key]
                 questions[row['id']] = question
             return questions
     except FileNotFoundError:
@@ -53,8 +56,8 @@ def save_data(datas, csv_file, header):
         f_csv.writerow(datas)
 
 
-def delete_id_question(id, dict):
-    dict.pop(id)
+def delete_id_question(id, questions):
+    questions.pop(id)
     return dict
 
 
@@ -66,5 +69,38 @@ def delete_answer_with_question(id, dict):
     return new_dict
 
 
-def load_answers():
-    pass
+def create_empty_question():
+    question = {}
+    for field in QUESTION_HEADER:
+        question[field] = ' '
+    question['id'] = create_id()
+    question['view_number'] = 0
+    question['vote_number'] = 0
+    return question
+
+
+def orderby(questions, orderby, order):
+    question_list = []
+    if orderby != 'id':
+        for id in questions.keys():
+            question_list.append([questions[id][orderby], id])
+            id = 1
+    else:
+        for id in questions.keys():
+            question_list.append([id])
+            id = 0
+    question_list.sort(reverse=True if order == 'asc' else False, key=lambda x: x[0].lower())
+    questions_ordered = OrderedDict()
+    for item in question_list:
+        questions_ordered[item[id]] = questions[item[id]]
+    return questions_ordered
+
+
+def replace_question(questions, question):
+    questions.pop(question['id'])
+    to_insert_question = {}
+    temp_question = {}
+    for field in range(1, len(QUESTION_HEADER)):
+        temp_question[QUESTION_HEADER[field]] = question[QUESTION_HEADER[field]]
+    questions[ question['id'] ] = temp_question
+    connection.write_questions(FILENAME_QUESTIONS, questions, QUESTION_HEADER)
