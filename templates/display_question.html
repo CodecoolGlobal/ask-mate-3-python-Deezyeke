@@ -45,7 +45,7 @@
             {% if value['image'] == ' ' %}
                 <p> <small> No image file had been uploaded! </small> </p>
             {% else %}
-                <img src="{{ url_for("static", filename=value['image']) }}" width="30"><br>
+                <img src="{{ url_for("static", filename=value['image']) }}" width="320"><br>
             {%  endif %}
             <a href="{{ url_for('delete_answer', id=a_id) }}"><button style="background-color:red; border-color:orange;">Delete answer</button></a>
         {% endif %}

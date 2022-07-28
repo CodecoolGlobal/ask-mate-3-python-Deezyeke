@@ -61,7 +61,8 @@ def edit_question(id):
         if uploaded_file.filename != '':
             uploaded_file.save(os.path.join('static', uploaded_file.filename))
             question['image'] = uploaded_file.filename
-            data_operations.delete_image_file(questions[id]['image'])
+            if questions[id]['image'] != ' ':
+                data_operations.delete_image_file(questions[id]['image'])
         else:
             question['image'] = questions[id]['image']
 
