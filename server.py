@@ -112,7 +112,6 @@ def delete_question(id):
     return render_template('delete.html', id=id)
 
 
-
 @app.route('/questions/<id>/delete/deleted')
 def deleted_question(id):
     answers = connection.read_question(data_operations.FILENAME_ANSWERS)
@@ -141,4 +140,3 @@ if __name__ == "__main__":
         port=5000,
         debug=True,
     )
-
