@@ -40,6 +40,11 @@ def change_votenum(information, up_or_downvote):
     return current_vote
 
 
+def add_view(information):
+    view_number = int(information["view_number"])
+    return view_number + 1
+
+
 def update_data(data: list, data_id, data_key, new_data, csv):
     """
     Takes List of dictionaries;

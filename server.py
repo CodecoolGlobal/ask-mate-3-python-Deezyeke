@@ -35,8 +35,17 @@ def questions_and_answers(id):
     questions = data_operations.load_csv(data_operations.FILENAME_QUESTIONS)
     answers = data_operations.load_csv(data_operations.FILENAME_ANSWERS)
     if request.method == 'GET':
+        increase_view(id)
         return render_template('display_question.html', question=questions, answer=answers, id=id)
     return redirect('display_question.html')
+
+
+def increase_view(question_id):
+    questions = util.read_questions()
+    data = util.choose_data(question_id)
+    current_view_number = util.add_view(data)
+    util.update_data(questions, question_id, "vote_number", current_view_number, "question")
+    return
 
 
 @app.route('/question/<question_id>/vote-up', methods=['POST'])
