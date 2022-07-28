@@ -7,29 +7,6 @@ import connection
 app = Flask(__name__)
 
 
-def init_questions():
-    questions = OrderedDict()
-    question = OrderedDict()
-    for field in data_operations.QUESTION_HEADER():
-        question[field] = ' '
-    question['view_number'] = '0'
-    question['vote_number'] = '0'
-    questions[data_operations.create_id()] = question
-
-
-def init_question():
-    question = {}
-
-    for field in data_operations.QUESTION_HEADER:
-        question[field] = ' '
-
-    question['id'] = data_operations.create_id()
-    question['view_number'] = 0
-    question['vote_number'] = 0
-
-    return question
-
-
 @app.route('/add_question', methods=['GET', 'POST'])
 def add_question():
     if request.method == 'GET':
@@ -53,27 +30,6 @@ def list():
             return render_template('questions_list_desc.html', orderby=request.args.get('orderby'), questions=questions_ordered, question_header=data_operations.QUESTION_HEADER)
 
 
-def orderby(questions, orderby, order):
-    question_list = []
-
-    if orderby != 'id':
-        for id in questions.keys():
-            question_list.append([ questions[id][orderby], id ])
-            id = 1
-    else:
-        for id in questions.keys():
-            question_list.append([id])
-            id = 0
-
-    question_list.sort(reverse=True if order=='asc' else False, key=lambda x : x[0].lower() )
-    questions_ordered = OrderedDict()
-
-    for item in question_list:
-        questions_ordered[item[id]]=questions[item[id]]
-
-    return questions_ordered
-
-
 @app.route('/questions/<id>', methods=['GET', 'POST'])
 def questions_and_answers(id):
     questions = data_operations.load_csv(data_operations.FILENAME_QUESTIONS)
@@ -83,11 +39,20 @@ def questions_and_answers(id):
     return redirect('display_question.html')
 
 
-@app.route('/question/<question_id>/vote-up')
+@app.route('/question/<question_id>/vote-up', methods=['POST'])
 def question_vote_up(question_id):
     questions = util.read_questions()
     data = util.choose_data(question_id)
     current_vote_number = util.change_votenum(data, "+")
+    util.update_data(questions, question_id, "vote_number", current_vote_number, "question")
+    return redirect('/')
+
+
+@app.route('/question/<question_id>/vote-down', methods=['POST'])
+def question_vote_down(question_id):
+    questions = util.read_questions()
+    data = util.choose_data(question_id)
+    current_vote_number = util.change_votenum(data, "-")
     util.update_data(questions, question_id, "vote_number", current_vote_number, "question")
     return redirect('/')
 
@@ -109,10 +74,6 @@ def deleted_question(id):
     deleted_file = data_operations.delete_id_question(id, questions)
     connection.write_questions(data_operations.FILENAME_QUESTIONS, deleted_file, data_operations.QUESTION_HEADER)
     return render_template('deleted.html', id=id)
-
-
-
-
 
 
 @app.route('/questions/<id>/new-answer', methods=['GET', 'POST'])

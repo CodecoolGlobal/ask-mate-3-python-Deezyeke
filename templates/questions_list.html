@@ -22,7 +22,7 @@
         </tr>
         {% for id in questions.keys() %}
             <tr>
-                <td><a href={{ url_for('questions_and_answers', id=id)}}>{{ id }}</a></td>
+                <td><a href={{ url_for('questions_and_answers', id=id) }}>{{ id }}</a></td>
                 {% for key in questions[id].keys() %}
                     {%  if key == 'image' %}
                             {%  if questions[id]['image'] != ' ' %}
@@ -35,12 +35,15 @@
                     {% endif %}
                 {% endfor %}
                 <td>
-                    <form action='/question/<question_id>/vote-up' method="POST">
+                    <form action='/question/{{ id }}/vote-up' method="POST">
                         <button style="background-color:orange; border-color:green;"> Vote +1</button>
+                    </form>
+                </td>
+                <td>
+                    <form action='/question/{{ id }}/vote-down' method="POST">
                         <button style="background-color:orange; border-color:green;"> Vote -1</button>
                     </form>
                 </td>
-
             </tr>
         {% endfor %}
     </table>

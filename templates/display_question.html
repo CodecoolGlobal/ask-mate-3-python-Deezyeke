@@ -29,7 +29,7 @@
         <img src="{{ url_for("static", filename=question[id]['image']) }}" width="320">
     {%  endif %}
     <br>
-    <a href="{{ url_for('delete_question', id=id) }}"><button type="button">Delete question</button></a>
+    <a href="{{ url_for('delete_question', id=id) }}"><button style="background-color:red; border-color:orange;">Delete question</button></a>
     <br>
 
     <h2>Answer(s):</h2>
