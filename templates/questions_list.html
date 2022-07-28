@@ -35,18 +35,13 @@
                     {% endif %}
                 {% endfor %}
                 <td>
-                    <form action='/question/<question_id>/vote-up' method="POST">
-<<<<<<< HEAD
+                    <form action='/question/{{ question_id }}/vote-up' method="POST">
                         <button style="background-color:orange; border-color:green;"> Vote +1</button>
-                        <button style="background-color:orange; border-color:green;"> Vote -1</button>
-=======
-                        <button type="submit"> Vote +1</button>
                     </form>
                 </td>
                 <td>
-                    <form action='/question/<question_id>/vote-up' method="POST">
-                        <button type="submit"> Vote -1</button>
->>>>>>> c7922196166133f109e5c50facda22e6eb309e91
+                    <form action='/question/{{ question_id }}/vote-down' method="POST">
+                        <button style="background-color:orange; border-color:green;"> Vote -1</button>
                     </form>
                 </td>
             </tr>

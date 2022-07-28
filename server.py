@@ -45,7 +45,7 @@ def question_vote_up(question_id):
     data = util.choose_data(question_id)
     current_vote_number = util.change_votenum(data, "+")
     util.update_data(questions, question_id, "vote_number", current_vote_number, "question")
-    return redirect('/')
+    return redirect('/', question_id=question_id)
 
 
 @app.route('/question/<question_id>/vote-down')
@@ -54,7 +54,7 @@ def question_vote_down(question_id):
     data = util.choose_data(question_id)
     current_vote_number = util.change_votenum(data, "-")
     util.update_data(questions, question_id, "vote_number", current_vote_number, "question")
-    return redirect('/')
+    return redirect('/', question_id=question_id)
 
 
 @app.route('/questions/<id>/delete')
