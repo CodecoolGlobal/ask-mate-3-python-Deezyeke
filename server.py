@@ -7,29 +7,6 @@ import connection
 app = Flask(__name__)
 
 
-def init_questions():
-    questions = OrderedDict()
-    question = OrderedDict()
-    for field in data_operations.QUESTION_HEADER():
-        question[field] = ' '
-    question['view_number'] = '0'
-    question['vote_number'] = '0'
-    questions[data_operations.create_id()] = question
-
-
-def init_question():
-    question = {}
-
-    for field in data_operations.QUESTION_HEADER:
-        question[field] = ' '
-
-    question['id'] = data_operations.create_id()
-    question['view_number'] = 0
-    question['vote_number'] = 0
-
-    return question
-
-
 @app.route('/add_question', methods=['GET', 'POST'])
 def add_question():
     if request.method == 'GET':
