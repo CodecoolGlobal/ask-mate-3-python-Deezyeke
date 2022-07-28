@@ -26,7 +26,7 @@
                 {% for key in questions[id].keys() %}
                     {%  if key == 'image' %}
                             {%  if questions[id]['image'] != ' ' %}
-                                <td> <img src="{{ url_for("static", filename=questions[id]['image']) }}" height="30" width="30"> </td> -->
+                                <td> <img src="{{ url_for("static", filename=questions[id]['image']) }}" height="30" width="30"> </td>
                             {%  else %}
                                 <td> <img src="{{ url_for("static", filename='no_file_02.png') }}" height="30" width="30"> </td>
                             {%  endif %}
@@ -34,6 +34,12 @@
                         <td> {{ questions[id][key] }} </td>
                     {% endif %}
                 {% endfor %}
+                <td>
+                    <form action='/question/<question_id>/vote-up' method="POST">
+        <button type="submit"> Vote +1</button>
+    </form>
+                </td>
+add_question
             </tr>
         {% endfor %}
     </table>

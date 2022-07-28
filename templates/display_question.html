@@ -24,7 +24,7 @@
         {% endif %}
     {% endfor %}
     {% if question[id]['image'] == ' ' %}
-        <img src="{{ url_for("static", filename='no_file_02.png') }}" width="320">
+        <p> <small> No image file had been uploaded! </small> </p>
     {% else %}
         <img src="{{ url_for("static", filename=question[id]['image']) }}" width="320">
     {%  endif %}
