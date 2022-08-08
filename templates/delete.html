@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Delete question {{ id }}</title>
+    </head>
+    <body bgcolor="ffcc44">
+        <h2>Are you sure you want to delete this question?</h2>
+        <a href="{{ url_for('deleted_question', id=id) }}"><button style="background-color:red; border-color:orange;">Delete</button></a><br><br>
+        <a href="{{ url_for('questions_and_answers', id=id) }}"><button style="background-color:lightgreen; border-color:orange;">Cancel</button></a>
+    </body>
+</html>

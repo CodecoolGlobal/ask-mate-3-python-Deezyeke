@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+
+<head>
+    <title>Zsaszk Home page</title>
+</head>
+
+<body bgcolor="33c455">
+    <center><h1 style="font-family:Helvetica">Zsaszk!</h1></center>
+    <hr width="80%" color="blue">
+    <center><h4>Zsask anything you want!</h4></center>
+    <a href="/add_question"> Add a new question </a><br><br>
+    <table>
+        <tr>
+            {% block question_list %}
+            {% for header in question_header  %}
+                {% if header == orderby %}
+                    <th> <a href= "{{ "/list?orderby=" + header + "&order=asc"}}"> >>+{{header}}+<< </a> </th>
+                {% else %}
+                    <th> <a href= "{{ "/list?orderby=" + header + "&order=asc"}}"> {{header}} </a> </th>
+                {% endif %}
+            {% endfor %}
+            {% endblock %}
+        </tr>
+        {% for id in questions.keys() %}
+            <tr>
+                <td><a href={{ url_for('increase_view', question_id=id) }}>{{ id }}</a></td>
+                {% for key in questions[id].keys() %}
+                    {%  if key == 'image' %}
+                            {% if questions[id]['image'] != ' ' %}
+                                <td> <img src="{{ url_for("static", filename=questions[id]['image']) }}" height="30" width="30"> </td>
+                            {% else %}
+                                <td> <img src="{{ url_for("static", filename='no_file_02.png') }}" height="30" width="30"> </td>
+                            {% endif %}
+                    {% else %}
+                        <td> {{ questions[id][key] }} </td>
+                    {% endif %}
+                {% endfor %}
+                <td>
+                    <form action='/question/{{ id }}/vote-up' method="POST">
+                        <button style="background-color:orange; border-color:green;"> Vote +1</button>
+                    </form>
+                </td>
+                <td>
+                    <form action='/question/{{ id }}/vote-down' method="POST">
+                        <button style="background-color:orange; border-color:green;"> Vote -1</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>
