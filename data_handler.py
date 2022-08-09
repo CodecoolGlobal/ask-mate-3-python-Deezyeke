@@ -26,3 +26,12 @@ def save_new_question(cursor, question):
     VALUES ( %(st)s, %(vi)s, %(vo)s, %(ti)s, %(me)s, %(im)s )"""
     cursor.execute(query, {'st': question['submission_time'], 'vi': question['view_number'], 'vo': question['view_number'], 'ti': question['title'],
                            'me': question['message'], 'im': question['image']})
+
+
+@connection_handler
+def get_all_answers(cursor):
+    query = """
+        SELECT *
+        FROM answer"""
+    cursor.execute(query)
+    return cursor.fetchall()

@@ -42,6 +42,21 @@ def add_question():
         return redirect('/list')
 
 
+@app.route('/display-question/<q_id>')
+def display_question(q_id):
+    questions = []
+    answers = []
+    for question in data_handler.get_all_questions():
+        for key, value in question.items():
+            if key == 'id' and str(value) == q_id:
+                questions.append(question)
+    for answer in data_handler.get_all_answers():
+        for key, value in answer.items():
+            if key == 'question_id' and str(value) == q_id:
+                answers.append(answer)
+    return render_template('display_question.html', question=questions, answer=answers, q_id=q_id)
+
+
 if __name__ == "__main__":
     app.run(
         host='0.0.0.0',
