@@ -35,3 +35,12 @@ def get_all_answers(cursor):
         FROM answer"""
     cursor.execute(query)
     return cursor.fetchall()
+
+
+# @connection_handler
+# def add_answer_to_question(cursor, id):
+#     query = """
+#             INSERT INTO answer (submission_time, vote_number, question_id, message, image)
+#             VALUES ( %(st)s, %(vo)s, %(qi)s, %(me)s, %(im)s )"""
+#     cursor.execute(query, )
+#     return cursor.fetchall()
