@@ -14,6 +14,9 @@ def index():
 
     return render_template('questions_list.html', orderby='id', questions=questions, question_header=data_handler.QUESTION_HEADER)
 
+@app.route('/question/<id>/delete')
+def delete_question(id):
+
 
 
 if __name__ == "__main__":

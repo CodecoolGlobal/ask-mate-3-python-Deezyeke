@@ -19,3 +19,18 @@ def get_all_questions(cursor):
         FROM question"""
     cursor.execute(query)
     return cursor.fetchall()
+
+
+@connection_handler
+def delete_question(cursor, id):
+    cursor.execute("""
+    DELETE FROM question
+    WHERE id = %(id)s""",
+                   {'id': id})
+
+@connection_handler
+def delete_answer(cursor, id):
+    cursor.execute("""
+    DELETE FROM answer
+    WHERE id = %(id)s""",
+                   {'id': id})
