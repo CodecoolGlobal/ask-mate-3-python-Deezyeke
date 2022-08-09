@@ -37,6 +37,14 @@ def get_all_answers(cursor):
     return cursor.fetchall()
 
 
+def create_empty_question():
+    question = {}
+    question['view_number'] = 0
+    question['vote_number'] = 0
+    question['image'] = None
+    return question
+
+
 # @connection_handler
 # def add_answer_to_question(cursor, id):
 #     query = """

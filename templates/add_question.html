@@ -6,7 +6,7 @@
 
 </head>
 <body bgcolor="33c4a1">
-    <form {% block form_action %} action="/add_question" {% endblock %} method="post" enctype="multipart/form-data">
+    <form {% block form_action %} action="{{url_for('add_question')}}" {% endblock %} method="post" enctype="multipart/form-data">
 
         <label for="title" name="title"> Question's title: </label> <br>
         <input type="text" id="title" name="title" {% block title_text %}{% endblock %}> <br><br>
@@ -19,10 +19,10 @@
     {%  endblock %}
 
         <input type="file" id="image_file" name="image_file" accept=".png, .jpg, .jpeg"> <br> <br>
-        <button style="background-color:orange; border-color:turquoise;"> {% block button_text %} Save question {% endblock %}</button>
+        <button type="submit" style="background-color:orange; border-color:turquoise;"> {% block button_text %} Save question {% endblock %}</button>
     </form>
     <br>
-    <form action="{{ url_for('questions_and_answers', id=id) }}">
+    <form action="{{url_for('index')}}">
         <button type="submit" style="background-color:red; border-color:orange">Cancel</button>
     </form>
 </body>
