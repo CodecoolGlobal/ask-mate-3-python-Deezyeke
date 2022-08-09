@@ -20,6 +20,16 @@ def get_all_questions(cursor):
     return cursor.fetchall()
 
 
+# Visszaadja az id alapján a megfelelő question-t, közvetlenül a dictonary-t, nem a listába ágyazott dictonary-t, amit a fetchall adna.
+@connection_handler
+def get_question(cursor, id):
+    query ='''SELECT * 
+    FROM  question
+    WHERE id=%(id)s'''
+    cursor.execute(query, {'id': id})
+    return cursor.fetchall()[0]
+
+
 @connection_handler
 def save_new_question(cursor, question):
     query = """
@@ -44,6 +54,18 @@ def create_empty_question():
     question['vote_number'] = 0
     question['image'] = None
     return question
+
+
+def delete_image_file(filename):
+    os.remove(os.path.join('static', filename))
+
+
+@connection_handler
+def replace_question(cursor, q_id, question):
+    query ='''UPDATE question 
+    SET  submission_time=%(sub)s, view_number=%(vie)s, vote_number=%(vot)s, title=%(ttl)s, message=%(msg)s, image=%(img)s
+    WHERE id=%(qid)s'''
+    cursor.execute(query, {'qid':q_id, 'sub':question['submission_time'], 'vie':question['view_number'], 'vot':question['vote_number'], 'ttl':question['title'], 'msg':question['message'], 'img':question['image']})
 
 
 def create_empty_answer():
@@ -82,3 +104,12 @@ def delete_answer(cursor, id):
     DELETE FROM answer
     WHERE id = %(id)s""",
                    {'id': id})
+
+
+@connection_handler
+def get_image_name(cursor, id, table_name):
+    cursor.execute("""
+    SELECT image
+    FROM %(t_n)s
+    WHERE id = %(id)s""",
+                   {'t_n': table_name, 'id': id})
