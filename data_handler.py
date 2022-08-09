@@ -63,3 +63,18 @@ def replace_question(cursor, q_id, question):
     SET  submission_time=%(sub)s, view_number=%(vie)s, vote_number=%(vot)s, title=%(ttl)s, message=%(msg)s, image=%(img)s
     WHERE id=%(qid)s'''
     cursor.execute(query, {'qid':q_id, 'sub':question['submission_time'], 'vie':question['view_number'], 'vot':question['vote_number'], 'ttl':question['title'], 'msg':question['message'], 'img':question['image']})
+
+
+def create_empty_answer():
+    answer = {'vote_number': 0, 'image': None}
+    return answer
+
+
+@connection_handler
+def add_answer_to_question(cursor, answer):
+    query = """
+            INSERT INTO answer (submission_time, vote_number, question_id, message, image)
+            VALUES ( %(st)s, %(vo)s, %(qi)s, %(me)s, %(im)s )"""
+    cursor.execute(query, {'st': answer['submission_time'], 'vo': answer['vote_number'],
+                    'qi': answer['question_id'], 'me': answer['message'], 'im': answer['image']})
+
