@@ -33,6 +33,8 @@
                             {% else %}
                                 <td> <img src="{{ url_for("static", filename='no_file_02.png') }}" height="30" width="30"> </td>
                             {% endif %}
+                    {% elif key == 'id' %}
+                        <td><a href="{{ url_for('display_question', q_id=question['id']) }}">{{ question['id'] }}</a></td>
                     {% else %}
                         <td> {{ question[key] }} </td>
                     {% endif %}
