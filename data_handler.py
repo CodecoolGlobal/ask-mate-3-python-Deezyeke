@@ -18,3 +18,12 @@ def get_all_questions(cursor):
         FROM question"""
     cursor.execute(query)
     return cursor.fetchall()
+
+
+@connection_handler
+def get_all_answers(cursor):
+    query = """
+        SELECT *
+        FROM answer"""
+    cursor.execute(query)
+    return cursor.fetchall()
