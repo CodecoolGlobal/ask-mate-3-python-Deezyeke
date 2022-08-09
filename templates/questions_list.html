@@ -23,10 +23,10 @@
             {% endfor %}
             {% endblock %}
         </tr>
-        {% for id in questions.keys() %}
+        {% for question in questions %}
             <tr>
                 <td><a href={{ url_for('increase_view', question_id=id) }}>{{ id }}</a></td>
-                {% for key in questions[id].keys() %}
+                {% for key in question.keys() %}
                     {%  if key == 'image' %}
                             {% if questions[id]['image'] != ' ' %}
                                 <td> <img src="{{ url_for("static", filename=questions[id]['image']) }}" height="30" width="30"> </td>
@@ -37,6 +37,7 @@
                         <td> {{ questions[id][key] }} </td>
                     {% endif %}
                 {% endfor %}
+{#
                 <td>
                     <form action='/question/{{ id }}/vote-up' method="POST">
                         <button style="background-color:orange; border-color:green;"> Vote +1</button>
@@ -47,6 +48,7 @@
                         <button style="background-color:orange; border-color:green;"> Vote -1</button>
                     </form>
                 </td>
+#}
             </tr>
         {% endfor %}
     </table>
