@@ -18,3 +18,11 @@ def get_all_questions(cursor):
         FROM question"""
     cursor.execute(query)
     return cursor.fetchall()
+
+@connection_handler
+def save_new_question(cursor, question):
+    query = """
+    INSERT INTO QUESTION ('submission_time', 'view_number', 'vote_number', 'title', 'message', 'image')
+    VALUES ( %(st)s, %(vi)s, %(vo)s, %(ti)s, %(me)s, %(im)s )"""
+    cursor.execute(query, {'st': question['submission_time'], 'vi': question['view_number'], 'vo': question['view_number'], 'ti': question['title'],
+                           'me': question['message'], 'im': question['image']})
