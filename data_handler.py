@@ -45,10 +45,16 @@ def create_empty_question():
     return question
 
 
-# @connection_handler
-# def add_answer_to_question(cursor, id):
-#     query = """
-#             INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-#             VALUES ( %(st)s, %(vo)s, %(qi)s, %(me)s, %(im)s )"""
-#     cursor.execute(query, )
-#     return cursor.fetchall()
+def create_empty_answer():
+    answer = {'vote_number': 0, 'image': None}
+    return answer
+
+
+@connection_handler
+def add_answer_to_question(cursor, answer):
+    query = """
+            INSERT INTO answer (submission_time, vote_number, question_id, message, image)
+            VALUES ( %(st)s, %(vo)s, %(qi)s, %(me)s, %(im)s )"""
+    cursor.execute(query, {'st': answer['submission_time'], 'vo': answer['vote_number'],
+                    'qi': answer['question_id'], 'me': answer['message'], 'im': answer['image']})
+
