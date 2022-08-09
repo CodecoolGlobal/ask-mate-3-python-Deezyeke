@@ -52,11 +52,11 @@ def display_question(q_id):
 
 @app.route('/display-question/<q_id>/delete', methods=['GET', 'POST'])
 def delete_question(q_id):
-    if request.method == 'POST':
+    if request.method == 'GET':
+        return render_template('delete.html', q_id=q_id)
+    else:
         data_handler.delete_question(q_id)
         return redirect(url_for('index'))
-    else:
-        return redirect(url_for('display_question'))
 
 
 if __name__ == "__main__":
