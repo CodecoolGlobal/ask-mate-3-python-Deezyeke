@@ -15,13 +15,6 @@ def index():
     return render_template('questions_list.html', orderby='id', questions=questions, question_header=data_handler.QUESTION_HEADER)
 
 
-def create_empty_question():
-    question = {}
-    question['view_number'] = 0
-    question['vote_number'] = 0
-    return question
-
-
 @app.route('/add_question', methods=['GET', 'POST'])
 def add_question():
     if request.method == 'GET':
@@ -37,9 +30,9 @@ def add_question():
             uploaded_file.save(os.path.join('static', uploaded_file.filename))
             question['image'] = uploaded_file.filename
 
-        data_handler.save_new_question()
+        data_handler.save_new_question(question)
 
-        return redirect('/list')
+        return redirect(url_for('index'))
 
 
 @app.route('/display-question/<q_id>')
