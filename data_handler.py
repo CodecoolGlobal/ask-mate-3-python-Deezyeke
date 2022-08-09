@@ -46,11 +46,33 @@ def create_empty_question():
     return question
 
 
+def create_empty_answer():
+    answer = {'vote_number': 0, 'image': None}
+    return answer
+
+
+@connection_handler
+def add_answer_to_question(cursor, answer):
+    query = """
+            INSERT INTO answer (submission_time, vote_number, question_id, message, image)
+            VALUES ( %(st)s, %(vo)s, %(qi)s, %(me)s, %(im)s )"""
+    cursor.execute(query, {'st': answer['submission_time'], 'vo': answer['vote_number'],
+                    'qi': answer['question_id'], 'me': answer['message'], 'im': answer['image']})
+
+
 @connection_handler
 def delete_question(cursor, id):
     cursor.execute("""
     DELETE FROM question
     WHERE id = %(id)s""",
+                   {'id': id})
+
+
+@connection_handler
+def delete_answer_when_question(cursor, id):
+    cursor.execute("""
+    DELETE FROM answer
+    WHERE question_id = %(id)s""",
                    {'id': id})
 
 

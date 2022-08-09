@@ -55,8 +55,27 @@ def delete_question(q_id):
     if request.method == 'GET':
         return render_template('delete.html', q_id=q_id)
     else:
+        data_handler.delete_answer_when_question(q_id)
         data_handler.delete_question(q_id)
         return redirect(url_for('index'))
+
+
+@app.route('/question/<q_id>/add-new-answer', methods=['GET', 'POST'])
+def add_new_answer(q_id):
+    if request.method == 'GET':
+        return render_template('new_answer.html', q_id=q_id)
+    elif request.method == 'POST':
+        answer = data_handler.create_empty_answer()
+        now = datetime.now()
+        answer['submission_time'] = now.strftime("%Y/%m/%d %H:%M:%S")
+        answer['message'] = request.form.get('message')
+        answer['question_id'] = q_id
+        uploaded_file = request.files['image_file']
+        if uploaded_file.filename != '':
+            uploaded_file.save(os.path.join('static', uploaded_file.filename))
+            answer['image'] = uploaded_file.filename
+        data_handler.add_answer_to_question(answer)
+        return redirect(url_for('display_question', q_id=q_id))
 
 
 if __name__ == "__main__":
