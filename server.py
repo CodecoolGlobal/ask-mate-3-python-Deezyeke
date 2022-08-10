@@ -14,13 +14,19 @@ app = Flask(__name__)
 def index():
      # questions = data_handler.get_all_questions()
      # return render_template('questions_list.html', orderby='id', questions=questions, question_header=data_handler.QUESTION_HEADER)
-# alapvetően submit time desc, legördülő menüből választható az order by és csak 5öt mutat:
+# alapvetően submit time desc és csak 5öt mutat, legördülő menüből választható mi alapján order-elje:
     if request.method == 'GET':
         submission_time = request.args.get('submission_time')
         # if submission_time:
         desc_by_time = data_handler.get_last_five_questions('submission_time')
         return render_template('questions_list.html', questions=desc_by_time, orderby='title', question_header=data_handler.QUESTION_HEADER)
-#a többi "old" questions akkor legyen csak látható, ha az utolsó 5 alatti linkre kattint pl show all questions névvel
+    # if request.method == 'POST':
+    # order_by = request.form.get('order_by')
+    # filtered = data_handler.filter_questions('order_by')
+    #  return render_template('questions_list.html', questions=filtered,
+
+# Extra idea: #a többi "old" questions akkor legyen csak látható, ha az utolsó 5 alatti linkre kattint pl show all questions névvel
+
 
 @app.route('/add_question', methods=['GET', 'POST'])
 def add_question():

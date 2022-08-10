@@ -7,14 +7,26 @@
 </head>
 
 <body bgcolor="33c455">
-    <center><h1 style="font-family:Helvetica">Zsaszk!</h1></center>
+    <center><h1 style="font-family:Helvetica">"Zs'aszk"!</h1></center>
     <hr width="80%" color="blue">
-    <center><h4>Zsask anything you want!</h4></center>
+    <center><h4>Just ask anything you want!</h4></center>
     <form>
         <textarea name="search" rows=1 cols=30 maxlength=30></textarea>
         <button type="submit" style="background-color:blue; border-color:green; color:whitesmoke">Search</button>
     </form>
-    <a href="/add_question"> Add a new question </a><br><br>
+
+    <form action="/" method="POST" name="order_by"><br><br>
+        <label>Filter by </label>
+        <select name="order_by" >
+          <option>title</option>
+          <option>message</option>
+          <option>submission time</option>
+          <option>number of views</option>
+          <option>number of votes</option>
+        </select>
+        <button class="btn" type="submit">Filter now!</button>
+  </form><br>
+
     <table>
         <tr>
             {% block question_list %}
@@ -55,7 +67,9 @@
                 </td>
             </tr>
         {% endfor %}
-    </table>
+    </table><br>
+    Haven't found you are looking for?
+    <a href="/add_question"> Add a new question here!</a><br><br>
 </body>
 
 </html>

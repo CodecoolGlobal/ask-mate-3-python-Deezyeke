@@ -30,6 +30,16 @@ def get_last_five_questions(cursor, submission_time):
     cursor.execute(query)
     return cursor.fetchall()
 
+
+@connection_handler
+def flter_questions():
+    pass
+    #query = sql.SQL('''SELECT * {}
+    #ORDER_BY {}''').format(sql.Identifier(table), sql.Literal(str(id)))
+    #cursor.execute(query)
+
+
+
 # Visszaadja az id alapján a megfelelő question-t, közvetlenül a dictonary-t, nem a listába ágyazott dictonary-t, amit a fetchall adna.
 @connection_handler
 def get_question(cursor, id):
