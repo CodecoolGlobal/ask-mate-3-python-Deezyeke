@@ -17,6 +17,7 @@ def get_all_questions(cursor):
     cursor.execute(query)
     return cursor.fetchall()
 
+
 # Visszaadja az id alapján a megfelelő question-t, közvetlenül a dictonary-t, nem a listába ágyazott dictonary-t, amit a fetchall adna.
 @connection_handler
 def get_question(cursor, id):
@@ -121,6 +122,8 @@ def get_image_name_from_answer(cursor, q_id):
     WHERE question_id = %(q_i)s""",
                    {'q_i': q_id})
     return cursor.fetchall()
+
+
 @connection_handler
 def add_comment(cursor, comment):
     query = """
@@ -138,3 +141,38 @@ def read_q_comments(cursor):
         WHERE answer_id is null"""
     cursor.execute(query)
     return cursor.fetchall()
+
+
+@connection_handler
+def get_question_tags(cursor, question_id):
+    query = '''SELECT name
+            FROM question_tag
+            JOIN tag ON question_tag.tag_id = tag.id
+            WHERE question_id = %(q_id)s'''
+    cursor.execute(query, {'q_id': question_id})
+    return cursor.fetchall()
+
+
+@connection_handler
+def get_tags(cursor):
+    query ="""SELECT *
+            FROM tag"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@connection_handler
+def add_new_tag(cursor, tag):
+    query = '''INSERT INTO tag (name)
+    VALUES (%(nme)s)
+    '''
+    cursor.execute(query, {'nme':tag})
+
+@connection_handler
+def add_new_tag_to_question(cursor, question_id, tag_id):
+    query ='''INSERT INTO question_tag (question_id, tag_id)
+                VALUES (%(qid)s, %(tid)s)'''
+    try:
+        cursor.execute(query, {'qid':question_id, 'tid':tag_id})
+    except psycopg2.errors.UniqueViolation:
+        pass

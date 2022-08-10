@@ -57,7 +57,20 @@
         <a href="{{ url_for('add_new_answer', q_id=q_id)}}">Add a new answer</a>
     </p>
 
-    <a href='/question/{{q_id}}/new-tag'> Add a new tag </a> <br><br>
+    <br>
+
+    <h4>Tags: </h4>
+    {% if question_tags != None %}
+        {% for tag in question_tags %}
+            <ul>
+                <li> {{ tag['name'] }} </li>
+            </ul>
+        {% endfor %}
+    {% else: %}
+        <h5> <small> No tag added yet! </small></h5>
+    {% endif %}
+    <a href='/question/{{q_id}}/new-tag'> Add tag </a> <br><br><br>
+
     <a href="/">Home page</a>
 </body>
 </html>
