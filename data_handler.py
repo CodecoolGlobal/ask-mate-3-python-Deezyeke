@@ -107,9 +107,20 @@ def delete_answer(cursor, id):
 
 
 @connection_handler
-def get_image_name(cursor, id, table_name):
+def get_image_name_from_question(cursor, id):
     cursor.execute("""
     SELECT image
-    FROM %(t_n)s
+    FROM question
     WHERE id = %(id)s""",
-                   {'t_n': table_name, 'id': id})
+                   {'id': id})
+    return cursor.fetchone()
+
+
+@connection_handler
+def get_image_name_from_answer(cursor, q_id):
+    cursor.execute("""
+    SELECT image
+    FROM answer
+    WHERE question_id = %(q_i)s""",
+                   {'q_i': q_id})
+    return cursor.fetchall()

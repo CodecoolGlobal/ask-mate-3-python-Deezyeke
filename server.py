@@ -85,6 +85,13 @@ def delete_question(q_id):
     if request.method == 'GET':
         return render_template('delete.html', q_id=q_id)
     else:
+        question_image = data_handler.get_image_name_from_question(q_id)
+        if question_image['image'] != None:
+            data_handler.delete_image_file(question_image['image'])
+        answer_images = data_handler.get_image_name_from_answer(q_id)
+        for row in answer_images:
+            if row['image'] != None:
+                data_handler.delete_image_file(row['image'])
         data_handler.delete_answer_when_question(q_id)
         data_handler.delete_question(q_id)
         return redirect(url_for('index'))
