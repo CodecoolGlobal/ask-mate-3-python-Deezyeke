@@ -16,10 +16,11 @@ def index():
      # return render_template('questions_list.html', orderby='id', questions=questions, question_header=data_handler.QUESTION_HEADER)
 # alapvetően submit time desc és csak 5öt mutat, legördülő menüből választható mi alapján order-elje:
     if request.method == 'GET':
-        submission_time = request.args.get('submission_time')
+        submission_time = request.args.get('submission_time', 'view_number')
         # if submission_time:
         desc_by_time = data_handler.get_last_five_questions('submission_time')
-        return render_template('questions_list.html', questions=desc_by_time, orderby='title', question_header=data_handler.QUESTION_HEADER)
+        views = data_handler.get_view_number()
+        return render_template('questions_list.html', questions=desc_by_time, orderby='title', view_number='views', question_header=data_handler.QUESTION_HEADER)
     # if request.method == 'POST':
     # order_by = request.form.get('order_by')
     # filtered = data_handler.filter_questions('order_by')

@@ -31,8 +31,17 @@ def get_last_five_questions(cursor, submission_time):
     return cursor.fetchall()
 
 
+# @connection_handler
+# def get_view_number(view_number):SELECT * FROM pg_views WHERE viewname='__viewname__';
+#     query = """CREATE RECURSIVE VIEW [INFORMATION_SCHEMA.views] view_name (view_number) AS SELECT  view_number FROM question;"""
+#     cursor.execute(query)
+#     return cursor.fetchall()
+
+
+
+# !!!!!!!!!!!! TODO!!!!!!!!!!!!!!!!!
 @connection_handler
-def flter_questions():
+def filter_questions():
     pass
     #query = sql.SQL('''SELECT * {}
     #ORDER_BY {}''').format(sql.Identifier(table), sql.Literal(str(id)))
