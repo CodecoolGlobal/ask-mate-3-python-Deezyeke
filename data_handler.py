@@ -22,10 +22,10 @@ def get_all_questions(cursor):
 
 
 @connection_handler
-def get_last_five_questions():
+def get_last_five_questions(cursor, submission_time):
     query = """
             SELECT * FROM question
-            ORDER BY submit_time DESC
+            ORDER BY submission_time DESC
             lIMIT 5;"""
     cursor.execute(query)
     return cursor.fetchall()
