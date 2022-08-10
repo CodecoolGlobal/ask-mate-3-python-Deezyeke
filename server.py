@@ -117,6 +117,11 @@ def add_new_answer(q_id):
         return redirect(url_for('display_question', q_id=q_id))
 
 
+@app.route('/display-question/<q_id>/delete_answer')
+def delete_answer():
+    pass
+
+
 if __name__ == "__main__":
     app.run(
         host='0.0.0.0',
