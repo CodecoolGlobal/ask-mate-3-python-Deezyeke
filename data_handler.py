@@ -2,13 +2,12 @@ import os
 from collections import OrderedDict
 import psycopg2
 import psycopg2.extras
+from psycopg2 import sql
 from data_connection import connection_handler
 
 
-QUESTION_HEADER = ['id', 'submission_time', 'view_number',
-                   'vote_number', 'title', 'message', 'image']
-ANSWER_HEADER = ['id', 'submission_time',
-                 'vote_number', 'question_id', 'message', 'image']
+QUESTION_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
+ANSWER_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
 
 
 @connection_handler
@@ -18,7 +17,6 @@ def get_all_questions(cursor):
         FROM question"""
     cursor.execute(query)
     return cursor.fetchall()
-
 
 # Visszaadja az id alapján a megfelelő question-t, közvetlenül a dictonary-t, nem a listába ágyazott dictonary-t, amit a fetchall adna.
 @connection_handler
@@ -74,6 +72,15 @@ def create_empty_answer():
 
 
 @connection_handler
+def change_vote_number(cursor, id, table, up_or_down):
+    vote = 1 if up_or_down == "+" else -1
+    query = sql.SQL('''UPDATE {}
+    SET vote_number={vote}
+    WHERE id=%(id)s''').format(sql.Identifier('table'))
+    pass
+
+
+@connection_handler
 def add_answer_to_question(cursor, answer):
     query = """
             INSERT INTO answer (submission_time, vote_number, question_id, message, image)
@@ -117,10 +124,29 @@ def get_image_name_from_question(cursor, id):
 
 
 @connection_handler
-def get_image_name_from_answer(cursor, q_id):
+def get_image_name_from_answer(cursor, a_id):
     cursor.execute("""
     SELECT image
     FROM answer
-    WHERE question_id = %(q_i)s""",
-                   {'q_i': q_id})
+    WHERE id = %(a_i)s""",
+                   {'a_i': a_id})
+    return cursor.fetchone()
+
+
+@connection_handler
+def add_comment(cursor, comment):
+    query = """
+            INSERT INTO comment (submission_time, question_id, message)
+            VALUES ( %(st)s, %(qi)s, %(me)s)"""
+    cursor.execute(query, {'st': comment['submission_time'],
+                        'qi': comment['question_id'], 'me': comment['message']})
+
+
+@connection_handler
+def read_q_comments(cursor):
+    query = """
+        SELECT *
+        FROM comment
+        WHERE answer_id is null"""
+    cursor.execute(query)
     return cursor.fetchall()
