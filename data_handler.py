@@ -17,7 +17,6 @@ def get_all_questions(cursor):
     cursor.execute(query)
     return cursor.fetchall()
 
-
 # Visszaadja az id alapján a megfelelő question-t, közvetlenül a dictonary-t, nem a listába ágyazott dictonary-t, amit a fetchall adna.
 @connection_handler
 def get_question(cursor, id):
@@ -25,7 +24,7 @@ def get_question(cursor, id):
     FROM  question
     WHERE id=%(id)s'''
     cursor.execute(query, {'id': id})
-    return cursor.fetchone()
+    return cursor.fetchall()[0]
 
 
 @connection_handler
@@ -79,3 +78,63 @@ def add_answer_to_question(cursor, answer):
     cursor.execute(query, {'st': answer['submission_time'], 'vo': answer['vote_number'],
                     'qi': answer['question_id'], 'me': answer['message'], 'im': answer['image']})
 
+
+@connection_handler
+def delete_question(cursor, id):
+    cursor.execute("""
+    DELETE FROM question
+    WHERE id = %(id)s""",
+                   {'id': id})
+
+
+@connection_handler
+def delete_answer_when_question(cursor, id):
+    cursor.execute("""
+    DELETE FROM answer
+    WHERE question_id = %(id)s""",
+                   {'id': id})
+
+
+@connection_handler
+def delete_answer(cursor, id):
+    cursor.execute("""
+    DELETE FROM answer
+    WHERE id = %(id)s""",
+                   {'id': id})
+
+
+@connection_handler
+def get_image_name_from_question(cursor, id):
+    cursor.execute("""
+    SELECT image
+    FROM question
+    WHERE id = %(id)s""",
+                   {'id': id})
+    return cursor.fetchone()
+
+
+@connection_handler
+def get_image_name_from_answer(cursor, q_id):
+    cursor.execute("""
+    SELECT image
+    FROM answer
+    WHERE question_id = %(q_i)s""",
+                   {'q_i': q_id})
+    return cursor.fetchall()
+@connection_handler
+def add_comment(cursor, comment):
+    query = """
+            INSERT INTO comment (submission_time, question_id, message)
+            VALUES ( %(st)s, %(qi)s, %(me)s)"""
+    cursor.execute(query, {'st': comment['submission_time'],
+                        'qi': comment['question_id'], 'me': comment['message']})
+
+
+@connection_handler
+def read_q_comments(cursor):
+    query = """
+        SELECT *
+        FROM comment
+        WHERE answer_id is null"""
+    cursor.execute(query)
+    return cursor.fetchall()

@@ -1,8 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
 import util
 import data_handler
+import os
 from datetime import datetime
+from dotenv import load_dotenv
 
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -66,6 +69,7 @@ def edit_question(id):
 
 @app.route('/display-question/<q_id>')
 def display_question(q_id):
+    q_comments = data_handler.read_q_comments()
     questions = []
     answers = []
     for question in data_handler.get_all_questions():
@@ -76,7 +80,24 @@ def display_question(q_id):
         for key, value in answer.items():
             if key == 'question_id' and str(value) == q_id:
                 answers.append(answer)
-    return render_template('display_question.html', question=questions, answer=answers, q_id=q_id)
+    return render_template('display_question.html', question=questions, answer=answers, q_id=q_id, q_comments=q_comments)
+
+
+@app.route('/display-question/<q_id>/delete', methods=['GET', 'POST'])
+def delete_question(q_id):
+    if request.method == 'GET':
+        return render_template('delete.html', q_id=q_id)
+    else:
+        question_image = data_handler.get_image_name_from_question(q_id)
+        if question_image['image'] != None:
+            data_handler.delete_image_file(question_image['image'])
+        answer_images = data_handler.get_image_name_from_answer(q_id)
+        for row in answer_images:
+            if row['image'] != None:
+                data_handler.delete_image_file(row['image'])
+        data_handler.delete_answer_when_question(q_id)
+        data_handler.delete_question(q_id)
+        return redirect(url_for('index'))
 
 
 @app.route('/question/<q_id>/add-new-answer', methods=['GET', 'POST'])
@@ -84,7 +105,7 @@ def add_new_answer(q_id):
     if request.method == 'GET':
         return render_template('new_answer.html', q_id=q_id)
     elif request.method == 'POST':
-        answer = data_handler.create_empty_answer()
+        answer = util.create_empty_answer()
         now = datetime.now()
         answer['submission_time'] = now.strftime("%Y/%m/%d %H:%M:%S")
         answer['message'] = request.form.get('message')
@@ -94,6 +115,21 @@ def add_new_answer(q_id):
             uploaded_file.save(os.path.join('static', uploaded_file.filename))
             answer['image'] = uploaded_file.filename
         data_handler.add_answer_to_question(answer)
+        return redirect(url_for('display_question', q_id=q_id))
+
+
+@app.route('//question/<q_id>/comments', methods=['GET', 'POST'])
+def add_comment_to_question(q_id):
+    if request.method == 'GET':
+        for question in data_handler.get_all_questions():
+            for key, value in question.items():
+                if key == 'id' and str(value) == q_id:
+                    return render_template('add_comment.html', q_id=q_id, question=question)
+    elif request.method == 'POST':
+        now = datetime.now()
+        comment = {'message': request.form.get('add-comment'), 'submission_time': now.strftime("%Y/%m/%d %H:%M:%S"),
+                   'question_id': q_id}
+        data_handler.add_comment(comment)
         return redirect(url_for('display_question', q_id=q_id))
 
 

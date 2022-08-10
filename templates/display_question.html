@@ -24,13 +24,20 @@
             <img src="{{ url_for("static", filename=data['image']) }}" width="320">
         {%  endif %}
     {% endfor %}
-    <br><br>
+    {% for comment in q_comments %}
+        <p style="font-size: 10px">
+            {{ comment['submission_time'] }}, {{ comment['message'] }}
+        </p>
+    {% endfor %}
+    <br>
+    <a href="{{ url_for('add_comment_to_question', q_id=q_id) }}" methods="get">Add comments</a>
+    <br>
 
     <a href="/question/{{q_id}}/edit"><button style="background-color:blue; border-color:green; color:whitesmoke">Edit question</button></a>
     <br><br>
-{#    <a href="{{ url_for('delete_question', id=q_id) }}"><button style="background-color:red; border-color:orange;">Delete question</button></a>#}
-{#    <br><br>#}
-{#    <hr width="80%" color="blue" align="left">#}
+    <a href="/display-question/{{q_id}}/delete"><button style="background-color:red; border-color:orange;">Delete question</button></a>
+    <br><br>
+    <hr width="80%" color="blue" align="left">
 
     <h2><i>Answer(s):</i></h2>
     {% for data in answer %}

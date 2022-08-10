@@ -77,3 +77,11 @@ def update_answer_csv(question_data):
         writer = csv.DictWriter(file, fieldnames=ANSWER_HEADER)
         for line in question_data:
             writer.writerow(line)
+
+
+"""Dont delete above anything!!"""
+
+
+def create_empty_answer():
+    answer = {'vote_number': 0, 'image': None}
+    return answer
