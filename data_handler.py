@@ -45,11 +45,6 @@ def create_empty_question():
     return question
 
 
-def create_empty_answer():
-    answer = {'vote_number': 0, 'image': None}
-    return answer
-
-
 @connection_handler
 def add_answer_to_question(cursor, answer):
     query = """
@@ -58,3 +53,21 @@ def add_answer_to_question(cursor, answer):
     cursor.execute(query, {'st': answer['submission_time'], 'vo': answer['vote_number'],
                     'qi': answer['question_id'], 'me': answer['message'], 'im': answer['image']})
 
+
+@connection_handler
+def add_comment(cursor, comment):
+    query = """
+            INSERT INTO comment (submission_time, question_id, message)
+            VALUES ( %(st)s, %(qi)s, %(me)s)"""
+    cursor.execute(query, {'st': comment['submission_time'],
+                        'qi': comment['question_id'], 'me': comment['message']})
+
+
+@connection_handler
+def read_q_comments(cursor):
+    query = """
+        SELECT *
+        FROM comment
+        WHERE answer_id is null"""
+    cursor.execute(query)
+    return cursor.fetchall()
