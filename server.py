@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import util
 import data_handler
-import os
 from datetime import datetime
 
 
@@ -96,6 +95,11 @@ def add_new_answer(q_id):
             answer['image'] = uploaded_file.filename
         data_handler.add_answer_to_question(answer)
         return redirect(url_for('display_question', q_id=q_id))
+
+
+@app.route('/question/<question_id>/new-tag')
+def add_new_tag(question_id):
+    pass
 
 
 if __name__ == "__main__":

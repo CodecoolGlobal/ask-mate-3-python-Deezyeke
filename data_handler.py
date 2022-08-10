@@ -17,6 +17,7 @@ def get_all_questions(cursor):
     cursor.execute(query)
     return cursor.fetchall()
 
+
 # Visszaadja az id alapján a megfelelő question-t, közvetlenül a dictonary-t, nem a listába ágyazott dictonary-t, amit a fetchall adna.
 @connection_handler
 def get_question(cursor, id):
@@ -24,7 +25,7 @@ def get_question(cursor, id):
     FROM  question
     WHERE id=%(id)s'''
     cursor.execute(query, {'id': id})
-    return cursor.fetchall()[0]
+    return cursor.fetchone()
 
 
 @connection_handler
