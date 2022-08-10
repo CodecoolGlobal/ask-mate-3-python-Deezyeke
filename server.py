@@ -72,6 +72,11 @@ def display_question(q_id):
     q_comments = data_handler.read_q_comments()
     questions = []
     answers = []
+
+    question_tags = data_handler.get_question_tags(q_id)
+    if len(question_tags) == 0:
+        question_tags = None
+
     for question in data_handler.get_all_questions():
         for key, value in question.items():
             if key == 'id' and str(value) == q_id:
@@ -80,7 +85,13 @@ def display_question(q_id):
         for key, value in answer.items():
             if key == 'question_id' and str(value) == q_id:
                 answers.append(answer)
-    return render_template('display_question.html', question=questions, answer=answers, q_id=q_id, q_comments=q_comments)
+    return render_template('display_question.html', question=questions, answer=answers, q_id=q_id, q_comments=q_comments, question_tags=question_tags)
+
+
+@app.route('/question/<q_id>/vote/<up_or_down>', methods=['POST'])
+def add_vote(q_id, up_or_down):
+    data_handler.change_vote_number(q_id, 'question', up_or_down)
+    return redirect('/')
 
 
 @app.route('/display-question/<q_id>/delete', methods=['GET', 'POST'])
@@ -145,9 +156,31 @@ def add_comment_to_question(q_id):
         return redirect(url_for('display_question', q_id=q_id))
 
 
-@app.route('/question/<question_id>/new-tag')
+@app.route('/question/<question_id>/new-tag', methods=['GET', 'POST'])
 def add_new_tag(question_id):
-    pass
+    question = data_handler.get_question(question_id)
+    question_tags = data_handler.get_question_tags(question_id)
+    tags = data_handler.get_tags()
+
+    if request.method == 'GET':
+        if len(question_tags) == 0:
+            question_tags = None
+        return render_template('add_tag.html', question_id=question_id, message=question['message'], question_tags=question_tags, tags=tags)
+    elif request.method == 'POST':
+        new_tag = request.form.get('new_tag')
+        choose_tag_id = request.form.get('choose_tag')
+        if new_tag:
+            data_handler.add_new_tag(new_tag)
+            return redirect(url_for('add_new_tag', question_id=question_id))
+        if choose_tag_id:
+            data_handler.add_new_tag_to_question(question_id, choose_tag_id)
+            return redirect(url_for('add_new_tag', question_id=question_id))
+
+
+@app.route('/question/<question_id>/tag/<tag_id>/delete')
+def delete_tag(question_id, tag_id):
+    data_handler.delete_question_tag(question_id, tag_id)
+    return redirect(url_for('display_question', q_id=question_id))
 
 
 if __name__ == "__main__":
