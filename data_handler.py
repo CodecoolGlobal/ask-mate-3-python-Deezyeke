@@ -21,6 +21,15 @@ def get_all_questions(cursor):
     return cursor.fetchall()
 
 
+@connection_handler
+def get_last_five_questions():
+    query = """
+            SELECT * FROM question
+            ORDER BY submit_time DESC
+            lIMIT 5;"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
 # Visszaadja az id alapján a megfelelő question-t, közvetlenül a dictonary-t, nem a listába ágyazott dictonary-t, amit a fetchall adna.
 @connection_handler
 def get_question(cursor, id):
