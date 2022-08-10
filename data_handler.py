@@ -2,6 +2,7 @@ import os
 from collections import OrderedDict
 import psycopg2
 import psycopg2.extras
+from psycopg2 import sql
 from data_connection import connection_handler
 
 
@@ -71,6 +72,15 @@ def replace_question(cursor, q_id, question):
 def create_empty_answer():
     answer = {'vote_number': 0, 'image': None}
     return answer
+
+
+@connection_handler
+def change_vote_number(cursor, id, table, up_or_down):
+    vote = 1 if up_or_down == "+" else -1
+    query = sql.SQL('''UPDATE {}
+    SET vote_number={vote}
+    WHERE id=%(id)s''').format(sql.Identifier('table'))
+    pass
 
 
 @connection_handler
