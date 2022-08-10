@@ -3,6 +3,8 @@ from collections import OrderedDict
 import psycopg2
 import psycopg2.extras
 from psycopg2 import sql
+from psycopg2._psycopg import cursor
+
 from data_connection import connection_handler
 
 

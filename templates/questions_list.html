@@ -20,9 +20,9 @@
             {% block question_list %}
             {% for header in question_header  %}
                 {% if header == orderby %}
-                    <th> <a href= "{{ "/list?orderby=" + header + "&order=asc"}}"> >>+{{header}}+<< </a> </th>
+                    <th> <a href= "{{ "/list?orderby=" + header + "&order=desc"}}"> {{header}} </a> </th>
                 {% else %}
-                    <th> <a href= "{{ "/list?orderby=" + header + "&order=asc"}}"> {{header}} </a> </th>
+                    <th> <a href= "{{ "/list?orderby=" + header + "&order=desc"}}"> {{header}} </a> </th>
                 {% endif %}
             {% endfor %}
             {% endblock %}
