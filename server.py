@@ -3,7 +3,9 @@ import util
 import data_handler
 import os
 from datetime import datetime
+from dotenv import load_dotenv
 
+load_dotenv()
 
 app = Flask(__name__)
 
