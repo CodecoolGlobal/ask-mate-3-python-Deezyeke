@@ -6,10 +6,8 @@ from psycopg2 import sql
 from data_connection import connection_handler
 
 
-QUESTION_HEADER = ['id', 'submission_time', 'view_number',
-                   'vote_number', 'title', 'message', 'image']
-ANSWER_HEADER = ['id', 'submission_time',
-                 'vote_number', 'question_id', 'message', 'image']
+QUESTION_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
+ANSWER_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
 
 
 @connection_handler
@@ -19,7 +17,6 @@ def get_all_questions(cursor):
         FROM question"""
     cursor.execute(query)
     return cursor.fetchall()
-
 
 # Visszaadja az id alapján a megfelelő question-t, közvetlenül a dictonary-t, nem a listába ágyazott dictonary-t, amit a fetchall adna.
 @connection_handler
@@ -117,9 +114,37 @@ def delete_answer(cursor, id):
 
 
 @connection_handler
-def get_image_name(cursor, id, table_name):
+def get_image_name_from_question(cursor, id):
     cursor.execute("""
     SELECT image
-    FROM %(t_n)s
+    FROM question
     WHERE id = %(id)s""",
-                   {'t_n': table_name, 'id': id})
+                   {'id': id})
+    return cursor.fetchone()
+
+
+@connection_handler
+def get_image_name_from_answer(cursor, q_id):
+    cursor.execute("""
+    SELECT image
+    FROM answer
+    WHERE question_id = %(q_i)s""",
+                   {'q_i': q_id})
+    return cursor.fetchall()
+@connection_handler
+def add_comment(cursor, comment):
+    query = """
+            INSERT INTO comment (submission_time, question_id, message)
+            VALUES ( %(st)s, %(qi)s, %(me)s)"""
+    cursor.execute(query, {'st': comment['submission_time'],
+                        'qi': comment['question_id'], 'me': comment['message']})
+
+
+@connection_handler
+def read_q_comments(cursor):
+    query = """
+        SELECT *
+        FROM comment
+        WHERE answer_id is null"""
+    cursor.execute(query)
+    return cursor.fetchall()
