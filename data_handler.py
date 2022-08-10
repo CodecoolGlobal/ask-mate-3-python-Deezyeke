@@ -45,6 +45,23 @@ def create_empty_question():
     return question
 
 
+def delete_image_file(filename):
+    os.remove(os.path.join('static', filename))
+
+
+@connection_handler
+def replace_question(cursor, q_id, question):
+    query ='''UPDATE question 
+    SET  submission_time=%(sub)s, view_number=%(vie)s, vote_number=%(vot)s, title=%(ttl)s, message=%(msg)s, image=%(img)s
+    WHERE id=%(qid)s'''
+    cursor.execute(query, {'qid':q_id, 'sub':question['submission_time'], 'vie':question['view_number'], 'vot':question['vote_number'], 'ttl':question['title'], 'msg':question['message'], 'img':question['image']})
+
+
+def create_empty_answer():
+    answer = {'vote_number': 0, 'image': None}
+    return answer
+
+
 @connection_handler
 def add_answer_to_question(cursor, answer):
     query = """
@@ -54,6 +71,48 @@ def add_answer_to_question(cursor, answer):
                     'qi': answer['question_id'], 'me': answer['message'], 'im': answer['image']})
 
 
+@connection_handler
+def delete_question(cursor, id):
+    cursor.execute("""
+    DELETE FROM question
+    WHERE id = %(id)s""",
+                   {'id': id})
+
+
+@connection_handler
+def delete_answer_when_question(cursor, id):
+    cursor.execute("""
+    DELETE FROM answer
+    WHERE question_id = %(id)s""",
+                   {'id': id})
+
+
+@connection_handler
+def delete_answer(cursor, id):
+    cursor.execute("""
+    DELETE FROM answer
+    WHERE id = %(id)s""",
+                   {'id': id})
+
+
+@connection_handler
+def get_image_name_from_question(cursor, id):
+    cursor.execute("""
+    SELECT image
+    FROM question
+    WHERE id = %(id)s""",
+                   {'id': id})
+    return cursor.fetchone()
+
+
+@connection_handler
+def get_image_name_from_answer(cursor, q_id):
+    cursor.execute("""
+    SELECT image
+    FROM answer
+    WHERE question_id = %(q_i)s""",
+                   {'q_i': q_id})
+    return cursor.fetchall()
 @connection_handler
 def add_comment(cursor, comment):
     query = """
