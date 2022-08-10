@@ -43,18 +43,16 @@
                         <td> {{ question[key] }} </td>
                     {% endif %}
                 {% endfor %}
-{#
                 <td>
-                    <form action='/question/{{ id }}/vote-up' method="POST">
+                    <form action='/question/{{ question["id"] }}/vote/up' method="POST">
                         <button style="background-color:orange; border-color:green;"> Vote +1</button>
                     </form>
                 </td>
                 <td>
-                    <form action='/question/{{ id }}/vote-down' method="POST">
+                    <form action='/question/{{ question["id"] }}/vote/down' method="POST">
                         <button style="background-color:orange; border-color:green;"> Vote -1</button>
                     </form>
                 </td>
-#}
             </tr>
         {% endfor %}
     </table>

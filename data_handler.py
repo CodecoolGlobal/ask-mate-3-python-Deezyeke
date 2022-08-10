@@ -18,6 +18,7 @@ def get_all_questions(cursor):
     cursor.execute(query)
     return cursor.fetchall()
 
+
 # Visszaadja az id alapján a megfelelő question-t, közvetlenül a dictonary-t, nem a listába ágyazott dictonary-t, amit a fetchall adna.
 @connection_handler
 def get_question(cursor, id):
@@ -73,7 +74,7 @@ def create_empty_answer():
 
 @connection_handler
 def change_vote_number(cursor, id, table, up_or_down):
-    if up_or_down == "+":
+    if up_or_down == "up":
         query = sql.SQL('''UPDATE {}
         SET vote_number = vote_number + 1
         WHERE id = {}''').format(sql.Identifier(table), sql.Literal(str(id)))
@@ -82,7 +83,6 @@ def change_vote_number(cursor, id, table, up_or_down):
         SET vote_number = vote_number - 1
         WHERE id = {}''').format(sql.Identifier(table), sql.Literal(str(id)))
     cursor.execute(query)
-    pass
 
 
 @connection_handler

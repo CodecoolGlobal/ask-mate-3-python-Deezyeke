@@ -83,6 +83,12 @@ def display_question(q_id):
     return render_template('display_question.html', question=questions, answer=answers, q_id=q_id, q_comments=q_comments)
 
 
+@app.route('/question/<q_id>/vote/<up_or_down>', methods=['POST'])
+def add_vote(q_id, up_or_down):
+    data_handler.change_vote_number(q_id, 'question', up_or_down)
+    return redirect('/')
+
+
 @app.route('/display-question/<q_id>/delete', methods=['GET', 'POST'])
 def delete_question(q_id):
     if request.method == 'GET':
