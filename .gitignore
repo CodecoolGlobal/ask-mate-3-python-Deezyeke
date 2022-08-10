@@ -15,9 +15,8 @@
 .idea/**/dictionaries
 .idea/**/shelf
 
-#VS Code postgresql configurations
-database.ini
-config.py
+#VS Code configurations
+.vscode/
 
 # AWS User-specific
 .idea/**/aws.xml

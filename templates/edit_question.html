@@ -6,7 +6,7 @@
 {% block form_action %} action={{ url_for("edit_question", id=id) }} {% endblock %}
 
 {% block image %}
-{% if image == ' ' %}
+{% if image == None %}
         <p> <small> No image file had been uploaded! </small> </p>
     {% else %}
         <img src="{{ url_for("static", filename=image) }}" width="320"> <br> <br>
