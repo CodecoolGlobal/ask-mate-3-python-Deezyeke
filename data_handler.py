@@ -73,11 +73,21 @@ def create_empty_answer():
 
 @connection_handler
 def change_vote_number(cursor, id, table, up_or_down):
-    vote = 1 if up_or_down == "+" else -1
-    query = sql.SQL('''UPDATE {}
-    SET vote_number={vote}
-    WHERE id=%(id)s''').format(sql.Identifier('table'))
+    if up_or_down == "+":
+        query = sql.SQL('''UPDATE {}
+        SET vote_number = vote_number + 1
+        WHERE id = {}''').format(sql.Identifier(table), sql.Literal(str(id)))
+    else:
+        query = sql.SQL('''UPDATE {}
+        SET vote_number = vote_number - 1
+        WHERE id = {}''').format(sql.Identifier(table), sql.Literal(str(id)))
+    cursor.execute(query)
     pass
+
+
+@connection_handler
+def search_questions(search):
+    return
 
 
 @connection_handler
