@@ -165,6 +165,12 @@ def add_new_tag(question_id):
             return redirect(url_for('add_new_tag', question_id=question_id))
 
 
+@app.route('/question/<question_id>/tag/<tag_id>/delete')
+def delete_tag(question_id, tag_id):
+    data_handler.delete_question_tag(question_id, tag_id)
+    return redirect(url_for('display_question', q_id=question_id))
+
+
 if __name__ == "__main__":
     app.run(
         host='0.0.0.0',

@@ -164,7 +164,7 @@ def read_q_comments(cursor):
 
 @connection_handler
 def get_question_tags(cursor, question_id):
-    query = '''SELECT name
+    query = '''SELECT tag_id, name
             FROM question_tag
             JOIN tag ON question_tag.tag_id = tag.id
             WHERE question_id = %(q_id)s'''
@@ -187,6 +187,7 @@ def add_new_tag(cursor, tag):
     '''
     cursor.execute(query, {'nme':tag})
 
+
 @connection_handler
 def add_new_tag_to_question(cursor, question_id, tag_id):
     query ='''INSERT INTO question_tag (question_id, tag_id)
@@ -195,3 +196,10 @@ def add_new_tag_to_question(cursor, question_id, tag_id):
         cursor.execute(query, {'qid':question_id, 'tid':tag_id})
     except psycopg2.errors.UniqueViolation:
         pass
+
+
+@connection_handler
+def delete_question_tag(cursor, question_id, tag_id):
+    query='''DELETE FROM question_tag
+            WHERE question_id=%(qid)s and tag_id=%(tid)s'''
+    cursor.execute(query, {'qid':question_id, 'tid':tag_id})
