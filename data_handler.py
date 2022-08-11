@@ -140,7 +140,7 @@ def delete_question(cursor, id):
 
 
 @connection_handler
-def delete_answer_when_question(cursor, id):
+def delete_answer_with_question(cursor, id):
     cursor.execute("""
     DELETE FROM answer
     WHERE question_id = %(id)s""",
@@ -325,3 +325,29 @@ def delete_comment_from_answer(cursor, answer_id, comment_id):
     DELETE FROM comment
     WHERE answer_id = %(a_i)s and id = %(c_i)s""",
                    {'a_i': answer_id, 'c_i': comment_id})
+
+
+@connection_handler
+def delete_comment_with_question(cursor, question_id):
+    cursor.execute("""
+    DELETE FROM comment
+    WHERE question_id = %(q_id)s""",
+                   {'q_id': question_id})
+
+
+@connection_handler
+def delete_answer_comment_with_question_deleted(cursor, answer_id):
+    cursor.execute("""
+    DELETE FROM comment
+    WHERE answer_id = %(a_i)s""",
+                   {'a_i': answer_id})
+
+
+@connection_handler
+def get_answers_with_question_id(cursor, question_id):
+    cursor.execute("""
+    SELECT *
+    FROM answer
+    WHERE question_id = %(q_i)s""",
+                   {'q_i': question_id})
+    return cursor.fetchall()

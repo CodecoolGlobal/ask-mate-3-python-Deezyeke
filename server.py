@@ -162,7 +162,11 @@ def delete_question(q_id):
         for row in answer_images:
             if row['image'] != None:
                 data_handler.delete_image_file(row['image'])
-        data_handler.delete_answer_when_question(q_id)
+        answers = data_handler.get_answers_with_question_id(q_id)
+        for answer in answers:
+            data_handler.delete_answer_comment_with_question_deleted(answer['id'])
+        data_handler.delete_comment_with_question(q_id)
+        data_handler.delete_answer_with_question(q_id)
         data_handler.delete_question(q_id)
         return redirect(url_for('index'))
 
