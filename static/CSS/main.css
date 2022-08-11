@@ -27,8 +27,8 @@ input {
     border-width: 0 0 1px 0;
     border-color: darkblue;
     color: papayawhip;
-
     height: 17pt;
+    font-style: italic;
     vertical-align:middle;
     background: linear-gradient(to right, darkgoldenrod, darkolivegreen)
 }
@@ -47,7 +47,7 @@ label{
 
 button{
     font-size: 9pt;
-    background: linear-gradient(to right, darkolivegreen, darkgoldenrod);
+    background: linear-gradient(to right, darkolivegreen, orangered);
     padding: 4pt;
     border-width: 0 0 0 0
 }
@@ -55,8 +55,22 @@ button{
 button:active {
 	position:relative;
 	top:1px;
+    border-color: red;
 }
 
+
+select {
+    background: linear-gradient(to right, darkgoldenrod, darkolivegreen);
+    font-size: 12pt;
+    padding: 2pt;
+    border-width: 0 0 1pt 0;
+    border-color: darkblue;
+    color: papayawhip;
+}
+
+select option{
+    background-color: papayawhip;
+}
 
 .flexbox_container{
   display: flex;

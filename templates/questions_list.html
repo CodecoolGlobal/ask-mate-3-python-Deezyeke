@@ -20,15 +20,19 @@
     </form>
 
     <form action="/" method="POST" name="order_by"><br><br>
-        <label>Filter by </label>
-        <select name="order_by" >
-          <option>title</option>
-          <option>message</option>
-          <option>submission time</option>
-          <option>number of views</option>
-          <option>number of votes</option>
-        </select>
-        <button class="btn" type="submit">Filter now!</button>
+        <div class="flexbox_container">
+            <label>Filter by: </label>
+            <select name="order_by" >
+                <div class="select_option">
+                    <option>title</option>
+                    <option>message</option>
+                    <option>submission time</option>
+                    <option>number of views</option>
+                    <option>number of votes</option>
+                </div>
+            </select>
+            <button class="btn" type="submit">Filter now!</button>
+        </div>
   </form><br>
 
     <table>
