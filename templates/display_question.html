@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title> Question details </title>
+    <title>Question details</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
 </head>
 
@@ -33,7 +33,7 @@
         </tr>
         </table>
         {% if data['image'] == None %}
-            <small> No image file had been uploaded! </small>
+            <small> No image file uploaded! </small>
         {% else %}
             <img src="{{ url_for("static", filename=data['image']) }}" width="320">
         {%  endif %}

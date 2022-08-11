@@ -12,8 +12,6 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    # questions = data_handler.get_all_questions()
-    # return render_template('questions_list.html', orderby='id', questions=questions, question_header=data_handler.QUESTION_HEADER)
 # alapvetően submit time desc és csak 5öt mutat, legördülő menüből választható mi alapján order-elje:
     if request.method == 'GET':
         submission_time = request.args.get('submission_time', 'view_number')
