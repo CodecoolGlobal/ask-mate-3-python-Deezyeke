@@ -34,13 +34,17 @@ def get_last_five_questions(cursor, submission_time):
 
 # !!!!!!!!!!!! TODO!!!!!!!!!!!!!!!!!
 @connection_handler
-def filter_questions():
+def filter_questions(cursor, table='question'):
     pass
-    #query = sql.SQL('''SELECT * {}
-    #ORDER_BY {}''').format(sql.Identifier(table), sql.Literal(str(id)))
-    #cursor.execute(query)
+    query = sql.SQL('''SELECT * {}
+    ORDER_BY {}''').format(sql.Identifier(table), sql.Literal(str(id)))
+    cursor.execute(query)
 
+        SET view_number = view_number + 1
+        WHERE id = {}''').format(sql.Identifier(table), sql.Literal(str()))
 
+    
+    
 @connection_handler
 def search_questions():
     pass
