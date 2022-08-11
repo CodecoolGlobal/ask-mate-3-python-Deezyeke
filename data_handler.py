@@ -31,32 +31,26 @@ def get_last_five_questions(cursor, submission_time):
     return cursor.fetchall()
 
 
-# @connection_handler
-# def get_view_number(view_number):SELECT * FROM pg_views WHERE viewname='__viewname__';
-#     query = """CREATE RECURSIVE VIEW [INFORMATION_SCHEMA.views] view_name (view_number) AS SELECT  view_number FROM question;"""
-    # query = """UPDATE view_number FROM question
-    # WHERE id=%(id)s'''
-    # cursor.execute(query, {'id': id})
-    # return cursor.fetchall()[0]"""
-
-
-# def get_view_number(view_number):
-#     query = '''SELECT *
-#         FROM  question
-#         WHERE view_number= int(view_number["view_number"] + 1)'''
-#     cursor.execute(query, {'id': id, view_number:view_number})
-#     return cursor.fetchall()[0]
-
-
-
-# !!!!!!!!!!!! TODO!!!!!!!!!!!!!!!!!
 @connection_handler
-def filter_questions():
-    pass
-    #query = sql.SQL('''SELECT * {}
-    #ORDER_BY {}''').format(sql.Identifier(table), sql.Literal(str(id)))
-    #cursor.execute(query)
+def increase_view_number(cursor, id, table='question'):
+    query = sql.SQL('''UPDATE {}
+        SET view_number = view_number + 1
+        WHERE id = {}''').format(sql.Identifier(table), sql.Literal(str(id)))
+    cursor.execute(query)
 
+
+@connection_handler
+def filter_questions(cursor, table='question'):
+    pass
+    query = sql.SQL('''SELECT * {}
+    ORDER_BY {}''').format(sql.Identifier(table), sql.Literal(str(id)))
+    cursor.execute(query)
+
+    
+    
+@connection_handler
+def search_questions():
+    pass
 
 
 # Visszaadja az id alapján a megfelelő question-t, közvetlenül a dictonary-t, nem a listába ágyazott dictonary-t, amit a fetchall adna.
