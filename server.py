@@ -86,6 +86,21 @@ def edit_question(id):
         return redirect (url_for('display_question', q_id=id))
 
 
+@app.route('/answer/<a_id>/edit', methods=['GET', 'POST'])
+def edit_answer(a_id):
+    if request.method == 'GET':
+        answers = data_handler.get_all_answers()
+        for answer in answers:
+            if str(answer['id']) == a_id:
+                return render_template('edit_answer.html', a_id=a_id, answer=answer)
+    elif request.method == 'POST':
+        message = request.form.get('add-answer')
+        data_handler.update_answer(a_id, message)
+        q_id_lst = data_handler.search_q_id_by_a_id(a_id)
+        for q_id in q_id_lst:
+            return redirect(url_for('display_question', q_id=q_id['question_id']))
+
+
 @app.route('/display-question/<q_id>')
 def display_question(q_id):
     q_comments = data_handler.read_q_comments_by_id(q_id)

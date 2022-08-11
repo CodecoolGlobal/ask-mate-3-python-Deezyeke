@@ -299,3 +299,11 @@ def get_qid_by_aid(cursor, a_id):
             WHERE id = %(aid)s"""
     cursor.execute(query, {'aid': a_id})
     return cursor.fetchall()
+
+
+@connection_handler
+def update_answer(cursor, a_id, new_message):
+    query = '''UPDATE answer
+            SET message = %(cmess)s
+            WHERE id = %(aid)s'''
+    cursor.execute(query, {'cmess': new_message, 'aid': a_id})
