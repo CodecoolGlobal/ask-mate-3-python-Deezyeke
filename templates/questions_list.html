@@ -1,81 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-<meta charset="UTF-8">
-
 <head>
-    <title>Zsaszk Home page</title>
+    <meta charset="UTF-8">
+    <title> Question details </title>
 </head>
+<body bgcolor="33c4a1">
+    {% for data in question %}
+        <h2><i>Title:</i></h2>
+        {% if data['title'] == None %}
+            <h4><i>This title is empty!</i></h4>
+        {% else %}
+            <h4>{{ data['title'] }}</h4>
+        {% endif %}
+        <h2><i>Question:</i></h2>
+        {% if data['message'] == None %}
+            <h4><i>There is no question added</i></h4>
+        {% else %}
+            <h4>{{ data['message'] }}</h4>
+        {% endif %}
+        {% if data['image'] == None %}
+            <p> <small> No image file had been uploaded! </small> </p>
+        {% else %}
+            <img src="{{ url_for("static", filename=data['image']) }}" width="320">
+        {%  endif %}
+    {% endfor %}
+    {% for comment in q_comments %}
+        <p style="font-size: 10px">
+            {{ comment['submission_time'] }}, {{ comment['message'] }}
+        </p>
+    {% endfor %}
+    <br>
+    <a href="{{ url_for('add_comment_to_question', q_id=q_id) }}" methods="get">Add comments</a>
+    <br><br>
+    <a href="/question/{{q_id}}/edit"><button style="background-color:blue; border-color:green; color:whitesmoke">Edit question</button></a>
+    <br><br>
+    <a href="/display-question/{{q_id}}/delete"><button style="background-color:red; border-color:orange;">Delete question</button></a>
+    <br><br>
+    <hr width="80%" color="blue" align="left">
 
-<body bgcolor="33c455">
-    <center><h1 style="font-family:Helvetica">"Zs'aszk"!</h1></center>
-    <hr width="80%" color="blue">
-    <center><h4>Just ask anything you want!</h4></center>
-    <form>
-        <textarea name="search" rows=1 cols=30 maxlength=30></textarea>
-        <button type="submit" style="background-color:blue; border-color:green; color:whitesmoke">Search</button>
-    </form>
+    <h2><i>Answer(s):</i></h2>
+    {% for data in answer %}
+        {% if data['message'] == None %}
+            <h4><i>There is no answer added</i></h4>
+        {% else %}
+            <h4>{{ data['message'] }}</h4>
+        {% endif %}
+        {% if data['image'] == None %}
+            <p> <small> No image file had been uploaded! </small> </p>
+        {% else %}
+            <img src="{{ url_for("static", filename=data['image']) }}" width="320"><br>
+        {%  endif %}
+        <p>Votes on this answer: {{ data['vote_number'] }}</p>
+        <form action='/question/{{ q_id }}/{{ data["id"] }}/vote/up' method="POST">
+            <button style="background-color:orange; border-color:green;"> Vote +1</button>
+        </form>
+        <form action='/question/{{ q_id }}/{{ data["id"] }}/vote/down' method="POST">
+            <button style="background-color:orange; border-color:green;"> Vote -1</button>
+        </form>
+{#        <a href="{{ url_for('delete_answer', id=a_id) }}"><button style="background-color:red; border-color:orange;">Delete answer</button></a>#}
+    {% endfor %}
+    <p>
+        <a href="{{ url_for('add_new_answer', q_id=q_id)}}">Add a new answer</a>
+    </p>
 
-    <form action="/" method="POST" name="order_by"><br><br>
-        <label>Filter by </label>
-        <select name="order_by" >
-        <option>title</option>
-        <option>message</option>
-        <option>submission time</option>
-        <option>number of views</option>
-        <option>number of votes</option>
-        </select>
-        <button class="btn" type="submit">Filter now!</button>
-    </form><br>
+    <br>
 
-    <table>
-        <tr>
-            {% block question_list %}
-            {% for header in question_header  %}
-                {% if header == orderby %}
-                    <th> <a href= "{{ "/list?orderby=" + header + "&order=desc"}}"> {{header}} </a> </th>
-                {% else %}
-                    <th> <a href= "{{ "/list?orderby=" + header + "&order=desc"}}"> {{header}} </a> </th>
-                {% endif %}
-            {% endfor %}
-            {% endblock %}
-        </tr>
-        {% for question in questions %}
-            <tr>
-{#                <td><a href={{ url_for('increase_view', question_id=id) }}>{{ id }}</a></td>#}
-                {% for key in question.keys() %}
-                    {%  if key == 'image' %}
-                            {% if question['image'] != None %}
-                                <td> <img src="{{ url_for("static", filename=question['image']) }}" height="30" width="30"> </td>
-                            {% else %}
-                                <td> <img src="{{ url_for("static", filename='no_file_02.png') }}" height="30" width="30"> </td>
-                            {% endif %}
-                    {% elif key == 'id' %}
-                        <td><a href="/question/{{ question['id'] }}/view">{{ question['id'] }}</a></td>
-                    {% else %}
-                        <td> {{ question[key] }} </td>
-                    {% endif %}
-                {% endfor %}
-{#
-                <td>
-                    <form action='/question/{{ id }}/vote-up' method="POST">
-                        <button style="background-color:orange; border-color:green;"> Vote +1</button>
-                    </form>
-                </td>
-                <td>
-                    <form action='/question/{{ id }}/vote-down' method="POST">
-                        <button style="background-color:orange; border-color:green;"> Vote -1</button>
-                    </form>
-                </td>
-#}
-            </tr>
+    <h4>Tags: </h4>
+    {% if question_tags != None %}
+        {% for tag in question_tags %}
+            <table>
+                <tr>
+                    <td> {{ tag['name'] }} </td>
+                    <td> <a href="{{ url_for('delete_tag', question_id=q_id, tag_id=tag['tag_id']) }}"> X </td>
+                </tr>
+            </table>
         {% endfor %}
-    </table><br>
-    <ul>Haven't found you are looking for? <br> Only the latest five questions are listed on this page!<br> You can
-        <li> check all questions(link)</li>
-        <li> use the search bar at the top of the page(link?)</li>
-    <li> Still haven't found the needed information?
-    <a href="/add_question"> Add a new question!</a></li><br><br>
-    </ul>
-</body>
+    {% else: %}
+        <h5> <small> No tag added yet! </small></h5>
+    {% endif %}
+    <a href='/question/{{q_id}}/new-tag'> Add tag </a> <br><br><br>
 
+    <a href="/">Home page</a>
+</body>
 </html>
