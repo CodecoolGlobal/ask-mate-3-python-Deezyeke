@@ -92,11 +92,6 @@ def display_question(q_id):
     q_comments = data_handler.read_q_comments()
     questions = []
     answers = []
-
-    question_tags = data_handler.get_question_tags(q_id)
-    if len(question_tags) == 0:
-        question_tags = None
-
     for question in data_handler.get_all_questions():
         for key, value in question.items():
             if key == 'id' and str(value) == q_id:
@@ -105,13 +100,7 @@ def display_question(q_id):
         for key, value in answer.items():
             if key == 'question_id' and str(value) == q_id:
                 answers.append(answer)
-    return render_template('display_question.html', question=questions, answer=answers, q_id=q_id, q_comments=q_comments, question_tags=question_tags)
-
-
-@app.route('/question/<q_id>/vote/<up_or_down>', methods=['POST'])
-def add_vote(q_id, up_or_down):
-    data_handler.change_vote_number(q_id, 'question', up_or_down)
-    return redirect('/')
+    return render_template('display_question.html', question=questions, answer=answers, q_id=q_id, q_comments=q_comments)
 
 
 @app.route('/display-question/<q_id>/delete', methods=['GET', 'POST'])
@@ -119,7 +108,7 @@ def delete_question(q_id):
     if request.method == 'GET':
         return render_template('question_delete.html', q_id=q_id)
     else:
-        question_image = data_handler.get_image_name(q_id)
+        question_image = data_handler.get_image_name_form_question(q_id)
         if question_image['image'] != None:
             data_handler.delete_image_file(question_image['image'])
         answer_images = data_handler.get_images_names(q_id)
@@ -154,7 +143,7 @@ def delete_answer(q_id, a_id):
     if request.method == 'GET':
         return render_template('answer_delete.html', q_id=q_id, a_id=a_id)
     else:
-        answer_image = data_handler.get_image_name(a_id)
+        answer_image = data_handler.get_image_name_from_answer(a_id)
         if answer_image['image'] != None:
             data_handler.delete_image_file(answer_image['image'])
         data_handler.delete_answer(a_id)
@@ -176,31 +165,9 @@ def add_comment_to_question(q_id):
         return redirect(url_for('display_question', q_id=q_id))
 
 
-@app.route('/question/<question_id>/new-tag', methods=['GET', 'POST'])
+@app.route('/question/<question_id>/new-tag')
 def add_new_tag(question_id):
-    question = data_handler.get_question(question_id)
-    question_tags = data_handler.get_question_tags(question_id)
-    tags = data_handler.get_tags()
-
-    if request.method == 'GET':
-        if len(question_tags) == 0:
-            question_tags = None
-        return render_template('add_tag.html', question_id=question_id, message=question['message'], question_tags=question_tags, tags=tags)
-    elif request.method == 'POST':
-        new_tag = request.form.get('new_tag')
-        choose_tag_id = request.form.get('choose_tag')
-        if new_tag:
-            data_handler.add_new_tag(new_tag)
-            return redirect(url_for('add_new_tag', question_id=question_id))
-        if choose_tag_id:
-            data_handler.add_new_tag_to_question(question_id, choose_tag_id)
-            return redirect(url_for('add_new_tag', question_id=question_id))
-
-
-@app.route('/question/<question_id>/tag/<tag_id>/delete')
-def delete_tag(question_id, tag_id):
-    data_handler.delete_question_tag(question_id, tag_id)
-    return redirect(url_for('display_question', q_id=question_id))
+    pass
 
 
 if __name__ == "__main__":

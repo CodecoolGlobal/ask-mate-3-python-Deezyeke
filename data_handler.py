@@ -155,10 +155,20 @@ def delete_answer(cursor, id):
 
 
 @connection_handler
-def get_image_name(cursor, id):
+def get_image_name_form_question(cursor, id):
     cursor.execute("""
     SELECT image
     FROM question
+    WHERE id = %(id)s""",
+                   {'id': id})
+    return cursor.fetchone()
+
+
+@connection_handler
+def get_image_name_from_answer(cursor, id):
+    cursor.execute("""
+    SELECT image
+    FROM answer
     WHERE id = %(id)s""",
                    {'id': id})
     return cursor.fetchone()
@@ -191,3 +201,46 @@ def read_q_comments(cursor):
         WHERE answer_id is null"""
     cursor.execute(query)
     return cursor.fetchall()
+
+
+@connection_handler
+def get_question_tags(cursor, question_id):
+    query = '''SELECT tag_id, name
+            FROM question_tag
+            JOIN tag ON question_tag.tag_id = tag.id
+            WHERE question_id = %(q_id)s'''
+    cursor.execute(query, {'q_id': question_id})
+    return cursor.fetchall()
+
+
+@connection_handler
+def get_tags(cursor):
+    query ="""SELECT *
+            FROM tag"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@connection_handler
+def add_new_tag(cursor, tag):
+    query = '''INSERT INTO tag (name)
+    VALUES (%(nme)s)
+    '''
+    cursor.execute(query, {'nme':tag})
+
+
+@connection_handler
+def add_new_tag_to_question(cursor, question_id, tag_id):
+    query ='''INSERT INTO question_tag (question_id, tag_id)
+                VALUES (%(qid)s, %(tid)s)'''
+    try:
+        cursor.execute(query, {'qid':question_id, 'tid':tag_id})
+    except psycopg2.errors.UniqueViolation:
+        pass
+
+
+@connection_handler
+def delete_question_tag(cursor, question_id, tag_id):
+    query='''DELETE FROM question_tag
+            WHERE question_id=%(qid)s and tag_id=%(tid)s'''
+    cursor.execute(query, {'qid':question_id, 'tid':tag_id})
