@@ -46,12 +46,6 @@ def filter_questions(cursor, table='question'):
     ORDER_BY {}''').format(sql.Identifier(table), sql.Literal(str(id)))
     cursor.execute(query)
 
-    
-    
-@connection_handler
-def search_questions():
-    pass
-
 
 # Visszaadja az id alapján a megfelelő question-t, közvetlenül a dictonary-t, nem a listába ágyazott dictonary-t, amit a fetchall adna.
 @connection_handler
@@ -109,19 +103,23 @@ def create_empty_answer():
 @connection_handler
 def change_vote_number(cursor, id, table, up_or_down):
     if up_or_down == "up":
-        query = sql.SQL('''UPDATE {}
+        query = sql.SQL("""UPDATE {}
         SET vote_number = vote_number + 1
-        WHERE id = {}''').format(sql.Identifier(table), sql.Literal(str(id)))
+        WHERE id = {}""").format(sql.Identifier(table), sql.Literal(str(id)))
     else:
-        query = sql.SQL('''UPDATE {}
+        query = sql.SQL("""UPDATE {}
         SET vote_number = vote_number - 1
-        WHERE id = {}''').format(sql.Identifier(table), sql.Literal(str(id)))
+        WHERE id = {}""").format(sql.Identifier(table), sql.Literal(str(id)))
     cursor.execute(query)
 
 
 @connection_handler
-def search_questions(search):
-    return
+def search_questions(cursor, search, table='question'):
+    query = sql.SQL("""SELECT * FROM {}
+    WHERE title LIKE {}
+    OR message LIKE {} """).format(sql.Identifier(table), sql.Literal('%'+search+'%'), sql.Literal('%'+search+'%'))
+    cursor.execute(query)
+    return cursor.fetchall()
 
 
 @connection_handler

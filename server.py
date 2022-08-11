@@ -5,6 +5,7 @@ import os
 from datetime import datetime
 from dotenv import load_dotenv
 
+
 load_dotenv()
 app = Flask(__name__)
 
@@ -19,13 +20,27 @@ def index():
         # if submission_time:
         desc_by_time = data_handler.get_last_five_questions('submission_time')
         # views = data_handler.get_view_number('view_number')
-        return render_template('questions_list.html', questions=desc_by_time, orderby='title', view_number='views', question_header=data_handler.QUESTION_HEADER)
+        search_value = request.args.get('search')
+        if search_value == None:
+            return render_template('questions_list.html', questions=desc_by_time, orderby='title', view_number='views', question_header=data_handler.QUESTION_HEADER)
+        else:
+            found = data_handler.search_questions(search_value)
+            print(found)
+            return render_template('questions_list.html', questions=found, orderby='title', view_number='views', question_header=data_handler.QUESTION_HEADER)
     # if request.method == 'POST':
     # order_by = request.form.get('order_by')
     # filtered = data_handler.filter_questions('order_by')
     #  return render_template('questions_list.html', questions=filtered,
 
 # Extra idea: #a többi "old" questions akkor legyen csak látható, ha az utolsó 5 alatti linkre kattint pl show all questions névvel
+
+
+@app.route('/all-question')
+def display_all_question():
+    questions = data_handler.get_all_questions()
+    return render_template('questions_list.html', questions=questions, orderby='title', view_number='views',
+                           question_header=data_handler.QUESTION_HEADER)
+
 
 @app.route('/question/<q_id>/view')
 def increase_view(q_id):
