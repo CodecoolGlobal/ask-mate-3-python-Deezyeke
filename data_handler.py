@@ -58,6 +58,10 @@ def filter_questions():
     #cursor.execute(query)
 
 
+@connection_handler
+def search_questions():
+    pass
+
 
 # Visszaadja az id alapján a megfelelő question-t, közvetlenül a dictonary-t, nem a listába ágyazott dictonary-t, amit a fetchall adna.
 @connection_handler
