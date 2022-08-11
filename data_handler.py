@@ -32,30 +32,19 @@ def get_last_five_questions(cursor, submission_time):
 
 
 @connection_handler
-def get_view_number(view_number):
-    query = """UPDATE view_number FROM question
-    WHERE id=%(id)s'''
-    cursor.execute(query, {'id': id})
-    return cursor.fetchall()[0]"""
+def increase_view_number(cursor, id, table='question'):
+    query = sql.SQL('''UPDATE {}
+        SET view_number = view_number + 1
+        WHERE id = {}''').format(sql.Identifier(table), sql.Literal(str(id)))
+    cursor.execute(query)
 
 
-# def get_view_number(view_number):
-#     query = '''SELECT *
-#         FROM  question
-#         WHERE view_number= int(view_number["view_number"] + 1)'''
-#     cursor.execute(query, {'id': id, view_number:view_number})
-#     return cursor.fetchall()[0]
-
-
-
-# !!!!!!!!!!!! TODO!!!!!!!!!!!!!!!!!
 @connection_handler
-def filter_questions():
+def filter_questions(cursor, table='question'):
     pass
-    #query = sql.SQL('''SELECT * {}
-    #ORDER_BY {}''').format(sql.Identifier(table), sql.Literal(str(id)))
-    #cursor.execute(query)
-
+    query = sql.SQL('''SELECT * {}
+    ORDER_BY {}''').format(sql.Identifier(table), sql.Literal(str(id)))
+    cursor.execute(query)
 
 
 # Visszaadja az id alapján a megfelelő question-t, közvetlenül a dictonary-t, nem a listába ágyazott dictonary-t, amit a fetchall adna.
@@ -113,11 +102,24 @@ def create_empty_answer():
 
 @connection_handler
 def change_vote_number(cursor, id, table, up_or_down):
-    vote = 1 if up_or_down == "+" else -1
-    query = sql.SQL('''UPDATE {}
-    SET vote_number={vote}
-    WHERE id=%(id)s''').format(sql.Identifier('table'))
-    pass
+    if up_or_down == "up":
+        query = sql.SQL("""UPDATE {}
+        SET vote_number = vote_number + 1
+        WHERE id = {}""").format(sql.Identifier(table), sql.Literal(str(id)))
+    else:
+        query = sql.SQL("""UPDATE {}
+        SET vote_number = vote_number - 1
+        WHERE id = {}""").format(sql.Identifier(table), sql.Literal(str(id)))
+    cursor.execute(query)
+
+
+@connection_handler
+def search_questions(cursor, search, table='question'):
+    query = sql.SQL("""SELECT * FROM {}
+    WHERE title LIKE {}
+    OR message LIKE {} """).format(sql.Identifier(table), sql.Literal('%'+search+'%'), sql.Literal('%'+search+'%'))
+    cursor.execute(query)
+    return cursor.fetchall()
 
 
 @connection_handler
@@ -272,6 +274,41 @@ def delete_question_tag(cursor, question_id, tag_id):
     query='''DELETE FROM question_tag
             WHERE question_id=%(qid)s and tag_id=%(tid)s'''
     cursor.execute(query, {'qid':question_id, 'tid':tag_id})
+
+
+@connection_handler
+def read_all_comments(cursor):
+    query = """
+            SELECT *
+            FROM comment"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@connection_handler
+def update_commit(cursor, c_id, new_message, current_time):
+    query = '''UPDATE comment
+            SET message = %(cmess)s, submission_time = %(c_time)s
+            WHERE id = %(cid)s'''
+    cursor.execute(query, {'cmess': new_message, 'cid': c_id, 'c_time': current_time})
+
+
+@connection_handler
+def get_qid_by_aid(cursor, a_id):
+    query = """
+            SELECT question_id
+            FROM answer
+            WHERE id = %(aid)s"""
+    cursor.execute(query, {'aid': a_id})
+    return cursor.fetchall()
+
+
+@connection_handler
+def update_answer(cursor, a_id, new_message):
+    query = '''UPDATE answer
+            SET message = %(cmess)s
+            WHERE id = %(aid)s'''
+    cursor.execute(query, {'cmess': new_message, 'aid': a_id})
 
 
 @connection_handler

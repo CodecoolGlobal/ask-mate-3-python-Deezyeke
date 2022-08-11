@@ -3,20 +3,38 @@
 <meta charset="UTF-8">
 
 <head>
-    <title>Zsaszk Home page</title>
+    <title class="neonText">Zsaszk Home page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
 </head>
 
-<body bgcolor="33c455">
-    <center><h1 style="font-family:Helvetica">"Zs'aszk"!</h1></center>
-    <hr width="80%" color="blue">
-    <center><h4>Just ask anything you want!</h4></center>
+<body>
+    <h1 class="AnimatedNeonText">"Zs'aszk"!</h1>
+    <hr width="80%" color="goldenrod">
+    <h4 class="neonText">Just ask anything you want!</h4>
     <form>
-        <textarea name="search" rows=1 cols=30 maxlength=30></textarea>
-        <button type="submit" style="background-color:blue; border-color:green; color:whitesmoke">Search</button>
+        <div class="flexbox_container">
+            <label for="search_button" >Search title and description: </label>
+            <input type="text" name="search">
+            <button type="submit" id="search_button">Search</button>
+        </div>
     </form>
 
     <form action="/" method="POST" name="order_by"><br><br>
-        <label>Filter by </label>
+        <div class="flexbox_container">
+            <label>Filter by: </label>
+            <select name="order_by" >
+                <div class="select_option">
+                    <option>title</option>
+                    <option>message</option>
+                    <option>submission time</option>
+                    <option>number of views</option>
+                    <option>number of votes</option>
+                </div>
+            </select>
+            <button class="btn" type="submit">Filter now!</button>
+        </div>
+     <form action="/" method="POST" name="order_by"><br><br>
+        <label>Sort by </label>
         <select name="order_by" >
           <option>title</option>
           <option>message</option>
@@ -24,19 +42,20 @@
           <option>number of views</option>
           <option>number of votes</option>
         </select>
-        <button class="btn" type="submit">Filter now!</button>
+        <button class="btn" type="submit">Sort now</button>
   </form><br>
 
     <table>
         <tr>
             {% block question_list %}
-            {% for header in question_header  %}
-                {% if header == orderby %}
-                    <th> <a href= "{{ "/list?orderby=" + header + "&order=desc"}}"> {{header}} </a> </th>
-                {% else %}
-                    <th> <a href= "{{ "/list?orderby=" + header + "&order=desc"}}"> {{header}} </a> </th>
-                {% endif %}
-            {% endfor %}
+                <th>id</th>
+                <th>Submission time</th>
+                <th>View number</th>
+                <th>Vote number</th>
+                <th>Title</th>
+                <th>Message</th>
+                <th>Image</th>
+
             {% endblock %}
         </tr>
         {% for question in questions %}
@@ -50,32 +69,31 @@
                                 <td> <img src="{{ url_for("static", filename='no_file_02.png') }}" height="30" width="30"> </td>
                             {% endif %}
                     {% elif key == 'id' %}
-                        <td><a href="{{ url_for('display_question', q_id=question['id']) }}">{{ question['id'] }}</a></td>
+                        <td><a href="/question/{{ question['id'] }}/view">{{ question['id'] }}</a></td>
                     {% else %}
                         <td> {{ question[key] }} </td>
                     {% endif %}
                 {% endfor %}
-{#
                 <td>
-                    <form action='/question/{{ id }}/vote-up' method="POST">
+                    <form action='/question/{{ question["id"] }}/vote/up' method="POST">
                         <button style="background-color:orange; border-color:green;"> Vote +1</button>
                     </form>
                 </td>
                 <td>
-                    <form action='/question/{{ id }}/vote-down' method="POST">
+                    <form action='/question/{{ question["id"] }}/vote/down' method="POST">
                         <button style="background-color:orange; border-color:green;"> Vote -1</button>
                     </form>
                 </td>
-#}
             </tr>
         {% endfor %}
-    </table><br>
+    </table>
     <ul>Haven't found you are looking for? <br> Only the latest five questions are listed on this page!<br> You can
         <li> check all questions(link)</li>
         <li> use the search bar at the top of the page(link?)</li>
     <li> Still haven't found the needed information?
     <a href="/add_question"> Add a new question!</a></li><br><br>
     </ul>
+    <a href="{{ url_for('display_all_question') }}"><button>All question</button></a>
 </body>
 
 </html>

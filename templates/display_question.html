@@ -27,7 +27,7 @@
     <h2>Comments:</h2>
     {% for comment in q_comments %}
         <p style="font-size: 10px">
-            {{ comment['submission_time'] }}, {{ comment['message'] }}
+            {{ comment['submission_time'] }}, {{ comment['message'] }} <a href="{{ url_for('edit_comment', c_id=comment['id']) }}" methods="get"><button>Edit</button></a>
             <a href="{{ url_for('delete_comment_from_question', q_id=q_id, c_id=comment['id'])}}"><button type="button">Delete comment</button></a>
         </p>
     {% endfor %}
@@ -45,7 +45,7 @@
         {% if data['message'] == None %}
             <h4><i>There is no answer added</i></h4>
         {% else %}
-            <h4>{{ data['message'] }}</h4>
+            <h4>{{ data['message'] }}  <a href="{{ url_for('edit_answer', a_id=data['id']) }}" methods="get"><button>Edit</button></a></h4>
         {% endif %}
         {% if data['image'] == None %}
             <p> <small> No image file had been uploaded! </small> </p>
@@ -62,7 +62,7 @@
         {% for comment in a_comment %}
             {% if comment['answer_id'] == data['id'] %}
                 <p style="font-size: 10px">
-                    {{ comment['submission_time'] }}, {{ comment['message'] }}
+                    {{ comment['submission_time'] }}, {{ comment['message'] }} <a href="{{ url_for('edit_comment', c_id=comment['id']) }}" methods="get"><button>Edit</button></a>
                     <a href="{{ url_for('delete_comment_from_answer', q_id=q_id, a_id=data['id'], c_id=comment['id']) }}"><button type="button">Delete comment</button></a>
                 </p>
             {% endif %}
