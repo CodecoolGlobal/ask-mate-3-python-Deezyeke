@@ -156,7 +156,7 @@ def delete_answer(cursor, id):
 
 
 @connection_handler
-def get_image_name_from_question(cursor, id):
+def get_image_name_form_question(cursor, id):
     cursor.execute("""
     SELECT image
     FROM question
@@ -166,7 +166,17 @@ def get_image_name_from_question(cursor, id):
 
 
 @connection_handler
-def get_image_name_from_answer(cursor, q_id):
+def get_image_name_from_answer(cursor, id):
+    cursor.execute("""
+    SELECT image
+    FROM answer
+    WHERE id = %(id)s""",
+                   {'id': id})
+    return cursor.fetchone()
+
+
+@connection_handler
+def get_images_names(cursor, q_id):
     cursor.execute("""
     SELECT image
     FROM answer
@@ -299,3 +309,19 @@ def update_answer(cursor, a_id, new_message):
             SET message = %(cmess)s
             WHERE id = %(aid)s'''
     cursor.execute(query, {'cmess': new_message, 'aid': a_id})
+
+
+@connection_handler
+def delete_comment_from_question(cursor, question_id, comment_id):
+    cursor.execute("""
+    DELETE FROM comment
+    WHERE question_id = %(q_i)s and id = %(c_i)s""",
+                   {'q_i': question_id, 'c_i':comment_id})
+
+
+@connection_handler
+def delete_comment_from_answer(cursor, answer_id, comment_id):
+    cursor.execute("""
+    DELETE FROM comment
+    WHERE answer_id = %(a_i)s and id = %(c_i)s""",
+                   {'a_i': answer_id, 'c_i': comment_id})
