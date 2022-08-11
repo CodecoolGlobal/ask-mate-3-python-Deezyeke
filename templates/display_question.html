@@ -31,8 +31,7 @@
     {% endfor %}
     <br>
     <a href="{{ url_for('add_comment_to_question', q_id=q_id) }}" methods="get">Add comments</a>
-    <br>
-
+    <br><br>
     <a href="/question/{{q_id}}/edit"><button style="background-color:blue; border-color:green; color:whitesmoke">Edit question</button></a>
     <br><br>
     <a href="/display-question/{{q_id}}/delete"><button style="background-color:red; border-color:orange;">Delete question</button></a>
@@ -51,6 +50,13 @@
         {% else %}
             <img src="{{ url_for("static", filename=data['image']) }}" width="320"><br>
         {%  endif %}
+        <p>Votes on this answer: {{ data['vote_number'] }}</p>
+        <form action='/question/{{ q_id }}/{{ data["id"] }}/vote/up' method="POST">
+            <button style="background-color:orange; border-color:green;"> Vote +1</button>
+        </form>
+        <form action='/question/{{ q_id }}/{{ data["id"] }}/vote/down' method="POST">
+            <button style="background-color:orange; border-color:green;"> Vote -1</button>
+        </form>
 {#        <a href="{{ url_for('delete_answer', id=a_id) }}"><button style="background-color:red; border-color:orange;">Delete answer</button></a>#}
     {% endfor %}
     <p>
