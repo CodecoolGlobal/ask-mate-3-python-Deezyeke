@@ -33,13 +33,10 @@ def index():
 
 # Extra idea: #a többi "old" questions akkor legyen csak látható, ha az utolsó 5 alatti linkre kattint pl show all questions névvel
 
-# @app.route('/question/<question_id>/view')
-# def increase_view():
-#     view_num = request.args.get('question_id', 'view_number')
-#     print(view_num)
-#     current_view_number = data_handler.add_view(data)
-#     print(current_view_number)
-#     data_handler.get_last_five_questions(cursor, submission_time, question_id, "view_number", current_view_number)
+@app.route('/question/<q_id>/view')
+def increase_view(q_id):
+    data_handler.increase_view_number(q_id)
+    return redirect(url_for('display_question', q_id=q_id))
 
 
 @app.route('/add_question', methods=['GET', 'POST'])
@@ -90,6 +87,21 @@ def edit_question(id):
         data_handler.replace_question(id, question)
 
         return redirect (url_for('display_question', q_id=id))
+
+
+@app.route('/answer/<a_id>/edit', methods=['GET', 'POST'])
+def edit_answer(a_id):
+    if request.method == 'GET':
+        answers = data_handler.get_all_answers()
+        for answer in answers:
+            if str(answer['id']) == a_id:
+                return render_template('edit_answer.html', a_id=a_id, answer=answer)
+    elif request.method == 'POST':
+        message = request.form.get('add-answer')
+        data_handler.update_answer(a_id, message)
+        q_id_lst = data_handler.search_q_id_by_a_id(a_id)
+        for q_id in q_id_lst:
+            return redirect(url_for('display_question', q_id=q_id['question_id']))
 
 
 @app.route('/display-question/<q_id>')
