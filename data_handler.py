@@ -3,6 +3,8 @@ from collections import OrderedDict
 import psycopg2
 import psycopg2.extras
 from psycopg2 import sql
+from psycopg2._psycopg import cursor
+
 from data_connection import connection_handler
 
 
@@ -17,6 +19,45 @@ def get_all_questions(cursor):
         FROM question"""
     cursor.execute(query)
     return cursor.fetchall()
+
+
+@connection_handler
+def get_last_five_questions(cursor, submission_time):
+    query = """
+            SELECT * FROM question
+            ORDER BY submission_time DESC
+            lIMIT 5;"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+# @connection_handler
+# def get_view_number(view_number):SELECT * FROM pg_views WHERE viewname='__viewname__';
+#     query = """CREATE RECURSIVE VIEW [INFORMATION_SCHEMA.views] view_name (view_number) AS SELECT  view_number FROM question;"""
+    # query = """UPDATE view_number FROM question
+    # WHERE id=%(id)s'''
+    # cursor.execute(query, {'id': id})
+    # return cursor.fetchall()[0]"""
+
+
+# def get_view_number(view_number):
+#     query = '''SELECT *
+#         FROM  question
+#         WHERE view_number= int(view_number["view_number"] + 1)'''
+#     cursor.execute(query, {'id': id, view_number:view_number})
+#     return cursor.fetchall()[0]
+
+
+
+# !!!!!!!!!!!! TODO!!!!!!!!!!!!!!!!!
+@connection_handler
+def filter_questions():
+    pass
+    #query = sql.SQL('''SELECT * {}
+    #ORDER_BY {}''').format(sql.Identifier(table), sql.Literal(str(id)))
+    #cursor.execute(query)
+
+
 
 # Visszaadja az id alapján a megfelelő question-t, közvetlenül a dictonary-t, nem a listába ágyazott dictonary-t, amit a fetchall adna.
 @connection_handler
@@ -73,11 +114,20 @@ def create_empty_answer():
 
 @connection_handler
 def change_vote_number(cursor, id, table, up_or_down):
-    vote = 1 if up_or_down == "+" else -1
-    query = sql.SQL('''UPDATE {}
-    SET vote_number={vote}
-    WHERE id=%(id)s''').format(sql.Identifier('table'))
-    pass
+    if up_or_down == "up":
+        query = sql.SQL('''UPDATE {}
+        SET vote_number = vote_number + 1
+        WHERE id = {}''').format(sql.Identifier(table), sql.Literal(str(id)))
+    else:
+        query = sql.SQL('''UPDATE {}
+        SET vote_number = vote_number - 1
+        WHERE id = {}''').format(sql.Identifier(table), sql.Literal(str(id)))
+    cursor.execute(query)
+
+
+@connection_handler
+def search_questions(search):
+    return
 
 
 @connection_handler
@@ -179,3 +229,46 @@ def read_a_comments(cursor):
             WHERE question_id is null"""
     cursor.execute(query)
     return cursor.fetchall()
+
+
+@connection_handler
+def get_question_tags(cursor, question_id):
+    query = '''SELECT tag_id, name
+            FROM question_tag
+            JOIN tag ON question_tag.tag_id = tag.id
+            WHERE question_id = %(q_id)s'''
+    cursor.execute(query, {'q_id': question_id})
+    return cursor.fetchall()
+
+
+@connection_handler
+def get_tags(cursor):
+    query ="""SELECT *
+            FROM tag"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@connection_handler
+def add_new_tag(cursor, tag):
+    query = '''INSERT INTO tag (name)
+    VALUES (%(nme)s)
+    '''
+    cursor.execute(query, {'nme':tag})
+
+
+@connection_handler
+def add_new_tag_to_question(cursor, question_id, tag_id):
+    query ='''INSERT INTO question_tag (question_id, tag_id)
+                VALUES (%(qid)s, %(tid)s)'''
+    try:
+        cursor.execute(query, {'qid':question_id, 'tid':tag_id})
+    except psycopg2.errors.UniqueViolation:
+        pass
+
+
+@connection_handler
+def delete_question_tag(cursor, question_id, tag_id):
+    query='''DELETE FROM question_tag
+            WHERE question_id=%(qid)s and tag_id=%(tid)s'''
+    cursor.execute(query, {'qid':question_id, 'tid':tag_id})

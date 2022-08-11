@@ -12,9 +12,29 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    questions = data_handler.get_all_questions()
+     # questions = data_handler.get_all_questions()
+     # return render_template('questions_list.html', orderby='id', questions=questions, question_header=data_handler.QUESTION_HEADER)
+# alapvetően submit time desc és csak 5öt mutat, legördülő menüből választható mi alapján order-elje:
+    if request.method == 'GET':
+        submission_time = request.args.get('submission_time', 'view_number')
+        # if submission_time:
+        desc_by_time = data_handler.get_last_five_questions('submission_time')
+        # views = data_handler.get_view_number('view_number')
+        return render_template('questions_list.html', questions=desc_by_time, orderby='title', view_number='views', question_header=data_handler.QUESTION_HEADER)
+    # if request.method == 'POST':
+    # order_by = request.form.get('order_by')
+    # filtered = data_handler.filter_questions('order_by')
+    #  return render_template('questions_list.html', questions=filtered,
 
-    return render_template('questions_list.html', orderby='id', questions=questions, question_header=data_handler.QUESTION_HEADER)
+# Extra idea: #a többi "old" questions akkor legyen csak látható, ha az utolsó 5 alatti linkre kattint pl show all questions névvel
+
+# @app.route('/question/<question_id>/view')
+# def increase_view():
+#     view_num = request.args.get('question_id', 'view_number')
+#     print(view_num)
+#     current_view_number = data_handler.add_view(data)
+#     print(current_view_number)
+#     data_handler.get_last_five_questions(cursor, submission_time, question_id, "view_number", current_view_number)
 
 
 @app.route('/add_question', methods=['GET', 'POST'])
@@ -73,8 +93,17 @@ def display_question(q_id):
     q_comments = util.select_needed_data('question_id', q_id, data_handler.read_q_comments_by_id(q_id))
     questions = util.select_needed_data('id', q_id, data_handler.get_all_questions())
     answers = util.select_needed_data('question_id', q_id, data_handler.get_all_answers())
-    return render_template('display_question.html', question=questions,
+    question_tags = data_handler.get_question_tags(q_id)
+    if len(question_tags) == 0:
+        question_tags = None
+    return render_template('display_question.html', question=questions, question_tags=question_tags,
                            answer=answers, q_id=q_id, q_comments=q_comments, a_comment=a_comment)
+
+
+@app.route('/question/<q_id>/vote/<up_or_down>', methods=['POST'])
+def add_vote(q_id, up_or_down):
+    data_handler.change_vote_number(q_id, 'question', up_or_down)
+    return redirect('/')
 
 
 @app.route('/display-question/<q_id>/delete', methods=['GET', 'POST'])
@@ -126,7 +155,6 @@ def add_comment_to_question(q_id):
         data_handler.add_comment_to_question(comment)
         return redirect(url_for('display_question', q_id=q_id))
 
-
 @app.route('/answer/<a_id>/new-comment', methods=['GET', 'POST'])
 def add_comment_to_answer(a_id):
     list_q_id = data_handler.search_q_id_by_a_id(a_id)
@@ -144,9 +172,31 @@ def add_comment_to_answer(a_id):
             return redirect(url_for('display_question', q_id=row['question_id']))
 
 
-@app.route('/question/<question_id>/new-tag')
+@app.route('/question/<question_id>/new-tag', methods=['GET', 'POST'])
 def add_new_tag(question_id):
-    pass
+    question = data_handler.get_question(question_id)
+    question_tags = data_handler.get_question_tags(question_id)
+    tags = data_handler.get_tags()
+
+    if request.method == 'GET':
+        if len(question_tags) == 0:
+            question_tags = None
+        return render_template('add_tag.html', question_id=question_id, message=question['message'], question_tags=question_tags, tags=tags)
+    elif request.method == 'POST':
+        new_tag = request.form.get('new_tag')
+        choose_tag_id = request.form.get('choose_tag')
+        if new_tag:
+            data_handler.add_new_tag(new_tag)
+            return redirect(url_for('add_new_tag', question_id=question_id))
+        if choose_tag_id:
+            data_handler.add_new_tag_to_question(question_id, choose_tag_id)
+            return redirect(url_for('add_new_tag', question_id=question_id))
+
+
+@app.route('/question/<question_id>/tag/<tag_id>/delete')
+def delete_tag(question_id, tag_id):
+    data_handler.delete_question_tag(question_id, tag_id)
+    return redirect(url_for('display_question', q_id=question_id))
 
 
 if __name__ == "__main__":
