@@ -115,7 +115,7 @@ def delete_answer(cursor, id):
 
 
 @connection_handler
-def get_image_name_from_question(cursor, id):
+def get_image_name(cursor, id):
     cursor.execute("""
     SELECT image
     FROM question
@@ -125,7 +125,7 @@ def get_image_name_from_question(cursor, id):
 
 
 @connection_handler
-def get_image_name_from_answer(cursor, q_id):
+def get_images_names(cursor, q_id):
     cursor.execute("""
     SELECT image
     FROM answer
