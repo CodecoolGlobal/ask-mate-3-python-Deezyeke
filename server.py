@@ -5,8 +5,8 @@ import os
 from datetime import datetime
 from dotenv import load_dotenv
 
-load_dotenv()
 
+load_dotenv()
 app = Flask(__name__)
 
 
@@ -20,7 +20,13 @@ def index():
         # if submission_time:
         desc_by_time = data_handler.get_last_five_questions('submission_time')
         # views = data_handler.get_view_number('view_number')
-        return render_template('questions_list.html', questions=desc_by_time, orderby='title', view_number='views', question_header=data_handler.QUESTION_HEADER)
+        search_value = request.args.get('search')
+        if search_value == None:
+            return render_template('questions_list.html', questions=desc_by_time, orderby='title', view_number='views', question_header=data_handler.QUESTION_HEADER)
+        else:
+            found = data_handler.search_questions(search_value)
+            print(found)
+            return render_template('questions_list.html', questions=found, orderby='title', view_number='views', question_header=data_handler.QUESTION_HEADER)
     # if request.method == 'POST':
     # order_by = request.form.get('order_by')
     # filtered = data_handler.filter_questions('order_by')
@@ -28,13 +34,22 @@ def index():
 
 # Extra idea: #a többi "old" questions akkor legyen csak látható, ha az utolsó 5 alatti linkre kattint pl show all questions névvel
 
-# @app.route('/question/<question_id>/view')
-# def increase_view():
-#     view_num = request.args.get('question_id', 'view_number')
-#     print(view_num)
-#     current_view_number = data_handler.add_view(data)
-#     print(current_view_number)
-#     data_handler.get_last_five_questions(cursor, submission_time, question_id, "view_number", current_view_number)
+
+@app.route('/all-question')
+def display_all_question():
+    questions = data_handler.get_all_questions()
+    search_value = request.args.get('search')
+    if search_value == None:
+        return render_template('questions_list.html', questions=questions, orderby='title', view_number='views', question_header=data_handler.QUESTION_HEADER)
+    else:
+        found = data_handler.search_questions(search_value)
+        return render_template('questions_list.html', questions=found, orderby='title', view_number='views', question_header=data_handler.QUESTION_HEADER)
+
+
+@app.route('/question/<q_id>/view')
+def increase_view(q_id):
+    data_handler.increase_view_number(q_id)
+    return redirect(url_for('display_question', q_id=q_id))
 
 
 @app.route('/add_question', methods=['GET', 'POST'])
@@ -87,17 +102,42 @@ def edit_question(id):
         return redirect (url_for('display_question', q_id=id))
 
 
+@app.route('/answer/<a_id>/edit', methods=['GET', 'POST'])
+def edit_answer(a_id):
+    if request.method == 'GET':
+        answers = data_handler.get_all_answers()
+        for answer in answers:
+            if str(answer['id']) == a_id:
+                return render_template('edit_answer.html', a_id=a_id, answer=answer)
+    elif request.method == 'POST':
+        message = request.form.get('add-answer')
+        data_handler.update_answer(a_id, message)
+        q_id_lst = data_handler.search_q_id_by_a_id(a_id)
+        for q_id in q_id_lst:
+            return redirect(url_for('display_question', q_id=q_id['question_id']))
+
+
 @app.route('/display-question/<q_id>')
 def display_question(q_id):
-    a_comment = data_handler.read_a_comments()
-    q_comments = util.select_needed_data('question_id', q_id, data_handler.read_q_comments_by_id(q_id))
-    questions = util.select_needed_data('id', q_id, data_handler.get_all_questions())
-    answers = util.select_needed_data('question_id', q_id, data_handler.get_all_answers())
+    q_comments = data_handler.read_q_comments_by_id(q_id)
+    a_comments = data_handler.read_a_comments()
+    questions = []
+    answers = []
+
     question_tags = data_handler.get_question_tags(q_id)
     if len(question_tags) == 0:
         question_tags = None
-    return render_template('display_question.html', question=questions, question_tags=question_tags,
-                           answer=answers, q_id=q_id, q_comments=q_comments, a_comment=a_comment)
+
+    for question in data_handler.get_all_questions():
+        for key, value in question.items():
+            if key == 'id' and str(value) == q_id:
+                questions.append(question)
+    for answer in data_handler.get_all_answers():
+        for key, value in answer.items():
+            if key == 'question_id' and str(value) == q_id:
+                answers.append(answer)
+    return render_template('display_question.html', question=questions, answer=answers, q_id=q_id, q_comments=q_comments,
+                           a_comment=a_comments, question_tags=question_tags)
 
 
 @app.route('/question/<q_id>/vote/<up_or_down>', methods=['POST'])
@@ -115,7 +155,7 @@ def add_answer_vote(q_id, answer_id, up_or_down):
 @app.route('/display-question/<q_id>/delete', methods=['GET', 'POST'])
 def delete_question(q_id):
     if request.method == 'GET':
-        return render_template('delete.html', q_id=q_id)
+        return render_template('question_delete.html', q_id=q_id)
     else:
         question_image = data_handler.get_image_name_from_question(q_id)
         if question_image['image'] != None:
@@ -147,7 +187,7 @@ def add_new_answer(q_id):
         return redirect(url_for('display_question', q_id=q_id))
 
 
-@app.route('/question/<q_id>/new-comment', methods=['GET', 'POST'])
+@app.route('//question/<q_id>/comments', methods=['GET', 'POST'])
 def add_comment_to_question(q_id):
     if request.method == 'GET':
         for question in data_handler.get_all_questions():
@@ -160,6 +200,7 @@ def add_comment_to_question(q_id):
                    'question_id': q_id}
         data_handler.add_comment_to_question(comment)
         return redirect(url_for('display_question', q_id=q_id))
+
 
 @app.route('/answer/<a_id>/new-comment', methods=['GET', 'POST'])
 def add_comment_to_answer(a_id):
@@ -203,6 +244,25 @@ def add_new_tag(question_id):
 def delete_tag(question_id, tag_id):
     data_handler.delete_question_tag(question_id, tag_id)
     return redirect(url_for('display_question', q_id=question_id))
+
+
+@app.route('/comment/<c_id>/edit', methods=['GET', 'POST'])
+def edit_comment(c_id):
+    a_comment = util.select_needed_data('id', c_id, data_handler.read_all_comments())
+    if request.method == 'GET':
+        for comment in a_comment:
+            return render_template('edit_comment.html', comment=comment)
+    if request.method == 'POST':
+        now = datetime.now()
+        message = request.form.get('add-comment')
+        data_handler.update_commit(c_id, message, now.strftime("%Y/%m/%d %H:%M:%S"))
+        for comment in a_comment:
+            if comment['question_id'] is not None:
+                return redirect(url_for('display_question', q_id=comment['question_id']))
+            else:
+                q_id = data_handler.get_qid_by_aid(comment['answer_id'])
+                for id in q_id:
+                    return redirect(url_for('display_question', q_id=id['question_id']))
 
 
 if __name__ == "__main__":

@@ -33,6 +33,16 @@
             </select>
             <button class="btn" type="submit">Filter now!</button>
         </div>
+     <form action="/" method="POST" name="order_by"><br><br>
+        <label>Sort by </label>
+        <select name="order_by" >
+          <option>title</option>
+          <option>message</option>
+          <option>submission time</option>
+          <option>number of views</option>
+          <option>number of votes</option>
+        </select>
+        <button class="btn" type="submit">Sort now</button>
   </form><br>
 
     <table>
@@ -59,7 +69,7 @@
                                 <td> <img src="{{ url_for("static", filename='no_file_02.png') }}" height="30" width="30"> </td>
                             {% endif %}
                     {% elif key == 'id' %}
-                        <td><a href="{{ url_for('display_question', q_id=question['id']) }}">{{ question['id'] }}</a></td>
+                        <td><a href="/question/{{ question['id'] }}/view">{{ question['id'] }}</a></td>
                     {% else %}
                         <td> {{ question[key] }} </td>
                     {% endif %}
@@ -76,13 +86,14 @@
                 </td>
             </tr>
         {% endfor %}
-    </table><br>
+    </table>
     <ul>Haven't found you are looking for? <br> Only the latest five questions are listed on this page!<br> You can
         <li> check all questions(link)</li>
         <li> use the search bar at the top of the page(link?)</li>
     <li> Still haven't found the needed information?
     <a href="/add_question"> Add a new question!</a></li><br><br>
     </ul>
+    <a href="{{ url_for('display_all_question') }}"><button>All question</button></a>
 </body>
 
 </html>
