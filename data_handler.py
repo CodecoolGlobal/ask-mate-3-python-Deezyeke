@@ -272,3 +272,19 @@ def delete_question_tag(cursor, question_id, tag_id):
     query='''DELETE FROM question_tag
             WHERE question_id=%(qid)s and tag_id=%(tid)s'''
     cursor.execute(query, {'qid':question_id, 'tid':tag_id})
+
+
+@connection_handler
+def delete_comment_from_question(cursor, question_id, comment_id):
+    cursor.execute("""
+    DELETE FROM comment
+    WHERE question_id = %(q_i)s and id = %(c_i)s""",
+                   {'q_i': question_id, 'c_i':comment_id})
+
+
+@connection_handler
+def delete_comment_from_answer(cursor, answer_id, comment_id):
+    cursor.execute("""
+    DELETE FROM comment
+    WHERE answer_id = %(a_i)s and id = %(c_i)s""",
+                   {'a_i': answer_id, 'c_i': comment_id})

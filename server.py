@@ -173,6 +173,16 @@ def add_comment_to_question(q_id):
         data_handler.add_comment_to_question(comment)
         return redirect(url_for('display_question', q_id=q_id))
 
+
+@app.route('/question/<q_id>/comment_delete/<c_id>', methods=['GET', 'POST'])
+def delete_comment_from_question(q_id, c_id):
+    if request.method == 'GET':
+        return render_template('comment_delete_form_question.html', q_id=q_id, c_id=c_id)
+    else:
+        data_handler.delete_comment_from_question(q_id, c_id)
+        return redirect(url_for('display_question', q_id=q_id))
+
+
 @app.route('/answer/<a_id>/new-comment', methods=['GET', 'POST'])
 def add_comment_to_answer(a_id):
     list_q_id = data_handler.search_q_id_by_a_id(a_id)
@@ -188,6 +198,15 @@ def add_comment_to_answer(a_id):
                        'answer_id': a_id}
             data_handler.add_comment_to_answer(comment)
             return redirect(url_for('display_question', q_id=row['question_id']))
+
+
+@app.route('/question/<q_id>/<a_id>/delete_comment/<c_id>', methods=['GET', 'POST'])
+def delete_comment_from_answer(q_id, a_id, c_id):
+    if request.method == 'GET':
+        return render_template('comment_delete_from_answer.html', q_id=q_id, a_id=a_id, c_id=c_id)
+    else:
+        data_handler.delete_comment_from_answer(a_id, c_id)
+        return redirect(url_for('display_question', q_id=q_id))
 
 
 @app.route('/question/<question_id>/new-tag', methods=['GET', 'POST'])
