@@ -38,8 +38,12 @@ def index():
 @app.route('/all-question')
 def display_all_question():
     questions = data_handler.get_all_questions()
-    return render_template('questions_list.html', questions=questions, orderby='title', view_number='views',
-                           question_header=data_handler.QUESTION_HEADER)
+    search_value = request.args.get('search')
+    if search_value == None:
+        return render_template('questions_list.html', questions=questions, orderby='title', view_number='views', question_header=data_handler.QUESTION_HEADER)
+    else:
+        found = data_handler.search_questions(search_value)
+        return render_template('questions_list.html', questions=found, orderby='title', view_number='views', question_header=data_handler.QUESTION_HEADER)
 
 
 @app.route('/question/<q_id>/view')
