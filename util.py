@@ -85,3 +85,12 @@ def update_answer_csv(question_data):
 def create_empty_answer():
     answer = {'vote_number': 0, 'image': None}
     return answer
+
+
+def select_needed_data(db_key, db_value, database):
+    found_data = []
+    for data in database:
+        for key, value in data.items():
+            if key == db_key and str(value) == db_value:
+                found_data.append(data)
+    return found_data

@@ -31,13 +31,12 @@ def get_last_five_questions(cursor, submission_time):
     return cursor.fetchall()
 
 
-# @connection_handler
-# def get_view_number(view_number):SELECT * FROM pg_views WHERE viewname='__viewname__';
-#     query = """CREATE RECURSIVE VIEW [INFORMATION_SCHEMA.views] view_name (view_number) AS SELECT  view_number FROM question;"""
-    # query = """UPDATE view_number FROM question
-    # WHERE id=%(id)s'''
-    # cursor.execute(query, {'id': id})
-    # return cursor.fetchall()[0]"""
+@connection_handler
+def get_view_number(view_number):
+    query = """UPDATE view_number FROM question
+    WHERE id=%(id)s'''
+    cursor.execute(query, {'id': id})
+    return cursor.fetchall()[0]"""
 
 
 # def get_view_number(view_number):
@@ -118,20 +117,11 @@ def create_empty_answer():
 
 @connection_handler
 def change_vote_number(cursor, id, table, up_or_down):
-    if up_or_down == "up":
-        query = sql.SQL('''UPDATE {}
-        SET vote_number = vote_number + 1
-        WHERE id = {}''').format(sql.Identifier(table), sql.Literal(str(id)))
-    else:
-        query = sql.SQL('''UPDATE {}
-        SET vote_number = vote_number - 1
-        WHERE id = {}''').format(sql.Identifier(table), sql.Literal(str(id)))
-    cursor.execute(query)
-
-
-@connection_handler
-def search_questions(search):
-    return
+    vote = 1 if up_or_down == "+" else -1
+    query = sql.SQL('''UPDATE {}
+    SET vote_number={vote}
+    WHERE id=%(id)s''').format(sql.Identifier('table'))
+    pass
 
 
 @connection_handler
@@ -168,7 +158,7 @@ def delete_answer(cursor, id):
 
 
 @connection_handler
-def get_image_name_from_question(cursor, id):
+def get_image_name_form_question(cursor, id):
     cursor.execute("""
     SELECT image
     FROM question
@@ -178,7 +168,17 @@ def get_image_name_from_question(cursor, id):
 
 
 @connection_handler
-def get_image_name_from_answer(cursor, q_id):
+def get_image_name_from_answer(cursor, id):
+    cursor.execute("""
+    SELECT image
+    FROM answer
+    WHERE id = %(id)s""",
+                   {'id': id})
+    return cursor.fetchone()
+
+
+@connection_handler
+def get_images_names(cursor, q_id):
     cursor.execute("""
     SELECT image
     FROM answer
@@ -188,7 +188,7 @@ def get_image_name_from_answer(cursor, q_id):
 
 
 @connection_handler
-def add_comment(cursor, comment):
+def add_comment_to_question(cursor, comment):
     query = """
             INSERT INTO comment (submission_time, question_id, message)
             VALUES ( %(st)s, %(qi)s, %(me)s)"""
@@ -197,11 +197,40 @@ def add_comment(cursor, comment):
 
 
 @connection_handler
-def read_q_comments(cursor):
+def add_comment_to_answer(cursor, comment):
+    query = """
+            INSERT INTO comment (submission_time, answer_id, message)
+            VALUES ( %(st)s, %(ai)s, %(me)s)"""
+    cursor.execute(query, {'st': comment['submission_time'],
+                        'ai': comment['answer_id'], 'me': comment['message']})
+
+
+@connection_handler
+def read_q_comments_by_id(cursor, q_id):
     query = """
         SELECT *
         FROM comment
-        WHERE answer_id is null"""
+        WHERE question_id = %(q_id)s"""
+    cursor.execute(query, {'q_id': q_id})
+    return cursor.fetchall()
+
+
+@connection_handler
+def search_q_id_by_a_id(cursor, a_id):
+    query = """
+        SELECT question_id
+        FROM answer
+        WHERE answer.id = %(a_id)s"""
+    cursor.execute(query, {'a_id': a_id})
+    return cursor.fetchall()
+
+
+@connection_handler
+def read_a_comments(cursor):
+    query = """
+            SELECT *
+            FROM comment
+            WHERE question_id is null"""
     cursor.execute(query)
     return cursor.fetchall()
 
