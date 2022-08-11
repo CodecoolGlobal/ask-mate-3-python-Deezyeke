@@ -28,13 +28,11 @@ def index():
 
 # Extra idea: #a többi "old" questions akkor legyen csak látható, ha az utolsó 5 alatti linkre kattint pl show all questions névvel
 
-# @app.route('/question/<question_id>/view')
-# def increase_view():
-#     view_num = request.args.get('question_id', 'view_number')
-#     print(view_num)
-#     current_view_number = data_handler.add_view(data)
-#     print(current_view_number)
-#     data_handler.get_last_five_questions(cursor, submission_time, question_id, "view_number", current_view_number)
+
+@app.route('/question/<q_id>/view')
+def increase_view(q_id):
+    data_handler.increase_view_number(q_id)
+    return redirect(url_for('display_question', q_id=q_id))
 
 
 @app.route('/add_question', methods=['GET', 'POST'])

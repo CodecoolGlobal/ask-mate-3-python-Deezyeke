@@ -31,22 +31,6 @@ def get_last_five_questions(cursor, submission_time):
     return cursor.fetchall()
 
 
-@connection_handler
-def get_view_number(view_number):
-    query = """UPDATE view_number FROM question
-    WHERE id=%(id)s'''
-    cursor.execute(query, {'id': id})
-    return cursor.fetchall()[0]"""
-
-
-# def get_view_number(view_number):
-#     query = '''SELECT *
-#         FROM  question
-#         WHERE view_number= int(view_number["view_number"] + 1)'''
-#     cursor.execute(query, {'id': id, view_number:view_number})
-#     return cursor.fetchall()[0]
-
-
 
 # !!!!!!!!!!!! TODO!!!!!!!!!!!!!!!!!
 @connection_handler
@@ -109,6 +93,14 @@ def replace_question(cursor, q_id, question):
 def create_empty_answer():
     answer = {'vote_number': 0, 'image': None}
     return answer
+
+
+@connection_handler
+def increase_view_number(cursor, id, table='question'):
+    query = sql.SQL('''UPDATE {}
+        SET view_number = view_number + 1
+        WHERE id = {}''').format(sql.Identifier(table), sql.Literal(str(id)))
+    cursor.execute(query)
 
 
 @connection_handler
