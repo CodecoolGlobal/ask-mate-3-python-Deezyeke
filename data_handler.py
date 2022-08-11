@@ -272,3 +272,30 @@ def delete_question_tag(cursor, question_id, tag_id):
     query='''DELETE FROM question_tag
             WHERE question_id=%(qid)s and tag_id=%(tid)s'''
     cursor.execute(query, {'qid':question_id, 'tid':tag_id})
+
+
+@connection_handler
+def read_all_comments(cursor):
+    query = """
+            SELECT *
+            FROM comment"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@connection_handler
+def update_commit(cursor, c_id, new_message, current_time):
+    query = '''UPDATE comment
+            SET message = %(cmess)s, submission_time = %(c_time)s
+            WHERE id = %(cid)s'''
+    cursor.execute(query, {'cmess': new_message, 'cid': c_id, 'c_time': current_time})
+
+
+@connection_handler
+def get_qid_by_aid(cursor, a_id):
+    query = """
+            SELECT question_id
+            FROM answer
+            WHERE id = %(aid)s"""
+    cursor.execute(query, {'aid': a_id})
+    return cursor.fetchall()

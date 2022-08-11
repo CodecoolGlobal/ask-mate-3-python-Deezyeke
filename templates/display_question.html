@@ -27,7 +27,7 @@
     <h2>Comments:</h2>
     {% for comment in q_comments %}
         <p style="font-size: 10px">
-            {{ comment['submission_time'] }}, {{ comment['message'] }}
+            {{ comment['submission_time'] }}, {{ comment['message'] }} <a href="{{ url_for('edit_comment', c_id=comment['id']) }}" methods="get"><button>Edit</button></a>
         </p>
     {% endfor %}
     <br>
@@ -61,7 +61,7 @@
         {% for comment in a_comment %}
             {% if comment['answer_id'] == data['id'] %}
                 <p style="font-size: 10px">
-                    {{ comment['submission_time'] }}, {{ comment['message'] }}
+                    {{ comment['submission_time'] }}, {{ comment['message'] }} <a href="{{ url_for('edit_comment', c_id=comment['id']) }}" methods="get"><button>Edit</button></a>
                 </p>
             {% endif %}
         {% endfor %}

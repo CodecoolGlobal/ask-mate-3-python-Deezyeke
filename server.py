@@ -205,6 +205,25 @@ def delete_tag(question_id, tag_id):
     return redirect(url_for('display_question', q_id=question_id))
 
 
+@app.route('/comment/<c_id>/edit', methods=['GET', 'POST'])
+def edit_comment(c_id):
+    a_comment = util.select_needed_data('id', c_id, data_handler.read_all_comments())
+    if request.method == 'GET':
+        for comment in a_comment:
+            return render_template('edit_comment.html', comment=comment)
+    if request.method == 'POST':
+        now = datetime.now()
+        message = request.form.get('add-comment')
+        data_handler.update_commit(c_id, message, now.strftime("%Y/%m/%d %H:%M:%S"))
+        for comment in a_comment:
+            if comment['question_id'] is not None:
+                return redirect(url_for('display_question', q_id=comment['question_id']))
+            else:
+                q_id = data_handler.get_qid_by_aid(comment['answer_id'])
+                for id in q_id:
+                    return redirect(url_for('display_question', q_id=id['question_id']))
+
+
 if __name__ == "__main__":
     app.run(
         host='0.0.0.0',
