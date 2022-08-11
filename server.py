@@ -34,6 +34,14 @@ def index():
 
 # Extra idea: #a többi "old" questions akkor legyen csak látható, ha az utolsó 5 alatti linkre kattint pl show all questions névvel
 
+
+@app.route('/all-question')
+def display_all_question():
+    questions = data_handler.get_all_questions()
+    return render_template('questions_list.html', questions=questions, orderby='title', view_number='views',
+                           question_header=data_handler.QUESTION_HEADER)
+
+
 @app.route('/question/<q_id>/view')
 def increase_view(q_id):
     data_handler.increase_view_number(q_id)
