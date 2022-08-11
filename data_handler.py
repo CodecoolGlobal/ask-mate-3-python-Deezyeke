@@ -40,6 +40,13 @@ def get_last_five_questions(cursor, submission_time):
     # return cursor.fetchall()[0]"""
 
 
+# def get_view_number(view_number):
+#     query = '''SELECT *
+#         FROM  question
+#         WHERE view_number= int(view_number["view_number"] + 1)'''
+#     cursor.execute(query, {'id': id, view_number:view_number})
+#     return cursor.fetchall()[0]
+
 
 
 # !!!!!!!!!!!! TODO!!!!!!!!!!!!!!!!!
