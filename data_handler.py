@@ -105,20 +105,11 @@ def increase_view_number(cursor, id, table='question'):
 
 @connection_handler
 def change_vote_number(cursor, id, table, up_or_down):
-    if up_or_down == "up":
-        query = sql.SQL('''UPDATE {}
-        SET vote_number = vote_number + 1
-        WHERE id = {}''').format(sql.Identifier(table), sql.Literal(str(id)))
-    else:
-        query = sql.SQL('''UPDATE {}
-        SET vote_number = vote_number - 1
-        WHERE id = {}''').format(sql.Identifier(table), sql.Literal(str(id)))
-    cursor.execute(query)
-
-
-@connection_handler
-def search_questions(search):
-    return
+    vote = 1 if up_or_down == "+" else -1
+    query = sql.SQL('''UPDATE {}
+    SET vote_number={vote}
+    WHERE id=%(id)s''').format(sql.Identifier('table'))
+    pass
 
 
 @connection_handler
@@ -155,7 +146,7 @@ def delete_answer(cursor, id):
 
 
 @connection_handler
-def get_image_name_from_question(cursor, id):
+def get_image_name_form_question(cursor, id):
     cursor.execute("""
     SELECT image
     FROM question
@@ -165,7 +156,17 @@ def get_image_name_from_question(cursor, id):
 
 
 @connection_handler
-def get_image_name_from_answer(cursor, q_id):
+def get_image_name_from_answer(cursor, id):
+    cursor.execute("""
+    SELECT image
+    FROM answer
+    WHERE id = %(id)s""",
+                   {'id': id})
+    return cursor.fetchone()
+
+
+@connection_handler
+def get_images_names(cursor, q_id):
     cursor.execute("""
     SELECT image
     FROM answer

@@ -113,12 +113,12 @@ def add_answer_vote(q_id, answer_id, up_or_down):
 @app.route('/display-question/<q_id>/delete', methods=['GET', 'POST'])
 def delete_question(q_id):
     if request.method == 'GET':
-        return render_template('delete.html', q_id=q_id)
+        return render_template('question_delete.html', q_id=q_id)
     else:
-        question_image = data_handler.get_image_name_from_question(q_id)
+        question_image = data_handler.get_image_name_form_question(q_id)
         if question_image['image'] != None:
             data_handler.delete_image_file(question_image['image'])
-        answer_images = data_handler.get_image_name_from_answer(q_id)
+        answer_images = data_handler.get_images_names(q_id)
         for row in answer_images:
             if row['image'] != None:
                 data_handler.delete_image_file(row['image'])
@@ -143,6 +143,18 @@ def add_new_answer(q_id):
             answer['image'] = uploaded_file.filename
         data_handler.add_answer_to_question(answer)
         return redirect(url_for('display_question', q_id=q_id))
+
+
+@app.route('/display-question/<q_id>/delete_answer/<a_id>', methods=['GET', 'POST'])
+def delete_answer(q_id, a_id):
+    if request.method == 'GET':
+        return render_template('answer_delete.html', q_id=q_id, a_id=a_id)
+    else:
+        answer_image = data_handler.get_image_name_from_answer(a_id)
+        if answer_image['image'] != None:
+            data_handler.delete_image_file(answer_image['image'])
+        data_handler.delete_answer(a_id)
+        return redirect(url_for('display_question', q_id=q_id, a_id=a_id))
 
 
 @app.route('/question/<q_id>/new-comment', methods=['GET', 'POST'])

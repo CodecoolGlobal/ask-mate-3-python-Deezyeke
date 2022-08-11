@@ -68,6 +68,7 @@
 
         <a href="{{ url_for('add_comment_to_answer', a_id=data['id']) }}" methods="get"><button>Add comment</button></a>
 {#        <a href="{{ url_for('delete_answer', id=a_id) }}"><button style="background-color:red; border-color:orange;">Delete answer</button></a>#}
+        <a href="{{ url_for('delete_answer', q_id=q_id, a_id=data['id']) }}"><button style="background-color:red; border-color:orange;">Delete answer</button></a>
     {% endfor %}
     <p>
         <a href="{{ url_for('add_new_answer', q_id=q_id)}}">Add a new answer</a>
