@@ -3,16 +3,20 @@
 <meta charset="UTF-8">
 
 <head>
-    <title>Zsaszk Home page</title>
+    <title class="neonText">Zsaszk Home page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
 </head>
 
-<body bgcolor="33c455">
-    <center><h1 style="font-family:Helvetica">"Zs'aszk"!</h1></center>
-    <hr width="80%" color="blue">
-    <center><h4>Just ask anything you want!</h4></center>
+<body>
+    <h1 class="AnimatedNeonText">"Zs'aszk"!</h1>
+    <hr width="80%" color="goldenrod">
+    <h4 class="neonText">Just ask anything you want!</h4>
     <form>
-        <textarea name="search" rows=1 cols=30 maxlength=30></textarea>
-        <button type="submit" style="background-color:blue; border-color:green; color:whitesmoke">Search</button>
+        <div class="flexbox_container">
+            <label for="search_button" >Search title and description: </label>
+            <input type="text" name="search">
+            <button type="submit" id="search_button">Search</button>
+        </div>
     </form>
 
     <form action="/" method="POST" name="order_by"><br><br>
@@ -30,13 +34,14 @@
     <table>
         <tr>
             {% block question_list %}
-            {% for header in question_header  %}
-                {% if header == orderby %}
-                    <th> <a href= "{{ "/list?orderby=" + header + "&order=desc"}}"> {{header}} </a> </th>
-                {% else %}
-                    <th> <a href= "{{ "/list?orderby=" + header + "&order=desc"}}"> {{header}} </a> </th>
-                {% endif %}
-            {% endfor %}
+                <th>id</th>
+                <th>Submission time</th>
+                <th>View number</th>
+                <th>Vote number</th>
+                <th>Title</th>
+                <th>Message</th>
+                <th>Image</th>
+
             {% endblock %}
         </tr>
         {% for question in questions %}
