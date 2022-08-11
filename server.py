@@ -12,8 +12,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-     # questions = data_handler.get_all_questions()
-     # return render_template('questions_list.html', orderby='id', questions=questions, question_header=data_handler.QUESTION_HEADER)
+    # questions = data_handler.get_all_questions()
+    # return render_template('questions_list.html', orderby='id', questions=questions, question_header=data_handler.QUESTION_HEADER)
 # alapvetően submit time desc és csak 5öt mutat, legördülő menüből választható mi alapján order-elje:
     if request.method == 'GET':
         submission_time = request.args.get('submission_time', 'view_number')
@@ -104,6 +104,12 @@ def display_question(q_id):
 def add_vote(q_id, up_or_down):
     data_handler.change_vote_number(q_id, 'question', up_or_down)
     return redirect('/')
+
+
+@app.route('/question/<q_id>/<answer_id>/vote/<up_or_down>', methods=['POST'])
+def add_answer_vote(q_id, answer_id, up_or_down):
+    data_handler.change_vote_number(answer_id, 'answer', up_or_down)
+    return redirect(url_for('display_question', q_id=q_id))
 
 
 @app.route('/display-question/<q_id>/delete', methods=['GET', 'POST'])
