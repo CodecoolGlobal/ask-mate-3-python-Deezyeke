@@ -1,29 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title> Question details </title>
+    <title>Question details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
 </head>
-<body bgcolor="33c4a1">
+
+<body>
     {% for data in question %}
-        <h2><i>Title:</i></h2>
-        {% if data['title'] == None %}
-            <h4><i>This title is empty!</i></h4>
-        {% else %}
-            <h4>{{ data['title'] }}</h4>
-        {% endif %}
-        <h2><i>Question:</i></h2>
+        <table>
+            <tr> <th> Title: </th> </tr>
+            <tr>
+                {% if data['title'] == None %}
+                    <td> This title is empty! </td>
+                {% else %}
+                    <td> {{ data['title'] }} </td>
+                {% endif %}
+            </tr>
+        </table>
+
+        <br>
+
+        <table>
+        <tr> <th> Question: </th> </tr>
+        <tr>
         {% if data['message'] == None %}
-            <h4><i>There is no question added</i></h4>
+            <td>There is no question added</td>
         {% else %}
-            <h4>{{ data['message'] }}</h4>
+            <td>{{ data['message'] }}</td>
         {% endif %}
+        </tr>
+        </table>
         {% if data['image'] == None %}
-            <p> <small> No image file had been uploaded! </small> </p>
+            <small> No image file uploaded! </small>
         {% else %}
             <img src="{{ url_for("static", filename=data['image']) }}" width="320">
         {%  endif %}
+
     {% endfor %}
+
+
     <h2>Comments:</h2>
     {% for comment in q_comments %}
         <p style="font-size: 10px">
@@ -77,19 +94,23 @@
 
     <br>
 
-    <h4>Tags: </h4>
     {% if question_tags != None %}
-        {% for tag in question_tags %}
-            <table>
+        <table>
+            <tr>
+                <th> Tag </th>
+                <th> Delete </th>
+            </tr>
+            {% for tag in question_tags %}
                 <tr>
                     <td> {{ tag['name'] }} </td>
-                    <td> <a href="{{ url_for('delete_tag', question_id=q_id, tag_id=tag['tag_id']) }}"> X </td>
+                    <td> <a href="{{ url_for('delete_tag', question_id=q_id, tag_id=tag['tag_id']) }}"> X </a> </td>
                 </tr>
-            </table>
-        {% endfor %}
+            {% endfor %}
+        </table>
     {% else: %}
         <h5> <small> No tag added yet! </small></h5>
     {% endif %}
+
     <a href='/question/{{q_id}}/new-tag'> Add tag </a> <br><br><br>
 
     <a href="/">Home page</a>

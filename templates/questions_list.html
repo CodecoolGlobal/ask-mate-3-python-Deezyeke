@@ -3,16 +3,18 @@
 <meta charset="UTF-8">
 
 <head>
-    <title class="neonText">Zsaszk Home page</title>
+    <title class="neonText">Zsaszk! Home page</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
 </head>
 
 <body>
-    <h1 class="AnimatedNeonText">"Zs'aszk"!</h1>
-    <hr width="80%" color="goldenrod">
-    <h4 class="neonText">Just ask anything you want!</h4>
+<h1 class="AnimatedNeonText">"Zs'aszk"!</h1>
+<hr width="80%" color="goldenrod">
+<h4 class="neonText">Just ask anything you want!</h4>
 
-    <form>
+<div class="grid_container">
+
+    <form class="item1">
         <div class="flexbox_container">
             <label for="search_button" >Search title and description: </label>
             <input type="text" name="search">
@@ -20,21 +22,24 @@
         </div>
     </form>
 
-     <form action="/" method="POST" name="order_by"><br><br>
-         <div class="flexbox_container">
+    <form class="item2" action="/" method="POST" name="order_by">
+        <div class="flexbox_container">
             <label>Sort by </label>
             <select name="order_by" >
-              <option>title</option>
-              <option>message</option>
-              <option>submission time</option>
-              <option>number of views</option>
-              <option>number of votes</option>
+                  <option>title</option>
+                  <option>message</option>
+                  <option>submission time</option>
+                  <option>number of views</option>
+                  <option>number of votes</option>
             </select>
             <button class="btn" type="submit">Sort now</button>
-         </div>
-  </form><br>
+        </div>
+    </form>
 
-    <table>
+    <a class="item3" href="{{ url_for('display_all_question') }}"><button>Show All Questions</button></a>
+</div> <br><br>
+
+<table>
         <tr>
             {% block question_list %}
                 <th>id</th>
@@ -49,7 +54,6 @@
         </tr>
         {% for question in questions %}
             <tr>
-{#                <td><a href={{ url_for('increase_view', question_id=id) }}>{{ id }}</a></td>#}
                 {% for key in question.keys() %}
                     {%  if key == 'image' %}
                             {% if question['image'] != None %}
@@ -65,24 +69,23 @@
                 {% endfor %}
                 <td>
                     <form action='/question/{{ question["id"] }}/vote/up' method="POST">
-                        <button style="background-color:orange; border-color:green;"> Vote +1</button>
+                        <button class='vote_button'> Vote +1</button>
                     </form>
                 </td>
                 <td>
                     <form action='/question/{{ question["id"] }}/vote/down' method="POST">
-                        <button style="background-color:orange; border-color:green;"> Vote -1</button>
+                        <button class='vote_button'> Vote -1</button>
                     </form>
                 </td>
             </tr>
         {% endfor %}
     </table>
-    <ul>Haven't found you are looking for? <br> Only the latest five questions are listed on this page!<br> You can
-        <li> check all questions(link)</li>
-        <li> use the search bar at the top of the page(link?)</li>
-    <li> Still haven't found the needed information?
-    <a href="/add_question"> Add a new question!</a></li><br><br>
+<ul class="info_list">Haven't you find you are looking for? <br> Only the latest five questions are listed on this page!<br> You can
+        <li>check all questions</li>
+        <li>use the search bar at the top of the page</li>
+        <li>Still haven't found the needed information? <br><br>
+        <a href="/add_question"> Add a new question </a></li><br><br>
     </ul>
-    <a href="{{ url_for('display_all_question') }}"><button>All question</button></a>
 </body>
 
 </html>

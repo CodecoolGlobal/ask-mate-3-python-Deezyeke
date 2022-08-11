@@ -1,7 +1,7 @@
 body {
     background-color: black;
     background-image: linear-gradient(to left, #010101, lightseagreen);
-    color: darkcyan;
+    color: papayawhip;
 }
 
 table th {
@@ -50,13 +50,20 @@ button{
     background: linear-gradient(to right, darkolivegreen, orangered);
     padding: 4pt;
     border-width: 0 0 0 0;
-    color: ;
+    color: navy;
 }
 
 button:active {
 	position:relative;
 	top:1px;
     border-color: red;
+}
+
+.vote_button{
+    font-size: 10pt;
+    background: linear-gradient(to right, greenyellow, cadetblue);
+    border-width: 6px 6px 6px 6px;
+    color: navy;
 }
 
 select {
@@ -68,15 +75,44 @@ select {
     color: papayawhip;
 }
 
+
+.info_list{
+    color: red;
+}
+
 .flexbox_container{
   display: flex;
   align-items: center;
 }
 
+.grid_container{
+    display: grid;
+    grid-template-columns: 4fr 1fr 4fr;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+
+.item1{
+    grid-column: 1 / span 2;
+    grid-row: 1;
+}
+
+.item2{
+    grid-column: 1;
+    grid-row: 3;
+}
+
+
+.item3{
+    grid-column: 3;
+    grid-row: 3;
+    justify-self: end;
+}
+
+
 .AnimatedNeonText {
     text-align: center;
     font-size: 50pt;
-    animation: flicker 1.5s infinite alternate;
+    animation: flicker 4s infinite alternate;
     color: #fff;
     text-shadow:
       0 0 7px #fff,
