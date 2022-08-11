@@ -19,7 +19,7 @@ def index():
         submission_time = request.args.get('submission_time', 'view_number')
         # if submission_time:
         desc_by_time = data_handler.get_last_five_questions('submission_time')
-        views = data_handler.get_view_number('view_number')
+        # views = data_handler.get_view_number('view_number')
         return render_template('questions_list.html', questions=desc_by_time, orderby='title', view_number='views', question_header=data_handler.QUESTION_HEADER)
     # if request.method == 'POST':
     # order_by = request.form.get('order_by')
@@ -28,13 +28,13 @@ def index():
 
 # Extra idea: #a többi "old" questions akkor legyen csak látható, ha az utolsó 5 alatti linkre kattint pl show all questions névvel
 
-@app.route('/question/<question_id>/view')
-def increase_view():
-    view_num = request.args.get('question_id', 'view_number')
-    print(view_num)
-    current_view_number = data_handler.add_view(data)
-    print(current_view_number)
-    data_handler.get_last_five_questions(cursor, submission_time, question_id, "view_number", current_view_number)
+# @app.route('/question/<question_id>/view')
+# def increase_view():
+#     view_num = request.args.get('question_id', 'view_number')
+#     print(view_num)
+#     current_view_number = data_handler.add_view(data)
+#     print(current_view_number)
+#     data_handler.get_last_five_questions(cursor, submission_time, question_id, "view_number", current_view_number)
 
 
 @app.route('/add_question', methods=['GET', 'POST'])
