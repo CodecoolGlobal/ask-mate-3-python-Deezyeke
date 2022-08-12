@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title> {%  block title %} Add a question {% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
 
 </head>
-<body bgcolor="33c4a1">
+<body>
     <form {% block form_action %} action="{{url_for('add_question')}}" {% endblock %} method="post" enctype="multipart/form-data">
 
         <label for="title" name="title"> Question's title: </label> <br>

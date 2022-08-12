@@ -3,7 +3,7 @@
 <meta charset="UTF-8">
 
 <head>
-    <title class="neonText">Zsaszk Home page</title>
+    <title class="neonText">Zsaszk! Home page</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
 </head>
 
@@ -54,7 +54,6 @@
         </tr>
         {% for question in questions %}
             <tr>
-{#                <td><a href={{ url_for('increase_view', question_id=id) }}>{{ id }}</a></td>#}
                 {% for key in question.keys() %}
                     {%  if key == 'image' %}
                             {% if question['image'] != None %}
@@ -81,10 +80,10 @@
             </tr>
         {% endfor %}
     </table>
-<ul class="info_list">Haven't found you are looking for? <br> Only the latest five questions are listed on this page!<br> You can
-        <li> check all questions(link)</li>
-        <li> use the search bar at the top of the page(link?)</li>
-        <li> Still haven't found the needed information? <br><br>
+<ul class="info_list">Haven't you find you are looking for? <br> Only the latest five questions are listed on this page!<br> You can
+        <li>check all questions</li>
+        <li>use the search bar at the top of the page</li>
+        <li>Still haven't found the needed information? <br><br>
         <a href="/add_question"> Add a new question </a></li><br><br>
     </ul>
 </body>

@@ -12,8 +12,6 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    # questions = data_handler.get_all_questions()
-    # return render_template('questions_list.html', orderby='id', questions=questions, question_header=data_handler.QUESTION_HEADER)
 # alapvetően submit time desc és csak 5öt mutat, legördülő menüből választható mi alapján order-elje:
     if request.method == 'GET':
         submission_time = request.args.get('submission_time', 'view_number')
@@ -165,7 +163,12 @@ def delete_question(q_id):
         for row in answer_images:
             if row['image'] != None:
                 data_handler.delete_image_file(row['image'])
-        data_handler.delete_answer_when_question(q_id)
+        answers = data_handler.get_answers_with_question_id(q_id)
+        for answer in answers:
+            data_handler.delete_answer_comment_with_question_deleted(answer['id'])
+        data_handler.delete_tag_with_question(q_id)
+        data_handler.delete_comment_with_question(q_id)
+        data_handler.delete_answer_with_question(q_id)
         data_handler.delete_question(q_id)
         return redirect(url_for('index'))
 
