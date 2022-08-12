@@ -22,6 +22,7 @@ def index():
         # views = data_handler.get_view_number('view_number')
         search_value = request.args.get('search')
         if search_value == None:
+            ti = 'title'
             return render_template('questions_list.html', questions=desc_by_time, orderby='title', view_number='views', question_header=data_handler.QUESTION_HEADER)
         else:
             found = data_handler.search_questions(search_value)

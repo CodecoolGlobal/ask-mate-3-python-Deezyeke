@@ -325,3 +325,15 @@ def delete_comment_from_answer(cursor, answer_id, comment_id):
     DELETE FROM comment
     WHERE answer_id = %(a_i)s and id = %(c_i)s""",
                    {'a_i': answer_id, 'c_i': comment_id})
+
+
+@connection_handler
+def sort_questions(cursor, order_by):
+    query = sql.SQL('SELECT * FROM question ORDER_BY {col}').format(col=sql.Identifier(order_by))
+    cursor.execute(query)
+    return cursor.fetchall()
+
+# query = sql.SQL("select {field} from {table} where {pkey} = %s").format(
+#     field=sql.Identifier('my_name'),
+#     table=sql.Identifier('some_table'),
+#     pkey=sql.Identifier('id'))
