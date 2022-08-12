@@ -351,3 +351,11 @@ def get_answers_with_question_id(cursor, question_id):
     WHERE question_id = %(q_i)s""",
                    {'q_i': question_id})
     return cursor.fetchall()
+
+
+@connection_handler
+def delete_tag_with_question(cursor, q_id):
+    cursor.execute("""
+    DELETE FROM question_tag
+    WHERE question_id = %(q_i)s""",
+                   {'q_i': q_id})

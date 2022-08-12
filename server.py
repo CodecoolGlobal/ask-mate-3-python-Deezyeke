@@ -165,6 +165,7 @@ def delete_question(q_id):
         answers = data_handler.get_answers_with_question_id(q_id)
         for answer in answers:
             data_handler.delete_answer_comment_with_question_deleted(answer['id'])
+        data_handler.delete_tag_with_question(q_id)
         data_handler.delete_comment_with_question(q_id)
         data_handler.delete_answer_with_question(q_id)
         data_handler.delete_question(q_id)
