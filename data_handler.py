@@ -4,7 +4,6 @@ import psycopg2
 import psycopg2.extras
 from psycopg2 import sql
 from psycopg2._psycopg import cursor
-
 from data_connection import connection_handler
 
 
@@ -366,7 +365,8 @@ def sort_questions(cursor, order_by):
     cursor.execute(query)
     return cursor.fetchall()
 
-# query = sql.SQL("select {field} from {table} where {pkey} = %s").format(
-#     field=sql.Identifier('my_name'),
-#     table=sql.Identifier('some_table'),
-#     pkey=sql.Identifier('id'))
+
+@connection_handler
+def add_new_user(cursor, email, password_hashed_text):
+    query = sql.SQL('INSERT INTO users (email, password) VALUES ({}, {})').format(sql.Literal(email), sql.Literal(password_hashed_text))
+    cursor.execute(query)

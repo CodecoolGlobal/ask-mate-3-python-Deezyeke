@@ -1,13 +1,17 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for,session
 import util
 import data_handler
 import os
 from datetime import datetime
 from dotenv import load_dotenv
+from util import generate_hash
+from data_handler import add_new_user
+import psycopg2
 
 
 load_dotenv()
 app = Flask(__name__)
+app.secret_key=b'lgheroh42_4243'
 
 
 
@@ -17,9 +21,20 @@ def index():
     pass
 
 
-@app.route('/registration')
+@app.route('/registration', methods=['GET', 'POST'])
 def registration():
-    pass
+    if request.method == 'GET':
+        return render_template('registration.html', already_taken=False)
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        session['email'] = email
+        password_hashed_text = generate_hash(password).decode()
+        try:
+            add_new_user(email, password_hashed_text)
+        except psycopg2.errors.UniqueViolation:
+            return render_template('registration.html', already_taken=True)
+        else: return redirect('/')
 
 
 @app.route('/questions_list')
