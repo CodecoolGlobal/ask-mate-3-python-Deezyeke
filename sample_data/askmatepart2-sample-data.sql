@@ -1,4 +1,9 @@
+--
+-- PostgreSQL database dump
+--
 
+-- Dumped from database version 9.5.6
+-- Dumped by pg_dump version 9.5.6
 
 ALTER TABLE IF EXISTS ONLY public.question DROP CONSTRAINT IF EXISTS pk_question_id CASCADE;
 ALTER TABLE IF EXISTS ONLY public.answer DROP CONSTRAINT IF EXISTS pk_answer_id CASCADE;
@@ -12,11 +17,12 @@ ALTER TABLE IF EXISTS ONLY public.tag DROP CONSTRAINT IF EXISTS pk_tag_id CASCAD
 ALTER TABLE IF EXISTS ONLY public.question_tag DROP CONSTRAINT IF EXISTS fk_tag_id CASCADE;
 
 
-DROP TABLE IF EXISTS public.users;
+DROP TABLE IF EXISTS public.users CASCADE;
 CREATE TABLE users(
        id SERIAL PRIMARY KEY,
-       email TEXT,
-       password TEXT);
+       email TEXT UNIQUE,
+       password TEXT,
+       reg_date DATE);
 
 
 DROP TABLE IF EXISTS public.question;
@@ -69,12 +75,9 @@ CREATE TABLE tag (
 );
 
 
-<<<<<<< HEAD
-=======
 
 
 
->>>>>>> c6e2d7c42823f8643515bfa1223b0304c7ae1d55
 ALTER TABLE ONLY answer
     ADD CONSTRAINT pk_answer_id PRIMARY KEY (id);
 

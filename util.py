@@ -1,5 +1,6 @@
 import csv
 import os
+import bcrypt
 
 
 QUESTION_FILE_PATH = os.getenv(
@@ -10,6 +11,17 @@ ANSWER_HEADER = ['id', 'submission_time',
                  'vote_number', 'question_id', 'message', 'image']
 QUESTION_HEADER = ['id', 'submission_time', 'view_number',
                    'vote_number', 'title', 'message', 'image']
+
+def generate_hash(password_text):
+    salt_bytes = bcrypt.gensalt()
+    password_bytes = password_text.encode()
+    password_hashed_bytes = bcrypt.hashpw(password_bytes, salt_bytes)
+    return password_hashed_bytes
+
+
+def verify_password(password_to_verify_text, password_hashed_bytes):
+    password_to_verify_bytes = password_to_verify_text.encode()
+    return bcrypt.checkpw(password_to_verify_bytes, password_hashed_bytes)
 
 
 def read_questions():
