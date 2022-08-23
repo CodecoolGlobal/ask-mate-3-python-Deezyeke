@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for,session
 import util
 import data_handler
 import os
-from datetime import datetime
+from datetime import datetime, date
 from dotenv import load_dotenv
 from util import generate_hash
 from data_handler import add_new_user
@@ -30,8 +30,10 @@ def registration():
         password = request.form.get('password')
         session['email'] = email
         password_hashed_text = generate_hash(password).decode()
+        reg_date = date.today()
+        print(reg_date)
         try:
-            add_new_user(email, password_hashed_text)
+            add_new_user(email, password_hashed_text, reg_date)
         except psycopg2.errors.UniqueViolation:
             return render_template('registration.html', already_taken=True)
         else: return redirect('/')
