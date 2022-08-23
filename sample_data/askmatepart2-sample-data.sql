@@ -25,10 +25,10 @@ CREATE TABLE question (
     title text,
     message text,
     image text,
-    user_id,
+    user_id INTEGER,
     CONSTRAINT fk_user_id
-           FOREIGN KEY(user_id)
-           REFERENCES user(id)
+               FOREIGN KEY(user_id)
+               REFERENCES users(id)
 );
 
 
@@ -68,9 +68,9 @@ CREATE TABLE tag (
 
 DROP TABLE IF EXISTS public.users;
 CREATE TABLE users(
-       id SERIAL NOT NULL,
+       id SERIAL PRIMARY KEY,
        email TEXT,
-       password TEXT)
+       password TEXT);
 
 
 
