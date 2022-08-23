@@ -16,6 +16,15 @@ ALTER TABLE IF EXISTS ONLY public.question_tag DROP CONSTRAINT IF EXISTS fk_ques
 ALTER TABLE IF EXISTS ONLY public.tag DROP CONSTRAINT IF EXISTS pk_tag_id CASCADE;
 ALTER TABLE IF EXISTS ONLY public.question_tag DROP CONSTRAINT IF EXISTS fk_tag_id CASCADE;
 
+
+DROP TABLE IF EXISTS public.users;
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email TEXT,
+    password TEXT
+);
+
+
 DROP TABLE IF EXISTS public.question;
 CREATE TABLE question (
     id serial NOT NULL,
@@ -25,10 +34,10 @@ CREATE TABLE question (
     title text,
     message text,
     image text,
-    user_id,
+    user_id integer,
     CONSTRAINT fk_user_id
-           FOREIGN KEY(user_id)
-           REFERENCES user(id)
+        FOREIGN KEY(user_id)
+        REFERENCES users(id)
 );
 
 
@@ -64,14 +73,6 @@ CREATE TABLE tag (
     id serial NOT NULL,
     name text
 );
-
-
-DROP TABLE IF EXISTS public.users;
-CREATE TABLE users(
-       id SERIAL NOT NULL,
-       email TEXT,
-       password TEXT)
-
 
 
 ALTER TABLE ONLY answer
