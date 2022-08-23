@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add comment</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
+</head>
+<body>
+<h2>Question:</h2>
+<h4>{{ answer['message'] }}</h4>
+<h3>Add your comment:</h3>
+<form action="{{ url_for('add_comment_to_answer', a_id=a_id) }}" method="post">
+    <label for="add-comment">Your comment:</label><br>
+    <textarea name="add-comment" id="add-comment" cols="30" rows="10"></textarea><br>
+    <button type="submit">Submit comment</button>
+</form>
+</body>
+</html>

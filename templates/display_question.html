@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Question details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
+</head>
+
+<body>
+    {% for data in question %}
+        <table>
+            <tr> <th> Title: </th> </tr>
+            <tr>
+                {% if data['title'] == None %}
+                    <td> This title is empty! </td>
+                {% else %}
+                    <td> {{ data['title'] }} </td>
+                {% endif %}
+            </tr>
+        </table>
+
+        <br>
+
+        <table>
+        <tr> <th> Question: </th> </tr>
+        <tr>
+        {% if data['message'] == None %}
+            <td>There is no question added</td>
+        {% else %}
+            <td>{{ data['message'] }}</td>
+        {% endif %}
+        </tr>
+        </table>
+        {% if data['image'] == None %}
+            <small> No image file uploaded! </small>
+        {% else %}
+            <img src="{{ url_for("static", filename=data['image']) }}" width="320">
+        {%  endif %}
+
+    {% endfor %}
+
+
+    <h2>Comments:</h2>
+    {% for comment in q_comments %}
+        <p style="font-size: 15px">
+            {{ comment['submission_time'] }}, {{ comment['message'] }} <a href="{{ url_for('edit_comment', c_id=comment['id']) }}" methods="get"><button>Edit</button></a>
+            <a href="{{ url_for('delete_comment_from_question', q_id=q_id, c_id=comment['id'])}}"><button type="button">Delete comment</button></a>
+        </p>
+    {% endfor %}
+    <br>
+    <a href="{{ url_for('add_comment_to_question', q_id=q_id) }}" methods="get">Add comments</a>
+    <br><br>
+    <a href="/question/{{q_id}}/edit"><button style="background-color:blue; border-color:green; color:whitesmoke">Edit question</button></a>
+    <br><br>
+    <a href="{{ url_for('delete_question', q_id=q_id) }}"><button style="background-color:red; border-color:orange;">Delete question</button></a>
+    <br><br>
+    <hr width="80%" color="blue" align="left">
+
+    <h2><i>Answer(s):</i></h2>
+    {% for data in answer %}
+        {% if data['message'] == None %}
+            <h4><i>There is no answer added</i></h4>
+        {% else %}
+            <h4>{{ data['message'] }}  <a href="{{ url_for('edit_answer', a_id=data['id']) }}" methods="get"><button>Edit</button></a></h4>
+        {% endif %}
+        {% if data['image'] == None %}
+            <p> <small> No image file had been uploaded! </small> </p>
+        {% else %}
+            <img src="{{ url_for("static", filename=data['image']) }}" width="320"><br>
+        {%  endif %}
+        <p>Votes on this answer: {{ data['vote_number'] }}</p>
+        <form action='/question/{{ q_id }}/{{ data["id"] }}/vote/up' method="POST">
+            <button style="background-color:orange; border-color:green;"> Vote +1</button>
+        </form>
+        <form action='/question/{{ q_id }}/{{ data["id"] }}/vote/down' method="POST">
+            <button style="background-color:orange; border-color:green;"> Vote -1</button>
+        </form>
+        {% for comment in a_comment %}
+            {% if comment['answer_id'] == data['id'] %}
+                <p style="font-size: 15px">
+                    {{ comment['submission_time'] }}, {{ comment['message'] }} <a href="{{ url_for('edit_comment', c_id=comment['id']) }}" methods="get"><button>Edit</button></a>
+                    <a href="{{ url_for('delete_comment_from_answer', q_id=q_id, a_id=data['id'], c_id=comment['id']) }}"><button type="button">Delete comment</button></a>
+                </p>
+            {% endif %}
+        {% endfor %}
+
+        <a href="{{ url_for('add_comment_to_answer', a_id=data['id']) }}" methods="get"><button>Add comment</button></a>
+        <a href="{{ url_for('delete_answer', q_id=q_id, a_id=data['id']) }}"><button style="background-color:red; border-color:orange;">Delete answer</button></a>
+    {% endfor %}
+    <p>
+        <a href="{{ url_for('add_new_answer', q_id=q_id)}}">Add a new answer</a>
+    </p>
+
+    <br>
+
+    {% if question_tags != None %}
+        <table>
+            <tr>
+                <th> Tag </th>
+                <th> Delete </th>
+            </tr>
+            {% for tag in question_tags %}
+                <tr>
+                    <td> {{ tag['name'] }} </td>
+                    <td> <a href="{{ url_for('delete_tag', question_id=q_id, tag_id=tag['tag_id']) }}"> X </a> </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else: %}
+        <h5> <small> No tag added yet! </small></h5>
+    {% endif %}
+
+    <a href='/question/{{q_id}}/new-tag'> Add tag </a> <br><br><br>
+
+    <a href="/">Home page</a>
+</body>
+</html>

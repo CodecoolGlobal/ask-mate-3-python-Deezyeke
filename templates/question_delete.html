@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Delete question {{ q_id }}</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
+    </head>
+    <body bgcolor="ffcc44">
+        <h2>Are you sure you want to delete this question?</h2>
+        <form action="/display-question/{{q_id}}/delete" method="post">
+        <button type="submit" style="background-color:red; border-color:orange;">Delete</button></a><br><br>
+        </form>
+        <a href="{{ url_for('display_question', q_id=q_id) }}"><button style="background-color:lightgreen; border-color:orange;">Cancel</button></a>
+    </body>
+</html>
