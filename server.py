@@ -10,6 +10,7 @@ load_dotenv()
 app = Flask(__name__)
 
 
+
 @app.route('/')
 def index():
 # alapvetően submit time desc és csak 5öt mutat, legördülő menüből választható mi alapján order-elje:
