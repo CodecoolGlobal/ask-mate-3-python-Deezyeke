@@ -24,13 +24,8 @@ CREATE TABLE question (
     vote_number integer,
     title text,
     message text,
-    image text,
-    user_id,
-    CONSTRAINT fk_user_id
-           FOREIGN KEY(user_id)
-           REFERENCES user(id)
+    image text
 );
-
 
 DROP TABLE IF EXISTS public.answer;
 CREATE TABLE answer (
@@ -64,14 +59,6 @@ CREATE TABLE tag (
     id serial NOT NULL,
     name text
 );
-
-
-DROP TABLE IF EXISTS public.users;
-CREATE TABLE users(
-       id SERIAL NOT NULL,
-       email TEXT,
-       password TEXT)
-
 
 
 ALTER TABLE ONLY answer
