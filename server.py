@@ -14,6 +14,17 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    return render_template('index.html')
+    pass
+
+
+@app.route('/registration')
+def registration():
+    pass
+
+
+@app.route('/questions_list')
+def questions_list():
 # alapvetően submit time desc és csak 5öt mutat, legördülő menüből választható mi alapján order-elje:
     if request.method == 'GET':
         submission_time = request.args.get('submission_time', 'view_number')
@@ -70,7 +81,7 @@ def add_question():
 
         data_handler.save_new_question(question)
 
-        return redirect(url_for('index'))
+        return redirect(url_for('questions_list'))
 
 
 @app.route('/question/<id>/edit', methods=['GET', 'POST'])
@@ -144,7 +155,7 @@ def display_question(q_id):
 @app.route('/question/<q_id>/vote/<up_or_down>', methods=['POST'])
 def add_vote(q_id, up_or_down):
     data_handler.change_vote_number(q_id, 'question', up_or_down)
-    return redirect('/')
+    return redirect(url_for('questions_list'))
 
 
 @app.route('/question/<q_id>/<answer_id>/vote/<up_or_down>', methods=['POST'])
@@ -172,7 +183,7 @@ def delete_question(q_id):
         data_handler.delete_comment_with_question(q_id)
         data_handler.delete_answer_with_question(q_id)
         data_handler.delete_question(q_id)
-        return redirect(url_for('index'))
+        return redirect(url_for('questions_list'))
 
 
 @app.route('/question/<q_id>/add-new-answer', methods=['GET', 'POST'])
