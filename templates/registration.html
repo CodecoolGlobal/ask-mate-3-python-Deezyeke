@@ -1,10 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+    <meta charset="UTF-8">
+    <title>User registraion</title>
 </head>
 <body>
+    <h3> User registration </h3>
+    <form action="{{ url_for('registration') }}" method="post">
+        <label> E-mail address: </label>
+        <input type="email" id="emial" name="email"> <br>
+        <label> Password: </label>
+        <input type="password" id="password" name="password"><br>
+        {% if already_taken == True %}
+            <h5> This email address is already registered! </h5>
+        {% endif %}
+
+        <br>
+        <button type="submit"> Register </button>
+        <button type="button"> <a href="/"> Cancel </a> </button>
+    </form>
 
 </body>
 </html>
