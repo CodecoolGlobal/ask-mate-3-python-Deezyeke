@@ -14,6 +14,7 @@ app = Flask(__name__)
 app.secret_key=b'lgheroh42_4243'
 
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
