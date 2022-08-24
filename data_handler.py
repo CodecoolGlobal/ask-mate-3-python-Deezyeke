@@ -366,6 +366,42 @@ def sort_questions(cursor, order_by):
     cursor.execute(query)
     return cursor.fetchall()
 
+
+@connection_handler
+def get_all_username(cursor):
+    cursor.execute("""
+    SELECT email FROM users
+    """)
+    return cursor.fetchall()
+
+
+@connection_handler
+def get_user_question_count(cursor, user):
+    cursor.execute('''
+    SELECT COUNT(user_id) AS question FROM users
+    INNER JOIN question ON users.id = question.user_id
+    ''')
+    return cursor.fetchall()
+
+
+@connection_handler
+def get_user_answer_count(cursor, user):
+    cursor.execute("""
+    SELECT COUNT(answer.question_id) AS answer FROM users
+    INNER JOIN answer ON users.id = answer.user_id
+    """)
+    return cursor.fetchall()
+
+
+@connection_handler
+def get_user_comment_count(cursor, user):
+    cursor.execute("""
+    SELECT COUNT(comment.question_id) AS comment FROM users
+    INNER JOIN comment ON users.id = comment.user_id
+    """)
+    return cursor.fetchall()
+
+
 # query = sql.SQL("select {field} from {table} where {pkey} = %s").format(
 #     field=sql.Identifier('my_name'),
 #     table=sql.Identifier('some_table'),
