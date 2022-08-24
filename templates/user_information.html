@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User information</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
+</head>
+<body>
+<h1>All users information</h1>
+<table>
+    <tr>
+        <th>Username</th>
+        <th>Registration date</th>
+        <th>Number of questions</th>
+        <th>Number of answers</th>
+        <th>Number of comments</th>
+        <th>Reputation</th>
+    </tr>
+    <tr>
+        {% for user, infos in users.items() %}
+            <tr>
+                <td><a href="{{ url_for('get_user_info', user=user) }}">{{ user }}</a></td>
+                {% for info in infos %}
+                    {% for inside in info %}
+                        {% for key, value in inside.items() %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+
+                    {% endfor %}
+
+                {% endfor %}
+            </tr>
+
+        {% endfor %}
+
+    </tr>
+</table>
+</body>
+</html>

@@ -373,8 +373,66 @@ def add_new_user(cursor, email, password_hashed_text, reg_date):
 
 
 @connection_handler
+def get_all_username(cursor):
+    cursor.execute("""
+    SELECT email FROM users
+    """)
+    return cursor.fetchall()
+
+
+@connection_handler
+def get_user_question_count(cursor, user):
+    cursor.execute('''
+    SELECT COUNT(user_id) AS question FROM users
+    INNER JOIN question ON users.id = question.user_id
+    ''')
+    return cursor.fetchall()
+
+
+@connection_handler
+def get_user_answer_count(cursor, user):
+    cursor.execute("""
+    SELECT COUNT(answer.question_id) AS answer FROM users
+    INNER JOIN answer ON users.id = answer.user_id
+    """)
+    return cursor.fetchall()
+
+
+@connection_handler
+def get_user_comment_count(cursor, user):
+    cursor.execute("""
+    SELECT COUNT(comment.question_id) AS comment FROM users
+    INNER JOIN comment ON users.id = comment.user_id
+    """)
+    return cursor.fetchall()
+
+
+@connection_handler
+def get_user_registration_date(cursor, user):
+    cursor.execute("""
+    SELECT reg_date FROM users
+    WHERE email = %(usr)s
+    """, {'usr': user})
+    return cursor.fetchall()
+
+
+# query = sql.SQL("select {field} from {table} where {pkey} = %s").format(
+#     field=sql.Identifier('my_name'),
+#     table=sql.Identifier('some_table'),
+#     pkey=sql.Identifier('id'))
+
+
+@connection_handler
 def get_user_info(cursor, user_id):
     cursor.execute("""
     SELECT * FROM users WHERE %(u_id)s = id""",
     {'u_id': user_id})
     return cursor.fetchall()
+
+
+@connection_handler
+def get_user_id_by_email(cursor, user_email):
+    cursor.execute("""
+    SELECT id FROM users WHERE email = %(u_i)s""",
+                   {'u_i': user_email})
+    return cursor.fetchone()
