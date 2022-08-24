@@ -95,6 +95,7 @@ def create_empty_question():
     question['view_number'] = 0
     question['vote_number'] = 0
     question['image'] = None
+    question['user_id'] = None
     return question
 
 
