@@ -6,8 +6,11 @@
 </head>
 
 <body>
+    {% include 'header.html' %}
+
     <a href="/questions_list"> Login </a> <br>
     <a href="{{ url_for('registration') }}" > User registration </ahref>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
 </body>
 
 </html>
