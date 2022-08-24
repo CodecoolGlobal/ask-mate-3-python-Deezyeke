@@ -17,11 +17,11 @@ def get_user_password(cursor, email):
     #         FROM question"""
     # cursor.execute(query)
     # return cursor.fetchall()  # listában adja vissza a dict-eket
-    query = sql.SQL('''SELECT password
+    query = sql.SQL('''SELECT id, password
         FROM users
         WHERE email={} ''').format(sql.Literal(email))
     cursor.execute(query)
-    return cursor.fetchone()["password"]
+    return cursor.fetchone()
 
 
 @connection_handler
@@ -72,12 +72,12 @@ def get_question(cursor, id):
 @connection_handler
 def save_new_question(cursor, question):
     query = """
-    INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
-    VALUES ( %(st)s, %(vi)s, %(vo)s, %(ti)s, %(me)s, %(im)s )"""
+    INSERT INTO question (submission_time, view_number, vote_number, title, message, image, user_id)
+    VALUES ( %(st)s, %(vi)s, %(vo)s, %(ti)s, %(me)s, %(im)s , %(uid)s)"""
     cursor.execute(query,
                    {'st': question['submission_time'], 'vi': question['view_number'], 'vo': question['view_number'],
                     'ti': question['title'],
-                    'me': question['message'], 'im': question['image']})
+                    'me': question['message'], 'im': question['image'], 'uid': question['user_id']})
 
 
 @connection_handler
@@ -94,6 +94,7 @@ def create_empty_question():
     question['view_number'] = 0
     question['vote_number'] = 0
     question['image'] = None
+    question['user_id'] = None
     return question
 
 
@@ -142,10 +143,11 @@ def search_questions(cursor, search, table='question'):
 @connection_handler
 def add_answer_to_question(cursor, answer):
     query = """
-            INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-            VALUES ( %(st)s, %(vo)s, %(qi)s, %(me)s, %(im)s )"""
+            INSERT INTO answer (submission_time, vote_number, question_id, message, image, user_id)
+            VALUES ( %(st)s, %(vo)s, %(qi)s, %(me)s, %(im)s, %(uid)s )"""
     cursor.execute(query, {'st': answer['submission_time'], 'vo': answer['vote_number'],
-                           'qi': answer['question_id'], 'me': answer['message'], 'im': answer['image']})
+                           'qi': answer['question_id'], 'me': answer['message'], 'im': answer['image'], 'uid': answer['user_id']})
+
 
 
 @connection_handler
@@ -205,19 +207,19 @@ def get_images_names(cursor, q_id):
 @connection_handler
 def add_comment_to_question(cursor, comment):
     query = """
-            INSERT INTO comment (submission_time, question_id, message)
-            VALUES ( %(st)s, %(qi)s, %(me)s)"""
-    cursor.execute(query, {'st': comment['submission_time'],
-                           'qi': comment['question_id'], 'me': comment['message']})
+            INSERT INTO comment (submission_time, question_id, message, user_id)
+            VALUES ( %(st)s, %(qi)s, %(me)s, %(uid)s)"""
+    cursor.execute(query, {'st': comment['submission_time'], 'qi': comment['question_id'], 'me': comment['message'], 'uid': comment['user_id']})
+
 
 
 @connection_handler
 def add_comment_to_answer(cursor, comment):
     query = """
-            INSERT INTO comment (submission_time, answer_id, message)
-            VALUES ( %(st)s, %(ai)s, %(me)s)"""
+            INSERT INTO comment (submission_time, answer_id, message, user_id)
+            VALUES ( %(st)s, %(ai)s, %(me)s, %(uid)s)"""
     cursor.execute(query, {'st': comment['submission_time'],
-                           'ai': comment['answer_id'], 'me': comment['message']})
+                           'ai': comment['answer_id'], 'me': comment['message'], 'uid': comment['user_id']})
 
 
 @connection_handler

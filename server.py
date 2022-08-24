@@ -11,6 +11,7 @@ from data_handler import get_user_password
 import psycopg2
 from datetime import date
 
+
 load_dotenv()
 app = Flask(__name__)
 app.secret_key = b'lgheroh42_4243'
@@ -28,10 +29,8 @@ def registration():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-        session['email'] = email
         password_hashed_text = generate_hash(password).decode()
         reg_date = date.today()
-        print(reg_date)
         try:
             add_new_user(email, password_hashed_text, reg_date)
         except psycopg2.errors.UniqueViolation:
@@ -45,12 +44,14 @@ def login():
     email = request.form.get("email")
     password_entered_by_user_text = request.form.get("password")
     if request.method == 'POST':
-        password_hashed_text = get_user_password(email)  # get password from database
+        password_hashed_text = get_user_password(email)["password"]  # get password from database
+        user_id = get_user_password(email)["id"]
         try:
 
             if verify_password(password_entered_by_user_text,
                                password_hashed_text.encode()):  # checking password if given pw is the same as in DB
                 session['email'] = request.form['email']
+                session['user_id'] = user_id
                 return redirect(url_for('questions_list', email=email))
             else:
                 return render_template('login.html', log_in_failed=True)
@@ -58,6 +59,13 @@ def login():
             return render_template('login.html', log_in_failed=True)
     else:
         return render_template("login.html", log_in_failed=False)
+
+
+@app.route("/logout")
+def logout():
+    session.pop("email")
+    # session.pop("user_id")
+    return redirect("/")
 
 
 @app.route('/questions_list')
@@ -78,13 +86,6 @@ def questions_list():
             print(found)
             return render_template('questions_list.html', questions=found, orderby='title', view_number='views',
                                    question_header=data_handler.QUESTION_HEADER, email=session["email"])
-
-
-@app.route("/logout")
-def logout():
-    session.pop("email")
-    # session.pop("user_id")
-    return redirect("/")
 
 
 # Extra idea: #a többi "old" questions akkor legyen csak látható, ha az utolsó 5 alatti linkre kattint pl show all questions névvel
@@ -119,6 +120,7 @@ def add_question():
         question['submission_time'] = now.strftime("%Y/%m/%d %H:%M:%S")
         question['title'] = request.form.get('title')
         question['message'] = request.form.get('text')
+        question['user_id'] = session['user_id']
         uploaded_file = request.files['image_file']
         if uploaded_file.filename != '':
             uploaded_file.save(os.path.join('static', uploaded_file.filename))
@@ -243,6 +245,7 @@ def add_new_answer(q_id):
         answer['submission_time'] = now.strftime("%Y/%m/%d %H:%M:%S")
         answer['message'] = request.form.get('message')
         answer['question_id'] = q_id
+        answer['user_id'] = session['user_id']
         uploaded_file = request.files['image_file']
         if uploaded_file.filename != '':
             uploaded_file.save(os.path.join('static', uploaded_file.filename))
@@ -273,7 +276,7 @@ def add_comment_to_question(q_id):
     elif request.method == 'POST':
         now = datetime.now()
         comment = {'message': request.form.get('add-comment'), 'submission_time': now.strftime("%Y/%m/%d %H:%M:%S"),
-                   'question_id': q_id}
+                   'question_id': q_id, 'user_id': session['user_id']}
         data_handler.add_comment_to_question(comment)
         return redirect(url_for('display_question', q_id=q_id))
 
@@ -299,7 +302,7 @@ def add_comment_to_answer(a_id):
         for row in list_q_id:
             now = datetime.now()
             comment = {'message': request.form.get('add-comment'), 'submission_time': now.strftime("%Y/%m/%d %H:%M:%S"),
-                       'answer_id': a_id}
+                       'answer_id': a_id, 'user_id': session['user_id']}
             data_handler.add_comment_to_answer(comment)
             return redirect(url_for('display_question', q_id=row['question_id']))
 
