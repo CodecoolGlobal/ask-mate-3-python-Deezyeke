@@ -1,12 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for,session
+from flask import Flask, render_template, request, redirect, url_for, session
 import util
 import data_handler
 import os
-from datetime import datetime, date
+from datetime import datetime
 from dotenv import load_dotenv
 from util import generate_hash
 from data_handler import add_new_user
 import psycopg2
+from datetime import date
 
 
 load_dotenv()
@@ -327,6 +328,25 @@ def edit_comment(c_id):
                 q_id = data_handler.get_qid_by_aid(comment['answer_id'])
                 for id in q_id:
                     return redirect(url_for('display_question', q_id=id['question_id']))
+
+
+@app.route('/users')
+def users():
+    all_info_by_mail = {}
+    all_usermail = []
+    for row in data_handler.get_all_username():
+        for k, value in row.items():
+            all_usermail.append(value)
+    for user in all_usermail:
+        counts = [
+            data_handler.get_user_registration_date(user), data_handler.get_user_question_count(user),
+            data_handler.get_user_answer_count(user), data_handler.get_user_comment_count(user)
+        ]
+        all_info_by_mail[user] = counts
+    if 'email' in session:
+        return render_template('user_information.html', users=all_info_by_mail)
+    else:
+        return redirect(url_for('index'))
 
 
 if __name__ == "__main__":
