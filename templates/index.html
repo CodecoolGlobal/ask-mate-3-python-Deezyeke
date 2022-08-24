@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
 </head>
 
 <body>
     {% include 'header.html' %}
 
-    <a href="/questions_list"> Login </a> <br>
-    <a href="{{ url_for('registration') }}" > User registration </ahref>
-    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
+    <a href="{{ url_for('login') }}" > Login </a> <br>
+    <a href="{{ url_for('registration') }}" > User registration </a href>
 </body>
 
 </html>
