@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from util import generate_hash
 from data_handler import add_new_user
 import psycopg2
-
+from data_handler import get_user_id
 
 load_dotenv()
 app = Flask(__name__)
@@ -28,10 +28,8 @@ def registration():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-        session['email'] = email
         password_hashed_text = generate_hash(password).decode()
         reg_date = date.today()
-        print(reg_date)
         try:
             add_new_user(email, password_hashed_text, reg_date)
         except psycopg2.errors.UniqueViolation:
@@ -90,6 +88,8 @@ def add_question():
         question['submission_time'] = now.strftime("%Y/%m/%d %H:%M:%S")
         question['title'] = request.form.get('title')
         question['message'] = request.form.get('text')
+        data_handler.get_user_id(session['email'])
+        question
         uploaded_file = request.files['image_file']
         if uploaded_file.filename != '':
             uploaded_file.save(os.path.join('static', uploaded_file.filename))
