@@ -15,6 +15,24 @@
         <th>Number of comments</th>
         <th>Reputation</th>
     </tr>
+    <tr>
+        {% for user, infos in users.items() %}
+            <tr>
+                <td><a href="{{ url_for('index') }}">{{ user }}</a></td>
+                {% for info in infos %}
+                    {% for inside in info %}
+                        {% for key, value in inside.items() %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+
+                    {% endfor %}
+
+                {% endfor %}
+            </tr>
+
+        {% endfor %}
+
+    </tr>
 </table>
 </body>
 </html>

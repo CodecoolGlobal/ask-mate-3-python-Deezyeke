@@ -407,6 +407,15 @@ def get_user_comment_count(cursor, user):
     return cursor.fetchall()
 
 
+@connection_handler
+def get_user_registration_date(cursor, user):
+    cursor.execute("""
+    SELECT reg_date FROM users
+    WHERE email = %(usr)s
+    """, {'usr': user})
+    return cursor.fetchall()
+
+
 # query = sql.SQL("select {field} from {table} where {pkey} = %s").format(
 #     field=sql.Identifier('my_name'),
 #     table=sql.Identifier('some_table'),
