@@ -5,10 +5,18 @@
 <head>
     <title class="neonText">Zsaszk! Home page</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
+
 </head>
 
 <body>
 {% include 'header.html' %}
+{% if email == None  %}
+    You are not logged in.
+{% else   %}
+    You are logged in as {{ email }}.
+{%  endif %}
+<a href="/logout"> Log out </a> </button>
+
 
 <div class="grid_container">
 
@@ -83,6 +91,9 @@
         <li>use the search bar at the top of the page</li>
         <li>Still haven't found the needed information? <br><br>
         <a href="/add_question"> Add a new question </a></li><br><br>
+    <br>
+        <button type="button">
+            <a href="/"> Back to home </a> </button>
     </ul>
 </body>
 
