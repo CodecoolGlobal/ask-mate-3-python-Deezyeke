@@ -1,25 +1,24 @@
-from flask import Flask, render_template, request, redirect, url_for,session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import util
+from util import verify_password
 import data_handler
 import os
 from datetime import datetime, date
 from dotenv import load_dotenv
 from util import generate_hash
 from data_handler import add_new_user
+from data_handler import get_user_password
 import psycopg2
-
 
 load_dotenv()
 app = Flask(__name__)
-app.secret_key=b'lgheroh42_4243'
-
-
+app.secret_key = b'lgheroh42_4243'
 
 
 @app.route('/')
 def index():
-    pass
-    # return redirect(url_for('index'))
+    return render_template("index.html")
+
 
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
@@ -36,24 +35,33 @@ def registration():
             add_new_user(email, password_hashed_text, reg_date)
         except psycopg2.errors.UniqueViolation:
             return render_template('registration.html', already_taken=True)
-        else: return redirect('/')
+        else:
+            return redirect('/')
 
 
 @app.route('/index', methods=['GET', 'POST'])
 def login():
+    email = request.form.get("email")
+    password_entered_by_user_text = request.form.get("password")
     if request.method == 'POST':
-        if get_user_data(request.form["email"], request.form["password"]):
-            session['email'] = request.form['email']
-            return redirect(url_for('questions_list', email=email, is_logged_in=True))
-        else:
-            return redirect(url_for('index'), is_logged_in=False)
+        password_hashed_text = get_user_password(email)  # get password from database
+        try:
+
+            if verify_password(password_entered_by_user_text,
+                               password_hashed_text.encode()):  # checking password if given pw is the same as in DB
+                session['email'] = request.form['email']
+                return redirect(url_for('questions_list', email=email))
+            else:
+                return render_template('login.html', log_in_failed=True)
+        except:
+            return render_template('login.html', log_in_failed=True)
     else:
-        return redirect(url_for('index'))
+        return render_template("login.html", log_in_failed=False)
 
 
 @app.route('/questions_list')
 def questions_list():
-# alapvetően submit time desc és csak 5öt mutat, legördülő menüből választható mi alapján order-elje:
+    # alapvetően submit time desc és csak 5öt mutat, legördülő menüből választható mi alapján order-elje:
     if request.method == 'GET':
         submission_time = request.args.get('submission_time', 'view_number')
         # if submission_time:
@@ -62,15 +70,21 @@ def questions_list():
         search_value = request.args.get('search')
         if search_value == None:
             ti = 'title'
-            return render_template('questions_list.html', questions=desc_by_time, orderby='title', view_number='views', question_header=data_handler.QUESTION_HEADER)
+            return render_template('questions_list.html', questions=desc_by_time, orderby='title', view_number='views',
+                                   question_header=data_handler.QUESTION_HEADER, email=session["email"])
         else:
             found = data_handler.search_questions(search_value)
             print(found)
-            return render_template('questions_list.html', questions=found, orderby='title', view_number='views', question_header=data_handler.QUESTION_HEADER)
-    # if request.method == 'POST':
-    # order_by = request.form.get('order_by')
-    # filtered = data_handler.filter_questions('order_by')
-    #  return render_template('questions_list.html', questions=filtered,
+            return render_template('questions_list.html', questions=found, orderby='title', view_number='views',
+                                   question_header=data_handler.QUESTION_HEADER, email=session["email"])
+
+
+@app.route("/logout")
+def logout():
+    session.pop("email")
+    # session.pop("user_id")
+    return redirect("/")
+
 
 # Extra idea: #a többi "old" questions akkor legyen csak látható, ha az utolsó 5 alatti linkre kattint pl show all questions névvel
 
@@ -80,10 +94,12 @@ def display_all_question():
     questions = data_handler.get_all_questions()
     search_value = request.args.get('search')
     if search_value == None:
-        return render_template('questions_list.html', questions=questions, orderby='title', view_number='views', question_header=data_handler.QUESTION_HEADER)
+        return render_template('questions_list.html', questions=questions, orderby='title', view_number='views',
+                               question_header=data_handler.QUESTION_HEADER, email=session["email"])
     else:
         found = data_handler.search_questions(search_value)
-        return render_template('questions_list.html', questions=found, orderby='title', view_number='views', question_header=data_handler.QUESTION_HEADER)
+        return render_template('questions_list.html', questions=found, orderby='title', view_number='views',
+                               question_header=data_handler.QUESTION_HEADER, email=session["email"])
 
 
 @app.route('/question/<q_id>/view')
@@ -109,14 +125,15 @@ def add_question():
 
         data_handler.save_new_question(question)
 
-        return redirect(url_for('questions_list'))
+        return redirect(url_for('questions_list', email=session["email"]))
 
 
 @app.route('/question/<id>/edit', methods=['GET', 'POST'])
 def edit_question(id):
     if request.method == 'GET':
         question = data_handler.get_question(id)
-        return render_template ('edit_question.html', id=id, title=question['title'], message=question['message'], image=question['image'])
+        return render_template('edit_question.html', id=id, title=question['title'], message=question['message'],
+                               image=question['image'])
     elif request.method == 'POST':
         orig_question = data_handler.get_question(id)
         question = {}
@@ -139,7 +156,7 @@ def edit_question(id):
 
         data_handler.replace_question(id, question)
 
-        return redirect (url_for('display_question', q_id=id))
+        return redirect(url_for('display_question', q_id=id))
 
 
 @app.route('/answer/<a_id>/edit', methods=['GET', 'POST'])
@@ -176,14 +193,15 @@ def display_question(q_id):
         for key, value in answer.items():
             if key == 'question_id' and str(value) == q_id:
                 answers.append(answer)
-    return render_template('display_question.html', question=questions, answer=answers, q_id=q_id, q_comments=q_comments,
+    return render_template('display_question.html', question=questions, answer=answers, q_id=q_id,
+                           q_comments=q_comments,
                            a_comment=a_comments, question_tags=question_tags)
 
 
 @app.route('/question/<q_id>/vote/<up_or_down>', methods=['POST'])
 def add_vote(q_id, up_or_down):
     data_handler.change_vote_number(q_id, 'question', up_or_down)
-    return redirect(url_for('questions_list'))
+    return redirect(url_for('questions_list', email=session["email"]))
 
 
 @app.route('/question/<q_id>/<answer_id>/vote/<up_or_down>', methods=['POST'])
@@ -211,7 +229,7 @@ def delete_question(q_id):
         data_handler.delete_comment_with_question(q_id)
         data_handler.delete_answer_with_question(q_id)
         data_handler.delete_question(q_id)
-        return redirect(url_for('questions_list'))
+        return redirect(url_for('questions_list', email=session["email"]))
 
 
 @app.route('/question/<q_id>/add-new-answer', methods=['GET', 'POST'])
@@ -303,7 +321,8 @@ def add_new_tag(question_id):
     if request.method == 'GET':
         if len(question_tags) == 0:
             question_tags = None
-        return render_template('add_tag.html', question_id=question_id, message=question['message'], question_tags=question_tags, tags=tags)
+        return render_template('add_tag.html', question_id=question_id, message=question['message'],
+                               question_tags=question_tags, tags=tags)
     elif request.method == 'POST':
         new_tag = request.form.get('new_tag')
         choose_tag_id = request.form.get('choose_tag')

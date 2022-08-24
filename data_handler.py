@@ -6,20 +6,22 @@ from psycopg2 import sql
 from psycopg2._psycopg import cursor
 from data_connection import connection_handler
 
-
 QUESTION_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
 ANSWER_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
 
 
-def get_user_data():
+@connection_handler
+def get_user_password(cursor, email):
     # query = """
     #         SELECT email, "password"
     #         FROM question"""
     # cursor.execute(query)
-    # return cursor.fetchall()
-    query = sql.SQL('''SELECT {} {}
-        FROM question''').format(sql.Literal(email), sql.Literal(password))
+    # return cursor.fetchall()  # listában adja vissza a dict-eket
+    query = sql.SQL('''SELECT password
+        FROM users
+        WHERE email={} ''').format(sql.Literal(email))
     cursor.execute(query)
+    return cursor.fetchone()["password"]
 
 
 @connection_handler
@@ -60,7 +62,7 @@ def filter_questions(cursor, table='question'):
 # Visszaadja az id alapján a megfelelő question-t, közvetlenül a dictonary-t, nem a listába ágyazott dictonary-t, amit a fetchall adna.
 @connection_handler
 def get_question(cursor, id):
-    query ='''SELECT * 
+    query = '''SELECT * 
     FROM  question
     WHERE id=%(id)s'''
     cursor.execute(query, {'id': id})
@@ -72,8 +74,10 @@ def save_new_question(cursor, question):
     query = """
     INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
     VALUES ( %(st)s, %(vi)s, %(vo)s, %(ti)s, %(me)s, %(im)s )"""
-    cursor.execute(query, {'st': question['submission_time'], 'vi': question['view_number'], 'vo': question['view_number'], 'ti': question['title'],
-                           'me': question['message'], 'im': question['image']})
+    cursor.execute(query,
+                   {'st': question['submission_time'], 'vi': question['view_number'], 'vo': question['view_number'],
+                    'ti': question['title'],
+                    'me': question['message'], 'im': question['image']})
 
 
 @connection_handler
@@ -99,10 +103,12 @@ def delete_image_file(filename):
 
 @connection_handler
 def replace_question(cursor, q_id, question):
-    query ='''UPDATE question 
+    query = '''UPDATE question 
     SET  submission_time=%(sub)s, view_number=%(vie)s, vote_number=%(vot)s, title=%(ttl)s, message=%(msg)s, image=%(img)s
     WHERE id=%(qid)s'''
-    cursor.execute(query, {'qid':q_id, 'sub':question['submission_time'], 'vie':question['view_number'], 'vot':question['vote_number'], 'ttl':question['title'], 'msg':question['message'], 'img':question['image']})
+    cursor.execute(query, {'qid': q_id, 'sub': question['submission_time'], 'vie': question['view_number'],
+                           'vot': question['vote_number'], 'ttl': question['title'], 'msg': question['message'],
+                           'img': question['image']})
 
 
 def create_empty_answer():
@@ -127,7 +133,8 @@ def change_vote_number(cursor, id, table, up_or_down):
 def search_questions(cursor, search, table='question'):
     query = sql.SQL("""SELECT * FROM {}
     WHERE title LIKE {}
-    OR message LIKE {} """).format(sql.Identifier(table), sql.Literal('%'+search+'%'), sql.Literal('%'+search+'%'))
+    OR message LIKE {} """).format(sql.Identifier(table), sql.Literal('%' + search + '%'),
+                                   sql.Literal('%' + search + '%'))
     cursor.execute(query)
     return cursor.fetchall()
 
@@ -138,7 +145,7 @@ def add_answer_to_question(cursor, answer):
             INSERT INTO answer (submission_time, vote_number, question_id, message, image)
             VALUES ( %(st)s, %(vo)s, %(qi)s, %(me)s, %(im)s )"""
     cursor.execute(query, {'st': answer['submission_time'], 'vo': answer['vote_number'],
-                    'qi': answer['question_id'], 'me': answer['message'], 'im': answer['image']})
+                           'qi': answer['question_id'], 'me': answer['message'], 'im': answer['image']})
 
 
 @connection_handler
@@ -201,7 +208,7 @@ def add_comment_to_question(cursor, comment):
             INSERT INTO comment (submission_time, question_id, message)
             VALUES ( %(st)s, %(qi)s, %(me)s)"""
     cursor.execute(query, {'st': comment['submission_time'],
-                        'qi': comment['question_id'], 'me': comment['message']})
+                           'qi': comment['question_id'], 'me': comment['message']})
 
 
 @connection_handler
@@ -210,7 +217,7 @@ def add_comment_to_answer(cursor, comment):
             INSERT INTO comment (submission_time, answer_id, message)
             VALUES ( %(st)s, %(ai)s, %(me)s)"""
     cursor.execute(query, {'st': comment['submission_time'],
-                        'ai': comment['answer_id'], 'me': comment['message']})
+                           'ai': comment['answer_id'], 'me': comment['message']})
 
 
 @connection_handler
@@ -255,7 +262,7 @@ def get_question_tags(cursor, question_id):
 
 @connection_handler
 def get_tags(cursor):
-    query ="""SELECT *
+    query = """SELECT *
             FROM tag"""
     cursor.execute(query)
     return cursor.fetchall()
@@ -266,24 +273,24 @@ def add_new_tag(cursor, tag):
     query = '''INSERT INTO tag (name)
     VALUES (%(nme)s)
     '''
-    cursor.execute(query, {'nme':tag})
+    cursor.execute(query, {'nme': tag})
 
 
 @connection_handler
 def add_new_tag_to_question(cursor, question_id, tag_id):
-    query ='''INSERT INTO question_tag (question_id, tag_id)
+    query = '''INSERT INTO question_tag (question_id, tag_id)
                 VALUES (%(qid)s, %(tid)s)'''
     try:
-        cursor.execute(query, {'qid':question_id, 'tid':tag_id})
+        cursor.execute(query, {'qid': question_id, 'tid': tag_id})
     except psycopg2.errors.UniqueViolation:
         pass
 
 
 @connection_handler
 def delete_question_tag(cursor, question_id, tag_id):
-    query='''DELETE FROM question_tag
+    query = '''DELETE FROM question_tag
             WHERE question_id=%(qid)s and tag_id=%(tid)s'''
-    cursor.execute(query, {'qid':question_id, 'tid':tag_id})
+    cursor.execute(query, {'qid': question_id, 'tid': tag_id})
 
 
 @connection_handler
@@ -326,7 +333,7 @@ def delete_comment_from_question(cursor, question_id, comment_id):
     cursor.execute("""
     DELETE FROM comment
     WHERE question_id = %(q_i)s and id = %(c_i)s""",
-                   {'q_i': question_id, 'c_i':comment_id})
+                   {'q_i': question_id, 'c_i': comment_id})
 
 
 @connection_handler
@@ -370,6 +377,7 @@ def delete_tag_with_question(cursor, q_id):
     WHERE question_id = %(q_i)s""",
                    {'q_i': q_id})
 
+
 @connection_handler
 def sort_questions(cursor, order_by):
     query = sql.SQL('SELECT * FROM question ORDER_BY {col}').format(col=sql.Identifier(order_by))
@@ -379,5 +387,8 @@ def sort_questions(cursor, order_by):
 
 @connection_handler
 def add_new_user(cursor, email, password_hashed_text, reg_date):
-    query = sql.SQL('INSERT INTO users (email, password, reg_date) VALUES ({}, {}, {})').format(sql.Literal(email), sql.Literal(password_hashed_text), sql.Literal(reg_date))
+    query = sql.SQL('INSERT INTO users (email, password, reg_date) VALUES ({}, {}, {})').format(sql.Literal(email),
+                                                                                                sql.Literal(
+                                                                                                    password_hashed_text),
+                                                                                                sql.Literal(reg_date))
     cursor.execute(query)

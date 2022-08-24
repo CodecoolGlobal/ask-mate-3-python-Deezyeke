@@ -9,12 +9,8 @@
 <body>
     {% include 'header.html' %}
 
-{#    <form method="post">#}
-{#             <p><input type=text name=email>#}
-{#             <p><input type=submit value=Login>#}
-{#         </form>#}
-    <a href="/questions_list"> Login </a> <br>
-    <a href="{{ url_for('registration') }}" > User registration </ahref>
+    <a href="{{ url_for('login') }}" > Login </a> <br>
+    <a href="{{ url_for('registration') }}" > User registration </a href>
 </body>
 
 </html>
