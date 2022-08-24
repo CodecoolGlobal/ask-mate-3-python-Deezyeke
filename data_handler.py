@@ -18,11 +18,11 @@ def get_user_password(cursor, email):
     #         FROM question"""
     # cursor.execute(query)
     # return cursor.fetchall()  # listában adja vissza a dict-eket
-    query = sql.SQL('''SELECT password
+    query = sql.SQL('''SELECT id, password
         FROM users
         WHERE email={} ''').format(sql.Literal(email))
     cursor.execute(query)
-    return cursor.fetchone()["password"]
+    return cursor.fetchone()
 
 
 @connection_handler
