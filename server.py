@@ -18,9 +18,8 @@ app.secret_key=b'lgheroh42_4243'
 
 @app.route('/')
 def index():
-    return render_template('index.html')
     pass
-
+    # return redirect(url_for('index'))
 
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
@@ -38,6 +37,18 @@ def registration():
         except psycopg2.errors.UniqueViolation:
             return render_template('registration.html', already_taken=True)
         else: return redirect('/')
+
+
+@app.route('/index', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        if get_user_data(request.form["email"], request.form["password"]):
+            session['email'] = request.form['email']
+            return redirect(url_for('questions_list', email=email, is_logged_in=True))
+        else:
+            return redirect(url_for('index'), is_logged_in=False)
+    else:
+        return redirect(url_for('index'))
 
 
 @app.route('/questions_list')

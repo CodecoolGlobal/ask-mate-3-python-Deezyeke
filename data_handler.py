@@ -11,6 +11,17 @@ QUESTION_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title
 ANSWER_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
 
 
+def get_user_data():
+    # query = """
+    #         SELECT email, "password"
+    #         FROM question"""
+    # cursor.execute(query)
+    # return cursor.fetchall()
+    query = sql.SQL('''SELECT {} {}
+        FROM question''').format(sql.Literal(email), sql.Literal(password))
+    cursor.execute(query)
+
+
 @connection_handler
 def get_all_questions(cursor):
     query = """
@@ -42,7 +53,7 @@ def increase_view_number(cursor, id, table='question'):
 def filter_questions(cursor, table='question'):
     pass
     query = sql.SQL('''SELECT * {}
-    ORDER_BY {}''').format(sql.Identifier(table), sql.Literal(str(id)))
+    ORDER BY {}''').format(sql.Identifier(table), sql.Literal(str(id)))
     cursor.execute(query)
 
 
