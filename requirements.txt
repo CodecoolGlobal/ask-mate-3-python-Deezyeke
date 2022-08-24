@@ -13,3 +13,4 @@ Werkzeug==2.2.0
 zipp==3.8.1
 psycopg2-binary==2.9.3
 python-dotenv==0.20.0
+bcrypt

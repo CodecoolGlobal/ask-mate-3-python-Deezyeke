@@ -368,6 +368,11 @@ def sort_questions(cursor, order_by):
 
 
 @connection_handler
+def add_new_user(cursor, email, password_hashed_text, reg_date):
+    query = sql.SQL('INSERT INTO users (email, password, reg_date) VALUES ({}, {}, {})').format(sql.Literal(email), sql.Literal(password_hashed_text), sql.Literal(reg_date))
+    cursor.execute(query)
+
+@connection_handler
 def get_all_username(cursor):
     cursor.execute("""
     SELECT email FROM users
