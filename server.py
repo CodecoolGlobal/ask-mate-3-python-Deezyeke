@@ -45,12 +45,14 @@ def login():
     email = request.form.get("email")
     password_entered_by_user_text = request.form.get("password")
     if request.method == 'POST':
-        password_hashed_text = get_user_password(email)  # get password from database
+        password_hashed_text = get_user_password(email)["password"]  # get password from database
+        user_id = get_user_password(email)["id"]
         try:
 
             if verify_password(password_entered_by_user_text,
                                password_hashed_text.encode()):  # checking password if given pw is the same as in DB
                 session['email'] = request.form['email']
+                session['user_id'] = user_id
                 return redirect(url_for('questions_list', email=email))
             else:
                 return render_template('login.html', log_in_failed=True)
@@ -58,6 +60,13 @@ def login():
             return render_template('login.html', log_in_failed=True)
     else:
         return render_template("login.html", log_in_failed=False)
+
+
+@app.route("/logout")
+def logout():
+    session.pop("email")
+    # session.pop("user_id")
+    return redirect("/")
 
 
 @app.route('/questions_list')
@@ -78,13 +87,6 @@ def questions_list():
             print(found)
             return render_template('questions_list.html', questions=found, orderby='title', view_number='views',
                                    question_header=data_handler.QUESTION_HEADER, email=session["email"])
-
-
-@app.route("/logout")
-def logout():
-    session.pop("email")
-    # session.pop("user_id")
-    return redirect("/")
 
 
 # Extra idea: #a többi "old" questions akkor legyen csak látható, ha az utolsó 5 alatti linkre kattint pl show all questions névvel
