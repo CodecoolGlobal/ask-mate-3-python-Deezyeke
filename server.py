@@ -11,6 +11,7 @@ from data_handler import get_user_password
 import psycopg2
 from datetime import date
 
+
 load_dotenv()
 app = Flask(__name__)
 app.secret_key = b'lgheroh42_4243'

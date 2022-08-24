@@ -150,6 +150,7 @@ def add_answer_to_question(cursor, answer):
                            'qi': answer['question_id'], 'me': answer['message'], 'im': answer['image'], 'uid': answer['user_id']})
 
 
+
 @connection_handler
 def delete_question(cursor, id):
     cursor.execute("""
@@ -210,6 +211,7 @@ def add_comment_to_question(cursor, comment):
             INSERT INTO comment (submission_time, question_id, message, user_id)
             VALUES ( %(st)s, %(qi)s, %(me)s, %(uid)s)"""
     cursor.execute(query, {'st': comment['submission_time'], 'qi': comment['question_id'], 'me': comment['message'], 'uid': comment['user_id']})
+
 
 
 @connection_handler
