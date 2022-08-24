@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">#}
+</head>
+
+<body>
+{% include 'header.html' %}
+    <h3> User Login </h3>
+    <form action="{{ url_for('login') }}" method="post">
+        <div class="reg_grid_container">
+            <label class="item_1"> E-mail address: </label>
+            <input type="email" id="email" name="email" class="item_2">
+            <label class="item_3"> Password: </label>
+            <input type="password" id="password" name="password" class="item_4">
+            {% if log_in_failed %}
+                <h4>Invalid email or password</h4>
+            {% endif %}
+        </div>
+
+        <br>
+        <button type="submit"> Login </button>
+        <button type="button"> <a href="/"> Back to home </a> </button>
+    </form>
+
+</body>
+</html>

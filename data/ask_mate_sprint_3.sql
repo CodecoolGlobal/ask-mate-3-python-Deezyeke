@@ -48,8 +48,13 @@ CREATE TABLE answer (
     vote_number integer,
     question_id integer,
     message text,
-    image text
+    image text,
+    user_id INTEGER,
+    CONSTRAINT fk_user_id
+               FOREIGN KEY(user_id)
+               REFERENCES users(id)
 );
+
 
 DROP TABLE IF EXISTS public.comment;
 CREATE TABLE comment (
@@ -58,7 +63,11 @@ CREATE TABLE comment (
     answer_id integer,
     message text,
     submission_time timestamp without time zone,
-    edited_count integer
+    edited_count integer,
+    user_id INTEGER,
+    CONSTRAINT fk_user_id
+               FOREIGN KEY(user_id)
+               REFERENCES users(id)
 );
 
 
