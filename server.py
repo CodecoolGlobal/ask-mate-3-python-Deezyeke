@@ -119,6 +119,7 @@ def add_question():
         question['submission_time'] = now.strftime("%Y/%m/%d %H:%M:%S")
         question['title'] = request.form.get('title')
         question['message'] = request.form.get('text')
+        question['user_id'] = session['user_id']
         uploaded_file = request.files['image_file']
         if uploaded_file.filename != '':
             uploaded_file.save(os.path.join('static', uploaded_file.filename))
@@ -243,6 +244,7 @@ def add_new_answer(q_id):
         answer['submission_time'] = now.strftime("%Y/%m/%d %H:%M:%S")
         answer['message'] = request.form.get('message')
         answer['question_id'] = q_id
+        answer['user_id'] = session['user_id']
         uploaded_file = request.files['image_file']
         if uploaded_file.filename != '':
             uploaded_file.save(os.path.join('static', uploaded_file.filename))
@@ -273,7 +275,7 @@ def add_comment_to_question(q_id):
     elif request.method == 'POST':
         now = datetime.now()
         comment = {'message': request.form.get('add-comment'), 'submission_time': now.strftime("%Y/%m/%d %H:%M:%S"),
-                   'question_id': q_id}
+                   'question_id': q_id, 'user_id': session['user_id']}
         data_handler.add_comment_to_question(comment)
         return redirect(url_for('display_question', q_id=q_id))
 
@@ -299,7 +301,7 @@ def add_comment_to_answer(a_id):
         for row in list_q_id:
             now = datetime.now()
             comment = {'message': request.form.get('add-comment'), 'submission_time': now.strftime("%Y/%m/%d %H:%M:%S"),
-                       'answer_id': a_id}
+                       'answer_id': a_id, 'user_id': session['user_id']}
             data_handler.add_comment_to_answer(comment)
             return redirect(url_for('display_question', q_id=row['question_id']))
 
