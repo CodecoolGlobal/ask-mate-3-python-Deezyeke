@@ -4,6 +4,7 @@ import psycopg2
 import psycopg2.extras
 from psycopg2 import sql
 from psycopg2._psycopg import cursor
+
 from data_connection import connection_handler
 
 QUESTION_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
@@ -392,3 +393,52 @@ def add_new_user(cursor, email, password_hashed_text, reg_date):
                                                                                                     password_hashed_text),
                                                                                                 sql.Literal(reg_date))
     cursor.execute(query)
+
+@connection_handler
+def get_all_username(cursor):
+    cursor.execute("""
+    SELECT email FROM users
+    """)
+    return cursor.fetchall()
+
+
+@connection_handler
+def get_user_question_count(cursor, user):
+    cursor.execute('''
+    SELECT COUNT(user_id) AS question FROM users
+    INNER JOIN question ON users.id = question.user_id
+    ''')
+    return cursor.fetchall()
+
+
+@connection_handler
+def get_user_answer_count(cursor, user):
+    cursor.execute("""
+    SELECT COUNT(answer.question_id) AS answer FROM users
+    INNER JOIN answer ON users.id = answer.user_id
+    """)
+    return cursor.fetchall()
+
+
+@connection_handler
+def get_user_comment_count(cursor, user):
+    cursor.execute("""
+    SELECT COUNT(comment.question_id) AS comment FROM users
+    INNER JOIN comment ON users.id = comment.user_id
+    """)
+    return cursor.fetchall()
+
+
+@connection_handler
+def get_user_registration_date(cursor, user):
+    cursor.execute("""
+    SELECT reg_date FROM users
+    WHERE email = %(usr)s
+    """, {'usr': user})
+    return cursor.fetchall()
+
+
+# query = sql.SQL("select {field} from {table} where {pkey} = %s").format(
+#     field=sql.Identifier('my_name'),
+#     table=sql.Identifier('some_table'),
+#     pkey=sql.Identifier('id'))
