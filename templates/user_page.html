@@ -1,0 +1,28 @@
+<!DOCKTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>User Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
+</head>
+<body>
+    <table>
+        <tr>
+            <ŧh>Id</ŧh>
+            <th>Name</th>
+            <th>Registration date</th>
+            <th>Number of asked question </th>
+            <th>Number of answers</th>
+            <th>Number of comments</th>
+        </tr>
+        <tr>
+            {% for info in user_info %}
+                <td>{{ info['id'] }}</td>
+                <td>{{ info['email'] }}</td>
+                <td>{{ info['reg_date'] }}</td>
+        </tr>
+    </table>
+
+
+</body>
+</html>

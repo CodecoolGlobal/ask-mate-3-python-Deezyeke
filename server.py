@@ -328,6 +328,12 @@ def edit_comment(c_id):
                     return redirect(url_for('display_question', q_id=id['question_id']))
 
 
+@app.route('/user/<user_id>')
+def get_user_info(user_id):
+    user_info = data_handler.get_user_info(user_id)
+    return render_template('user_page.html', user_info=user_info)
+
+
 if __name__ == "__main__":
     app.run(
         host='0.0.0.0',
