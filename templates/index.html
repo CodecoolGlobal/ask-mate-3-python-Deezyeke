@@ -17,6 +17,7 @@
             <button class="blue_button""> You are logged in as: <strong> {{ email }} </strong> </button>
             <a href="/logout"> <button class="red_button"> Log out </button></a>
             <a style="position: absolute; top: 50%; left: 45%; color: white" href="{{ url_for('questions_list', email=email) }}"> Questions list </a>
+            <a style="position: absolute; top: 55%; left: 44.5%; color: white" href="{{ url_for('tags', email=email) }}"> Questions' tags </a>
         {%  endif %}
 </body>
 
