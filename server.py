@@ -349,6 +349,16 @@ def users():
         return redirect(url_for('index'))
 
 
+@app.route('/accept-answer')
+def accept_answer():
+    pass
+
+
+@app.route('/decline-answer')
+def decline_answer():
+    pass
+
+
 if __name__ == "__main__":
     app.run(
         host='0.0.0.0',

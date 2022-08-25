@@ -49,6 +49,7 @@ CREATE TABLE answer (
     question_id integer,
     message text,
     image text,
+    state integer,
     user_id INTEGER,
     CONSTRAINT fk_user_id
                FOREIGN KEY(user_id)
