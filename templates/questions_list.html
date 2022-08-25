@@ -9,14 +9,25 @@
 </head>
 
 <body>
-{% include 'header.html' %}
-{% if email == None  %}
-    You are not logged in.
-{% else   %}
-    You are logged in as {{ email }}.
-{%  endif %}
-<a href="/logout"> Log out </a> </button>
 
+{% include 'header.html' %}
+
+
+<nav>
+    <button class="green_button"">
+        {% if email == None  %}
+            You are not logged in.
+        {% else   %}
+            You are logged in as: <strong> {{ email }} </strong>
+        {%  endif %}
+    </button>
+    <a href="/logout"> <button class="red_button"> Log out </button></a>
+    <a href="{{ url_for('display_all_question') }}"><button class="green_button">Show All Questions</button></a>
+    <a href="{{ url_for('users') }}"><button class="green_button">Show All User</button></a>
+    <a href="{{ url_for('tags') }}"> <button class="green_button">Question's tags</button></a>
+    <a href="/add_question"> <button class="red_button">Add a new question</button></a>
+</nav>
+<br><br>
 
 <div class="grid_container">
 
@@ -24,27 +35,23 @@
         <div class="flexbox_container">
             <label for="search_button" >Search title and description: </label>
             <input type="text" name="search">
-            <button type="submit" id="search_button">Search</button>
+            <button type="submit" id="search_button" class="blue_button">Search</button>
         </div>
     </form>
 
-    <form class="item2" action="/" method="POST" name="order_by">
+    <form class="item2" action="/question-list" method="POST">
         <div class="flexbox_container">
             <label>Sort by </label>
             <select name="order_by" >
-                  <option>title</option>
-                  <option>message</option>
-                  <option>submission time</option>
-                  <option>number of views</option>
-                  <option>number of votes</option>
+                  <option value="title">title</option>
+                  <option value="message">message</option>
+                  <option value="submission_time">submission time</option>
+                  <option value="view_number">number of views</option>
+                  <option value="vote_number">number of votes</option>
             </select>
-            <button class="btn" type="submit">Sort now</button>
+            <button type="submit" class="blue_button">Sort now</button>
         </div>
     </form>
-    <a href="{{ url_for('get_user_info', email=email) }}">Profil</a>
-    <a class="item3" href="{{ url_for('display_all_question') }}"><button>Show All Questions</button></a>
-    <a class="item4" href="{{ url_for('users') }}"><button>Show All User</button></a>
-
 </div> <br><br>
 
 <table>
@@ -92,7 +99,7 @@
         <li>check all questions</li>
         <li>use the search bar at the top of the page</li>
         <li>Still haven't found the needed information? <br><br>
-        <a href="/add_question"> Add a new question </a></li><br><br>
+
     <br>
         <button type="button">
             <a href="/"> Back to home </a> </button>

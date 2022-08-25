@@ -22,7 +22,8 @@ CREATE TABLE users(
        id SERIAL PRIMARY KEY,
        email TEXT UNIQUE,
        password TEXT,
-       reg_date DATE);
+       reg_date DATE,
+       reputation INT);
 
 
 DROP TABLE IF EXISTS public.question;
@@ -34,7 +35,7 @@ CREATE TABLE question (
     title text,
     message text,
     image text,
-    user_id INTEGER,
+    user_id INTEGER NOT NULL ,
     CONSTRAINT fk_user_id
                FOREIGN KEY(user_id)
                REFERENCES users(id)
