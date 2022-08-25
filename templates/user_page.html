@@ -21,9 +21,72 @@
                 <td>{{ info['email'] }}</td>
                 <td>{{ info['reg_date'] }}</td>
             {% endfor %}
+            {% for info in user_q_count %}
+                <td>{{ info['question'] }}</td>
+            {% endfor %}
+            {% for info in user_a_count %}
+                <td>{{ info['answer'] }}</td>
+            {% endfor %}
+            {% for info in user_c_count %}
+                <td>{{ info['comment'] }}</td>
+            {% endfor %}
         </tr>
     </table>
+    <h2>Questions:</h2>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Submission time</th>
+            <th>View number</th>
+            <th>Vote number</th>
+            <th>Title</th>
+            <th>Message</th>
+        </tr>
+        <tr>
+            {% for info in user_questions %}
+                <td><a href="{{ url_for('display_question', q_id=info['id']) }}">{{ info['id'] }}</a></td>
+                <td>{{ info['submission_time'] }}</td>
+                <td>{{ info['view_number'] }}</td>
+                <td>{{ info['vote_number'] }}</td>
+                <td>{{ info['title'] }}</td>
+                <td>{{ info['message'] }}</td>
+            {% endfor %}
+        </tr>
+    </table>
+    <h2>Answers:</h2>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Submission time</th>
+            <th>Vote number</th>
+            <th>Message</th>
+        </tr>
+        <tr>
+            {% for info in user_answers %}
+                <td><a href="{{ url_for('display_question', q_id=info['question_id']) }}">{{ info['id'] }}</a></td>
+                <td>{{ info['submission_time'] }}</td>
+                <td>{{ info['vote_number'] }}</td>
+                <td>{{ info['message'] }}</td>
+            {% endfor %}
+        </tr>
+    </table>
+    <h2>Comments:</h2>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Submission time</th>
+            <th>Message</th>
+        </tr>
 
+        {% for info in user_comments %}
+            <tr>
+                <td><a href="{{ url_for('display_question', q_id=info['question_id']) }}">{{ info['id'] }}</a></td>
+                <td>{{ info['submission_time'] }}</td>
+                <td>{{ info['message'] }}</td>
+            </tr>
+        {% endfor %}
+
+    </table>
 
 </body>
 </html>

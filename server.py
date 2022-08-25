@@ -386,7 +386,15 @@ def users():
 def get_user_info(user):
     user_id = data_handler.get_user_id_by_email(user)
     user_info = data_handler.get_user_info(user_id['id'])
-    return render_template('user_page.html', user_info=user_info)
+    user_q_count = data_handler.get_user_question_count(user)
+    user_a_count = data_handler.get_user_answer_count(user)
+    user_c_count = data_handler.get_user_comment_count(user)
+    user_questions = data_handler.get_questions_by_user_id(user_id['id'])
+    user_answers = data_handler.get_answers_by_user_id(user_id['id'])
+    user_comments = data_handler.get_comments_by_user_id(user_id['id'])
+    return render_template('user_page.html', user_info=user_info, user_q_count=user_q_count, user_a_count=user_a_count,
+                           user_c_count=user_c_count, user_questions=user_questions, user_answers=user_answers,
+                           user_comments=user_comments)
 
 
 if __name__ == "__main__":
