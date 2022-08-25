@@ -21,6 +21,18 @@ table td {
     color: darkgoldenrod;
 }
 
+a:link {
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:visited {
+    color: aliceblue;
+    background-color: transparent;
+    text-decoration: none;
+}
+
 input {
     outline: 0;
     border-style: solid;
