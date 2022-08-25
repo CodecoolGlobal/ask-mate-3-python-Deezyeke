@@ -393,7 +393,7 @@ def users():
         counts = [
             data_handler.get_user_registration_date(user), data_handler.get_user_question_count(user),
             data_handler.get_user_answer_count(user), data_handler.get_user_comment_count(user),
-            data_handler.get_user_reputation(user)
+            data_handler.get_user_reputation_a(user)
         ]
         all_info_by_mail[user] = counts
     if 'email' in session:

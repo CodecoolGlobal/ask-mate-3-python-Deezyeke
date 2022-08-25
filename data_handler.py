@@ -409,6 +409,23 @@ def get_all_username(cursor):
 
 
 @connection_handler
+def get_user_reputation(cursor):
+    cursor.execute('''
+    SELECT reputation
+    FROM users
+    ''')
+    return cursor.fetchone()
+
+
+@connection_handler
+def change_user_reputation(cursor, rep, user_id):
+    cursor.execute('''UPDATE users
+    SET reputation = {rep}
+    WHERE user_id = {user_id}
+    ''')
+
+
+@connection_handler
 def get_user_question_count(cursor, user):
     cursor.execute('''
     SELECT COUNT(user_id) AS question FROM users
@@ -448,7 +465,7 @@ def get_user_registration_date(cursor, user):
 
 
 @connection_handler
-def get_user_reputation(cursor, user):
+def get_user_reputation_a(cursor, user):
     cursor.execute("""
     SELECT reputation
     FROM users
