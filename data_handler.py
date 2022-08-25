@@ -122,7 +122,6 @@ def change_vote_number(cursor, id, table, up_or_down):
     if up_or_down == "up":
         query = sql.SQL("""UPDATE {}
         SET vote_number = vote_number + 1
-        
         WHERE id = {}""").format(sql.Identifier(table), sql.Literal(str(id)))
     else:
         query = sql.SQL("""UPDATE {}
@@ -392,12 +391,12 @@ def sort_questions(cursor, order_by):
 
 
 @connection_handler
-def add_new_user(cursor, email, password_hashed_text, reg_date, reputation):
+def add_new_user(cursor, email, password_hashed_text, reg_date):
     query = sql.SQL('INSERT INTO users (email, password, reg_date, reputation) VALUES ({}, {}, {}, {})').format(sql.Literal(email),
                                                                                                 sql.Literal(
                                                                                                     password_hashed_text),
                                                                                                 sql.Literal(reg_date),
-                                                                                                sql.Literal(reputation))
+                                                                                                                sql.Literal(0))
     cursor.execute(query)
 
 
@@ -407,23 +406,6 @@ def get_all_username(cursor):
     SELECT email FROM users	
     """)
     return cursor.fetchall()
-
-
-@connection_handler
-def get_user_reputation(cursor):
-    cursor.execute('''
-    SELECT reputation
-    FROM users
-    ''')
-    return cursor.fetchone()
-
-
-@connection_handler
-def change_user_reputation(cursor, rep, user_id):
-    cursor.execute('''UPDATE users
-    SET reputation = {rep}
-    WHERE user_id = {user_id}
-    ''')
 
 
 @connection_handler
@@ -466,6 +448,16 @@ def get_user_registration_date(cursor, user):
 
 
 @connection_handler
+def get_user_reputation(cursor, user):
+    cursor.execute("""
+    SELECT reputation
+    FROM users
+    WHERE email = %(usr)s""",
+                   {'usr': user})
+    return cursor.fetchall()
+
+
+@connection_handler
 def get_questions_tags(cursor):
     query = ('''SELECT question.title, question.message, COUNT(question_tag.tag_id) as tags
                     FROM question
@@ -484,7 +476,7 @@ def get_questions_tags(cursor):
 @connection_handler
 def get_user_info(cursor, user_id):
     cursor.execute("""
-    SELECT id, email, reg_date FROM users WHERE %(u_id)s = id""",
+    SELECT id, email, reg_date, reputation FROM users WHERE %(u_id)s = id""",
     {'u_id': user_id})
     return cursor.fetchall()
 
@@ -519,3 +511,26 @@ def get_comments_by_user_id(cursor, user_id):
     SELECT id, message, submission_time, question_id FROM comment WHERE user_id = %(u_i)s""",
                    {'u_i': user_id})
     return cursor.fetchall()
+
+
+@connection_handler
+def get_user_id_by_s_id(cursor, table, col, s_id):
+    query = sql.SQL("""
+    SELECT user_id FROM {} WHERE {} = {}""").format(sql.Identifier(table), sql.Identifier(col), sql.Literal(str(s_id)))
+    cursor.execute(query)
+    return cursor.fetchone()
+
+
+@connection_handler
+def change_reputation_number(cursor, u_id, table, up_or_down, numb):
+    if up_or_down == 'up':
+        query = sql.SQL("""
+        UPDATE {} 
+        SET reputation = reputation + {}
+        WHERE id = {}""").format(sql.Identifier(table), sql.Literal(str(numb)), sql.Literal(str(u_id)))
+    else:
+        query = sql.SQL("""
+        UPDATE {} 
+        SET reputation = reputation - 2
+        WHERE id = {}""").format(sql.Identifier(table), sql.Literal(str(u_id)))
+    cursor.execute(query)

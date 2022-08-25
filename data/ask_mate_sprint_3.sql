@@ -23,8 +23,7 @@ CREATE TABLE users(
        email TEXT UNIQUE,
        password TEXT,
        reg_date DATE,
-       reputation INTEGER
-       );
+       reputation integer);
 
 
 DROP TABLE IF EXISTS public.question;
