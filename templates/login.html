@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-{#    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">#}
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
 </head>
 
 <body>
 {% include 'header.html' %}
     <h3> User Login </h3>
     <form action="{{ url_for('login') }}" method="post">
-        <div class="reg_grid_container">
-            <label class="item_1"> E-mail address: </label>
-            <input type="email" id="email" name="email" class="item_2">
-            <label class="item_3"> Password: </label>
-            <input type="password" id="password" name="password" class="item_4">
+            <label style="position: absolute; top: 50%; left: 35%;" > E-mail address: </label>
+            <input style="position: absolute; top: 50%; left: 49%;" type="email" id="email" name="email" >
+            <label style="position: absolute; top: 60%; left: 38%;"> Password: </label>
+            <input style="position: absolute; top: 60%; left: 47%;" type="password" id="password" name="password" class="item_2">
             {% if log_in_failed %}
-                <h4>Invalid email or password</h4>
+                <script>
+                    alert('Invalid email or password!')
+                </script>
             {% endif %}
-        </div>
 
         <br>
-        <button type="submit"> Login </button>
-        <button type="button"> <a href="/"> Back to home </a> </button>
+        <button style="position: absolute; top: 70%; left: 45%;" class= "red_button" type="submit"> Login </button>
+        <button style="position: absolute; top: 70%; left: 50%;" class= "blue_button"> <a href="{{ url_for('index') }}"> Back to home </a> </button>
     </form>
 
 </body>

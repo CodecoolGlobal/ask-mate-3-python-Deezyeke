@@ -10,19 +10,17 @@
     {% include 'header.html' %}
     <h3> User registration </h3>
     <form action="{{ url_for('registration') }}" method="post">
-        <div class="reg_grid_container">
-            <label class="item_1"> E-mail address: </label>
-            <input type="email" id="email" name="email" class="item_2">
-            <label class="item_3"> Password: </label>
-            <input type="password" id="password" name="password" class="item_4">
-            {% if already_taken == True %}
-                <h5> This email address is already registered! </h5>
-            {% endif %}
-        </div>
+        <label style="position: absolute; top: 50%; left: 35%;" > E-mail address: </label>
+        <input style="position: absolute; top: 50%; left: 49%;" type="email" id="email" name="email" >
+        <label style="position: absolute; top: 60%; left: 38%;"> Password: </label>
+        <input style="position: absolute; top: 60%; left: 47%;" type="password" id="password" name="password" class="item_2">
+        {% if already_taken == True %}
+            <h5> This email address is already registered! </h5>
+        {% endif %}
 
         <br>
-        <button type="submit"> Register </button>
-        <button type="button"> <a href="/"> Cancel </a> </button>
+        <button style="position: absolute; top: 70%; left: 45%;" class= "red_button" type="submit"> Register </button>
+        <button style="position: absolute; top: 70%; left: 50%;" class= "blue_button"> <a href="{{ url_for('index') }}"> Cancel </a> </button>
     </form>
 
 

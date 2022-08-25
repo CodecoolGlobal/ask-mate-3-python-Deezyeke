@@ -22,7 +22,11 @@ app.secret_key = b'lgheroh42_4243'
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    try:
+        email = session['email']
+    except:
+        email = None
+    return render_template("index.html", email=email)
 
 
 @app.route('/registration', methods=['GET', 'POST'])
@@ -45,7 +49,7 @@ def registration():
             return redirect('/')
 
 
-@app.route('/index', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     email = request.form.get("email")
     password_entered_by_user_text = request.form.get("password")

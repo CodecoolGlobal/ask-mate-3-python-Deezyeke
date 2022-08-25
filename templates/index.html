@@ -2,21 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Zs'aszk</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
 </head>
 
 <body>
     {% include 'header.html' %}
 
-    {% if session %}
-        You are logged in as {{ email }}. Your reputation is: {{ reputation }}.
-    {% else   %}
-        You are not logged in.
-    {%  endif %}
-
-    <a href="{{ url_for('login') }}" > Login </a> <br>
-    <a href="{{ url_for('registration') }}" > User registration </a href>
+        {% if email == None  %}
+            <button class="blue_button""> You are not logged in. </button>
+            <a href="{{ url_for('login') }}" style="position: absolute; top: 45%; left: 48%; color: white"> Login </a> <br>
+            <a href="{{ url_for('registration') }} " style="position: absolute; top: 50%; left: 44%; color: white"> User registration </a href>
+        {% else %}
+            <button class="blue_button""> You are logged in as: <strong> {{ email }} </strong> </button>
+            <a href="/logout"> <button class="red_button"> Log out </button></a>
+            <a style="position: absolute; top: 50%; left: 45%; color: white" href="{{ url_for('questions_list', email=email) }}"> Questions list </a>
+        {%  endif %}
 </body>
 
 </html>
