@@ -214,14 +214,6 @@ def display_question(q_id):
 
 @app.route('/question/<q_id>/vote/<up_or_down>', methods=['POST'])
 def add_vote(q_id, up_or_down):
-    rep = data_handler.get_user_reputation()['reputation']
-    user = user_id
-    if up_or_down == "up":
-        rep += 5
-        data_handler.change_user_reputation(rep)
-    else:
-        rep -= 2
-        data_handler.change_user_reputation(rep)
     data_handler.change_vote_number(q_id, 'question', up_or_down)
     user_id = data_handler.get_user_id_by_s_id('question', 'id', q_id)
     data_handler.change_reputation_number(user_id['user_id'], 'users', up_or_down, 5)
