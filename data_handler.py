@@ -16,7 +16,7 @@ def get_user_password(cursor, email):
     #         SELECT email, "password"
     #         FROM question"""
     # cursor.execute(query)
-    # return cursor.fetchall()  # listában adja vissza a dict-eket
+    # return cursor.fetchall()  # listában adja vissza a dict-eket  fetchone -> dictionaryben adja vissza a dict-eket
     query = sql.SQL('''SELECT id, password
         FROM users
         WHERE email={} ''').format(sql.Literal(email))
@@ -122,6 +122,7 @@ def change_vote_number(cursor, id, table, up_or_down):
     if up_or_down == "up":
         query = sql.SQL("""UPDATE {}
         SET vote_number = vote_number + 1
+        
         WHERE id = {}""").format(sql.Identifier(table), sql.Literal(str(id)))
     else:
         query = sql.SQL("""UPDATE {}
@@ -382,17 +383,21 @@ def delete_tag_with_question(cursor, q_id):
 
 @connection_handler
 def sort_questions(cursor, order_by):
-    query = sql.SQL('SELECT * FROM question ORDER_BY {col}').format(col=sql.Identifier(order_by))
+    query = sql.SQL('SELECT * FROM question ORDER BY {col}').format(col=sql.Identifier(order_by))
     cursor.execute(query)
-    return cursor.fetchall()
+    result = cursor.fetchall()
+    print(result)
+    return result
+
 
 
 @connection_handler
-def add_new_user(cursor, email, password_hashed_text, reg_date):
-    query = sql.SQL('INSERT INTO users (email, password, reg_date) VALUES ({}, {}, {})').format(sql.Literal(email),
+def add_new_user(cursor, email, password_hashed_text, reg_date, reputation):
+    query = sql.SQL('INSERT INTO users (email, password, reg_date, reputation) VALUES ({}, {}, {}, {})').format(sql.Literal(email),
                                                                                                 sql.Literal(
                                                                                                     password_hashed_text),
-                                                                                                sql.Literal(reg_date))
+                                                                                                sql.Literal(reg_date),
+                                                                                                sql.Literal(reputation))
     cursor.execute(query)
 
 
@@ -402,6 +407,23 @@ def get_all_username(cursor):
     SELECT email FROM users	
     """)
     return cursor.fetchall()
+
+
+@connection_handler
+def get_user_reputation(cursor):
+    cursor.execute('''
+    SELECT reputation
+    FROM users
+    ''')
+    return cursor.fetchone()
+
+
+@connection_handler
+def change_user_reputation(cursor, rep, user_id):
+    cursor.execute('''UPDATE users
+    SET reputation = {rep}
+    WHERE user_id = {user_id}
+    ''')
 
 
 @connection_handler

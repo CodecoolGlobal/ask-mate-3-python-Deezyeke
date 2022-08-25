@@ -9,6 +9,12 @@
 <body>
     {% include 'header.html' %}
 
+    {% if session %}
+        You are logged in as {{ email }}. Your reputation is: {{ reputation }}.
+    {% else   %}
+        You are not logged in.
+    {%  endif %}
+
     <a href="{{ url_for('login') }}" > Login </a> <br>
     <a href="{{ url_for('registration') }}" > User registration </a href>
 </body>
