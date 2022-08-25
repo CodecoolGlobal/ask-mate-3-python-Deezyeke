@@ -17,7 +17,7 @@ def get_user_password(cursor, email):
     #         SELECT email, "password"
     #         FROM question"""
     # cursor.execute(query)
-    # return cursor.fetchall()  # listában adja vissza a dict-eket
+    # return cursor.fetchall()  # listában adja vissza a dict-eket  fetchone -> dictionaryben adja vissza a dict-eket
     query = sql.SQL('''SELECT id, password
         FROM users
         WHERE email={} ''').format(sql.Literal(email))
@@ -381,9 +381,12 @@ def delete_tag_with_question(cursor, q_id):
 
 @connection_handler
 def sort_questions(cursor, order_by):
-    query = sql.SQL('SELECT * FROM question ORDER_BY {col}').format(col=sql.Identifier(order_by))
+    query = sql.SQL('SELECT * FROM question ORDER BY {col}').format(col=sql.Identifier(order_by))
     cursor.execute(query)
-    return cursor.fetchall()
+    result = cursor.fetchall()
+    print(result)
+    return result
+
 
 
 @connection_handler

@@ -28,15 +28,15 @@
         </div>
     </form>
 
-    <form class="item2" action="/" method="POST" name="order_by">
+    <form class="item2" action="/question-list" method="POST">
         <div class="flexbox_container">
             <label>Sort by </label>
             <select name="order_by" >
-                  <option>title</option>
-                  <option>message</option>
-                  <option>submission time</option>
-                  <option>number of views</option>
-                  <option>number of votes</option>
+                  <option value="title">title</option>
+                  <option value="message">message</option>
+                  <option value="submission_time">submission time</option>
+                  <option value="view_number">number of views</option>
+                  <option value="vote_number">number of votes</option>
             </select>
             <button class="btn" type="submit">Sort now</button>
         </div>
@@ -86,15 +86,11 @@
             </tr>
         {% endfor %}
     </table>
-<ul class="info_list">Haven't you find you are looking for? <br> Only the latest five questions are listed on this page!<br> You can
-        <li>check all questions</li>
-        <li>use the search bar at the top of the page</li>
-        <li>Still haven't found the needed information? <br><br>
-        <a href="/add_question"> Add a new question </a></li><br><br>
+
+        <a href="/add_question"> Add a new question </a><br><br>
     <br>
         <button type="button">
             <a href="/"> Back to home </a> </button>
-    </ul>
 </body>
 
 </html>

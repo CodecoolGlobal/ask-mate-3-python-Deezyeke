@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+from psycopg2._psycopg import cursor
+
 import util
 from util import verify_password
 import data_handler
@@ -45,9 +47,11 @@ def login():
     email = request.form.get("email")
     password_entered_by_user_text = request.form.get("password")
     if request.method == 'POST':
-        password_hashed_text = get_user_password(email)["password"]  # get password from database
-        user_id = get_user_password(email)["id"]
-        try:
+        if get_user_password(email) == None:
+            return render_template('login.html', log_in_failed=True)
+        else:
+            password_hashed_text = get_user_password(email)["password"]  # get password from database
+            user_id = get_user_password(email)["id"]
 
             if verify_password(password_entered_by_user_text,
                                password_hashed_text.encode()):  # checking password if given pw is the same as in DB
@@ -56,9 +60,7 @@ def login():
                 return redirect(url_for('questions_list', email=email))
             else:
                 return render_template('login.html', log_in_failed=True)
-        except:
-            return render_template('login.html', log_in_failed=True)
-    else:
+    elif request.method == 'GET':
         return render_template("login.html", log_in_failed=False)
 
 
@@ -379,6 +381,17 @@ def users():
         return render_template('user_information.html', users=all_info_by_mail)
     else:
         return redirect(url_for('index'))
+
+
+@app.route('/question-list', methods=['GET', 'POST'])
+def sort_by():
+    if request.method == 'GET':
+        return redirect(url_for('questions_list'))
+    if request.method == 'POST':
+        order_by=request.form.get("order_by")
+        ordered_questions = data_handler.sort_questions(order_by)
+        return render_template('questions_list.html', questions=ordered_questions)
+
 
 
 if __name__ == "__main__":
