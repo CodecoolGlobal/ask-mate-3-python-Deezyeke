@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+from psycopg2._psycopg import cursor
+
 import util
 from util import verify_password
 import data_handler
@@ -30,10 +32,13 @@ def registration():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
+        session['email'] = email
         password_hashed_text = generate_hash(password).decode()
         reg_date = date.today()
+        reputation = 0
+        print(reg_date)
         try:
-            add_new_user(email, password_hashed_text, reg_date)
+            add_new_user(email, password_hashed_text, reg_date, reputation)
         except psycopg2.errors.UniqueViolation:
             return render_template('registration.html', already_taken=True)
         else:
@@ -45,9 +50,11 @@ def login():
     email = request.form.get("email")
     password_entered_by_user_text = request.form.get("password")
     if request.method == 'POST':
-        password_hashed_text = get_user_password(email)["password"]  # get password from database
-        user_id = get_user_password(email)["id"]
-        try:
+        if get_user_password(email) == None:
+            return render_template('login.html', log_in_failed=True)
+        else:
+            password_hashed_text = get_user_password(email)["password"]  # get password from database
+            user_id = get_user_password(email)["id"]
 
             if verify_password(password_entered_by_user_text,
                                password_hashed_text.encode()):  # checking password if given pw is the same as in DB
@@ -56,16 +63,13 @@ def login():
                 return redirect(url_for('questions_list', email=email))
             else:
                 return render_template('login.html', log_in_failed=True)
-        except:
-            return render_template('login.html', log_in_failed=True)
-    else:
+    elif request.method == 'GET':
         return render_template("login.html", log_in_failed=False)
 
 
 @app.route("/logout")
 def logout():
-    session.pop("email")
-    # session.pop("user_id")
+    session.clear()
     return redirect("/")
 
 
@@ -73,6 +77,8 @@ def logout():
 def questions_list():
     # alapvetően submit time desc és csak 5öt mutat, legördülő menüből választható mi alapján order-elje:
     if request.method == 'GET':
+        show_reputation = data_handler.get_user_reputation()
+        reputation = show_reputation['reputation']
         submission_time = request.args.get('submission_time', 'view_number')
         # if submission_time:
         desc_by_time = data_handler.get_last_five_questions('submission_time')
@@ -81,7 +87,7 @@ def questions_list():
         if search_value == None:
             ti = 'title'
             return render_template('questions_list.html', questions=desc_by_time, orderby='title', view_number='views',
-                                   question_header=data_handler.QUESTION_HEADER, email=session["email"])
+                                   question_header=data_handler.QUESTION_HEADER, email=session["email"], reputation=reputation)
         else:
             found = data_handler.search_questions(search_value)
             print(found)
@@ -204,6 +210,14 @@ def display_question(q_id):
 
 @app.route('/question/<q_id>/vote/<up_or_down>', methods=['POST'])
 def add_vote(q_id, up_or_down):
+    rep = data_handler.get_user_reputation()['reputation']
+    user = user_id
+    if up_or_down == "up":
+        rep += 5
+        data_handler.change_user_reputation(rep)
+    else:
+        rep -= 2
+        data_handler.change_user_reputation(rep)
     data_handler.change_vote_number(q_id, 'question', up_or_down)
     return redirect(url_for('questions_list', email=session["email"]))
 
@@ -402,6 +416,16 @@ def get_user_info(user):
     return render_template('user_page.html', user_info=user_info, user_q_count=user_q_count, user_a_count=user_a_count,
                            user_c_count=user_c_count, user_questions=user_questions, user_answers=user_answers,
                            user_comments=user_comments)
+
+
+@app.route('/question-list', methods=['GET', 'POST'])
+def sort_by():
+    if request.method == 'GET':
+        return redirect(url_for('questions_list'))
+    if request.method == 'POST':
+        order_by=request.form.get("order_by")
+        ordered_questions = data_handler.sort_questions(order_by)
+        return render_template('questions_list.html', questions=ordered_questions)
 
 
 if __name__ == "__main__":
