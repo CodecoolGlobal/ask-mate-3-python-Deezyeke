@@ -30,11 +30,11 @@ function getFilteredItems(items, filterValue) {
     // === SAMPLE CODE ===
     // if you have not changed the original html uncomment the code below to have an idea of the
     // effect this function has on the table
-    for (let i=0; i<filterValue.length; i++) {
-        items.pop()
-    }
+    filtered = items.filter(item => {
+        return item.Title.toLowerCase().includes(filterValue.toLowerCase()) || item.Description.toLowerCase().includes(filterValue.toLowerCase())
+    });
 
-    return items
+    return filtered
 }
 
 function toggleTheme() {
