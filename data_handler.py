@@ -440,6 +440,15 @@ def get_user_registration_date(cursor, user):
     return cursor.fetchall()
 
 
+def get_questions_tags():
+    query = ('''SELECT question.title, question.message, COUNT(question_tag.tag_id) as tags
+                    FROM question
+                    JOIN question_tag ON question.id = question_tag.question_id
+                    GROUP BY question.title, question.message;''')
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
 # query = sql.SQL("select {field} from {table} where {pkey} = %s").format(
 #     field=sql.Identifier('my_name'),
 #     table=sql.Identifier('some_table'),
