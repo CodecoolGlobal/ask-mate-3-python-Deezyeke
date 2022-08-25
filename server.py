@@ -10,6 +10,7 @@ from data_handler import add_new_user
 from data_handler import get_user_password
 import psycopg2
 from datetime import date
+from data_handler import get_questions_tags
 
 
 load_dotenv()
@@ -380,6 +381,12 @@ def users():
         return render_template('user_information.html', users=all_info_by_mail)
     else:
         return redirect(url_for('index'))
+
+
+@app.route('/tags')
+def tags():
+    questions_tags = get_questions_tags()
+    return render_template('tags.html', questions_tags=questions_tags, email=session['email'])
 
 
 @app.route('/user/<user>')

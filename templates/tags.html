@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Tags </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
+</head>
+<body>
+    <table>
+        <tr>
+            <th> Question title </th>
+            <th> Message </th>
+            <th> Number of tags </th>
+        </tr>
+
+        {% for question in questions_tags %}
+                </tr>
+                    <td> {{ question['title'] }}</td>
+                    <td> {{ question['message'] }} </td>
+                    <td> {{ question['tags'] }}</td>
+                </tr>
+        {% endfor %}
+
+    </table>
+
+    <br>
+    <a href="{{ url_for('questions_list', email=email) }}"> << Back to questions list </a>
+
+</body>
+</html>
