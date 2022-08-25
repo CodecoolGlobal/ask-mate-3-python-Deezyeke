@@ -50,7 +50,7 @@ button{
     background: linear-gradient(to right, darkolivegreen, orangered);
     padding: 4pt;
     border-width: 0 0 0 0;
-    color: navy;
+    color: white;
 }
 
 button:active {
@@ -104,13 +104,18 @@ select {
     grid-row: 1;
 }
 
-.item_3{
-    grid-column: 2;
-    grid-row: 3;
+.item_displ_all_questions{
+    grid-column: 4;
+    grid-row: 1;
 }
 
-.item_4{
-    grid-column: 3;
+.item_button{
+    grid-column: 4;
+    grid-row: 2;
+}
+
+.item_tags{
+    grid-column: 4;
     grid-row: 3;
 }
 
@@ -133,13 +138,13 @@ select {
 
 .item3{
     grid-column: 3;
-    grid-row: 2;
+    grid-row: 1;
     justify-self: end;
 }
 
 .item4 {
     grid-column: 3;
-    grid-row: 3;
+    grid-row: 2;
     justify-self: end;
 }
 
@@ -149,6 +154,13 @@ select {
     grid-row: 4;
     justify-self: end;
 }
+
+.item5{
+    grid-column: 3;
+    grid-row: 5;
+    justify-self: end;
+}
+
 
 .AnimatedNeonText {
     text-align: center;
