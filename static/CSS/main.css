@@ -137,10 +137,11 @@ select {
     justify-self: end;
 }
 
-.item4{
+.item4 {
     grid-column: 3;
     grid-row: 3;
     justify-self: end;
+}
 
 
 .AnimatedNeonText {

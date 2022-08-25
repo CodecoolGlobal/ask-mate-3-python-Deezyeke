@@ -385,9 +385,9 @@ def users():
 
 @app.route('/tags')
 def tags():
-    get_questions_tags()
+    questions_tags = get_questions_tags()
+    return render_template('tags.html', questions_tags=questions_tags, email=session['email'])
 
-    return render_template('tags.html')
 
 if __name__ == "__main__":
     app.run(
