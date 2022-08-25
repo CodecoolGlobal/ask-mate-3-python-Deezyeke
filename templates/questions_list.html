@@ -25,7 +25,7 @@
     <a href="{{ url_for('display_all_question') }}"><button class="green_button">Show All Questions</button></a>
     <a href="{{ url_for('users') }}"><button class="green_button">Show All User</button></a>
     <a href="{{ url_for('tags') }}"> <button class="green_button">Question's tags</button></a>
-    <a href="{{ url_for('get_user_info', email=email) }}">Profil</a>
+    <a href="{{ url_for('get_user_info', user=email) }}">Profil</a>
     <a href="/add_question"> <button class="red_button">Add a new question</button></a>
 </nav>
 <br><br>
