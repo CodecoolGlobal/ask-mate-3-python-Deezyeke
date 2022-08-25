@@ -89,7 +89,7 @@ select {
 .reg_grid_container{
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 2fr;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
     border: 4px solid goldenrod;
     padding: 30px;
 }
@@ -118,7 +118,7 @@ select {
 .grid_container{
     display: grid;
     grid-template-columns: 4fr 1fr 4fr;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
 }
 
 .item1{
@@ -143,6 +143,12 @@ select {
     justify-self: end;
 }
 
+
+.item4{
+    grid-column: 3;
+    grid-row: 4;
+    justify-self: end;
+}
 
 .AnimatedNeonText {
     text-align: center;
