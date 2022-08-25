@@ -33,9 +33,10 @@ def registration():
         session['email'] = email
         password_hashed_text = generate_hash(password).decode()
         reg_date = date.today()
+        reputation = 0
         print(reg_date)
         try:
-            add_new_user(email, password_hashed_text, reg_date)
+            add_new_user(email, password_hashed_text, reg_date, reputation)
         except psycopg2.errors.UniqueViolation:
             return render_template('registration.html', already_taken=True)
         else:
@@ -66,8 +67,7 @@ def login():
 
 @app.route("/logout")
 def logout():
-    session.pop("email")
-    # session.pop("user_id")
+    session.clear()
     return redirect("/")
 
 
@@ -75,6 +75,8 @@ def logout():
 def questions_list():
     # alapvetően submit time desc és csak 5öt mutat, legördülő menüből választható mi alapján order-elje:
     if request.method == 'GET':
+        show_reputation = data_handler.get_user_reputation()
+        reputation = show_reputation['reputation']
         submission_time = request.args.get('submission_time', 'view_number')
         # if submission_time:
         desc_by_time = data_handler.get_last_five_questions('submission_time')
@@ -83,7 +85,7 @@ def questions_list():
         if search_value == None:
             ti = 'title'
             return render_template('questions_list.html', questions=desc_by_time, orderby='title', view_number='views',
-                                   question_header=data_handler.QUESTION_HEADER, email=session["email"])
+                                   question_header=data_handler.QUESTION_HEADER, email=session["email"], reputation=reputation)
         else:
             found = data_handler.search_questions(search_value)
             print(found)
@@ -205,6 +207,14 @@ def display_question(q_id):
 
 @app.route('/question/<q_id>/vote/<up_or_down>', methods=['POST'])
 def add_vote(q_id, up_or_down):
+    rep = data_handler.get_user_reputation()['reputation']
+    user = user_id
+    if up_or_down == "up":
+        rep += 5
+        data_handler.change_user_reputation(rep)
+    else:
+        rep -= 2
+        data_handler.change_user_reputation(rep)
     data_handler.change_vote_number(q_id, 'question', up_or_down)
     return redirect(url_for('questions_list', email=session["email"]))
 

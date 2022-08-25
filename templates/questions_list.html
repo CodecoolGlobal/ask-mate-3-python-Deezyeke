@@ -10,10 +10,10 @@
 
 <body>
 {% include 'header.html' %}
-{% if email == None  %}
-    You are not logged in.
+{% if session %}
+    You are logged in as {{ email }}. Your reputation is: {{ reputation }}.
 {% else   %}
-    You are logged in as {{ email }}.
+    You are not logged in.
 {%  endif %}
 <a href="/logout"> Log out </a> </button>
 
