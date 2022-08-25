@@ -12,6 +12,8 @@ from data_handler import add_new_user
 from data_handler import get_user_password
 import psycopg2
 from datetime import date
+from data_handler import get_questions_tags
+
 
 load_dotenv()
 app = Flask(__name__)
@@ -125,6 +127,7 @@ def add_question():
         question['submission_time'] = now.strftime("%Y/%m/%d %H:%M:%S")
         question['title'] = request.form.get('title')
         question['message'] = request.form.get('text')
+        question['user_id'] = session['user_id']
         uploaded_file = request.files['image_file']
         if uploaded_file.filename != '':
             uploaded_file.save(os.path.join('static', uploaded_file.filename))
@@ -257,6 +260,7 @@ def add_new_answer(q_id):
         answer['submission_time'] = now.strftime("%Y/%m/%d %H:%M:%S")
         answer['message'] = request.form.get('message')
         answer['question_id'] = q_id
+        answer['user_id'] = session['user_id']
         uploaded_file = request.files['image_file']
         if uploaded_file.filename != '':
             uploaded_file.save(os.path.join('static', uploaded_file.filename))
@@ -287,7 +291,7 @@ def add_comment_to_question(q_id):
     elif request.method == 'POST':
         now = datetime.now()
         comment = {'message': request.form.get('add-comment'), 'submission_time': now.strftime("%Y/%m/%d %H:%M:%S"),
-                   'question_id': q_id}
+                   'question_id': q_id, 'user_id': session['user_id']}
         data_handler.add_comment_to_question(comment)
         return redirect(url_for('display_question', q_id=q_id))
 
@@ -313,7 +317,7 @@ def add_comment_to_answer(a_id):
         for row in list_q_id:
             now = datetime.now()
             comment = {'message': request.form.get('add-comment'), 'submission_time': now.strftime("%Y/%m/%d %H:%M:%S"),
-                       'answer_id': a_id}
+                       'answer_id': a_id, 'user_id': session['user_id']}
             data_handler.add_comment_to_answer(comment)
             return redirect(url_for('display_question', q_id=row['question_id']))
 
@@ -393,6 +397,27 @@ def users():
         return redirect(url_for('index'))
 
 
+@app.route('/tags')
+def tags():
+    questions_tags = get_questions_tags()
+    return render_template('tags.html', questions_tags=questions_tags, email=session['email'])
+
+
+@app.route('/user/<user>')
+def get_user_info(user):
+    user_id = data_handler.get_user_id_by_email(user)
+    user_info = data_handler.get_user_info(user_id['id'])
+    user_q_count = data_handler.get_user_question_count(user)
+    user_a_count = data_handler.get_user_answer_count(user)
+    user_c_count = data_handler.get_user_comment_count(user)
+    user_questions = data_handler.get_questions_by_user_id(user_id['id'])
+    user_answers = data_handler.get_answers_by_user_id(user_id['id'])
+    user_comments = data_handler.get_comments_by_user_id(user_id['id'])
+    return render_template('user_page.html', user_info=user_info, user_q_count=user_q_count, user_a_count=user_a_count,
+                           user_c_count=user_c_count, user_questions=user_questions, user_answers=user_answers,
+                           user_comments=user_comments)
+
+
 @app.route('/question-list', methods=['GET', 'POST'])
 def sort_by():
     if request.method == 'GET':
@@ -401,7 +426,6 @@ def sort_by():
         order_by=request.form.get("order_by")
         ordered_questions = data_handler.sort_questions(order_by)
         return render_template('questions_list.html', questions=ordered_questions)
-
 
 
 if __name__ == "__main__":

@@ -9,12 +9,18 @@
 </head>
 
 <body>
+
 {% include 'header.html' %}
-{% if session %}
-    You are logged in as {{ email }}. Your reputation is: {{ reputation }}.
-{% else   %}
+{% if email == None  %}
     You are not logged in.
+{% else   %}
+    You are logged in as {{ email }}.
 {%  endif %}
+{#{% if session %}
+{#    You are logged in as {{ email }}. Your reputation is: {{ reputation }}.
+{#{% else   %}
+{#    You are not logged in.
+{#{%  endif %}#}
 <a href="/logout"> Log out </a> </button>
 
 
@@ -42,10 +48,11 @@
         </div>
     </form>
 
-    <a class="item3" href="{{ url_for('display_all_question') }}"><button>Show All Questions</button></a><br>
-    <a class="item4" href="{{  url_for('add_question') }}"><button>Add a new question</button></a><br><br>
 </div> <br><br>
-
+<a class="item_displ_all_questions" href="{{ url_for('display_all_question') }}"><button>Show All Questions</button></a>
+    <a class="item_button" href="{{ url_for('users') }}"><button>Show All User</button></a>
+     <a class="item4" href="{{  url_for('add_question') }}"><button>Add a new question</button></a><br>
+    <a href="{{ url_for('tags') }}" class="
 <table>
         <tr>
             {% block question_list %}
