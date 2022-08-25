@@ -14,6 +14,7 @@
             <th>Number of asked question </th>
             <th>Number of answers</th>
             <th>Number of comments</th>
+            <th>Reputation</th>
         </tr>
         <tr>
             {% for info in user_info %}
@@ -29,6 +30,9 @@
             {% endfor %}
             {% for info in user_c_count %}
                 <td>{{ info['comment'] }}</td>
+            {% endfor %}
+            {% for info in user_info %}
+                <td>{{ info['reputation'] }}</td>
             {% endfor %}
         </tr>
     </table>
