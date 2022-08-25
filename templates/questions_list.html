@@ -9,7 +9,9 @@
 </head>
 
 <body>
+
 {% include 'header.html' %}
+
 {% if email == None  %}
     You are not logged in.
 {% else   %}
@@ -41,8 +43,9 @@
             <button class="btn" type="submit">Sort now</button>
         </div>
     </form>
-
-    <a class="item3" href="{{ url_for('display_all_question') }}"><button>Show All Questions</button></a>
+    <a class="item_displ_all_questions" href="{{ url_for('display_all_question') }}"><button>Show All Questions</button></a>
+    <a class="item_button" href="{{ url_for('users') }}"><button>Show All User</button></a>
+    <a href="{{ url_for('tags') }}" class="item_tags"> <button> Question's tags </button> </a>
 </div> <br><br>
 
 <table>

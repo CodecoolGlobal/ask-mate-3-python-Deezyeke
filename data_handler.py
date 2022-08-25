@@ -4,7 +4,6 @@ import psycopg2
 import psycopg2.extras
 from psycopg2 import sql
 from psycopg2._psycopg import cursor
-
 from data_connection import connection_handler
 from bonus_questions import SAMPLE_QUESTIONS
 
@@ -397,10 +396,11 @@ def add_new_user(cursor, email, password_hashed_text, reg_date):
                                                                                                 sql.Literal(reg_date))
     cursor.execute(query)
 
+
 @connection_handler
 def get_all_username(cursor):
     cursor.execute("""
-    SELECT email FROM users
+    SELECT email FROM users	
     """)
     return cursor.fetchall()
 
@@ -410,7 +410,8 @@ def get_user_question_count(cursor, user):
     cursor.execute('''
     SELECT COUNT(user_id) AS question FROM users
     INNER JOIN question ON users.id = question.user_id
-    ''')
+    WHERE users.email = %(us)s''',
+                   {'us': user})
     return cursor.fetchall()
 
 
@@ -419,7 +420,8 @@ def get_user_answer_count(cursor, user):
     cursor.execute("""
     SELECT COUNT(answer.question_id) AS answer FROM users
     INNER JOIN answer ON users.id = answer.user_id
-    """)
+    WHERE users.email = %(us)s""",
+                   {'us':user})
     return cursor.fetchall()
 
 
@@ -428,7 +430,8 @@ def get_user_comment_count(cursor, user):
     cursor.execute("""
     SELECT COUNT(comment.question_id) AS comment FROM users
     INNER JOIN comment ON users.id = comment.user_id
-    """)
+    WHERE users.email = %(us)s""",
+                   {'us': user})
     return cursor.fetchall()
 
 
@@ -446,7 +449,57 @@ def get_bonus_questions(cursor):
     return SAMPLE_QUESTIONS
 
 
+@connection_handler
+def get_questions_tags(cursor):
+    query = ('''SELECT question.title, question.message, COUNT(question_tag.tag_id) as tags
+                    FROM question
+                    LEFT JOIN question_tag ON question.id = question_tag.question_id
+                    GROUP BY question.title, question.message;''')
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
 # query = sql.SQL("select {field} from {table} where {pkey} = %s").format(
 #     field=sql.Identifier('my_name'),
 #     table=sql.Identifier('some_table'),
 #     pkey=sql.Identifier('id'))
+
+
+@connection_handler
+def get_user_info(cursor, user_id):
+    cursor.execute("""
+    SELECT id, email, reg_date FROM users WHERE %(u_id)s = id""",
+    {'u_id': user_id})
+    return cursor.fetchall()
+
+
+@connection_handler
+def get_user_id_by_email(cursor, user_email):
+    cursor.execute("""
+    SELECT id FROM users WHERE email = %(u_i)s""",
+                   {'u_i': user_email})
+    return cursor.fetchone()
+
+
+@connection_handler
+def get_questions_by_user_id(cursor, user_id):
+    cursor.execute("""
+    SELECT id, submission_time, view_number, vote_number, title, message FROM question WHERE user_id = %(u_i)s""",
+                   {'u_i': user_id})
+    return cursor.fetchall()
+
+
+@connection_handler
+def get_answers_by_user_id(cursor, user_id):
+    cursor.execute("""
+    SELECT id, submission_time, vote_number, question_id message FROM answer WHERE user_id = %(u_i)s""",
+                   {'u_i': user_id})
+    return cursor.fetchall()
+
+
+@connection_handler
+def get_comments_by_user_id(cursor, user_id):
+    cursor.execute("""
+    SELECT id, message, submission_time, question_id FROM comment WHERE user_id = %(u_i)s""",
+                   {'u_i': user_id})
+    return cursor.fetchall()

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>User information</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
 </head>
 <body>
 <h1>All users information</h1>
@@ -18,7 +19,7 @@
     <tr>
         {% for user, infos in users.items() %}
             <tr>
-                <td><a href="{{ url_for('index') }}">{{ user }}</a></td>
+                <td><a href="{{ url_for('get_user_info', user=user) }}">{{ user }}</a></td>
                 {% for info in infos %}
                     {% for inside in info %}
                         {% for key, value in inside.items() %}
@@ -34,5 +35,7 @@
 
     </tr>
 </table>
+<br>
+<a href="{{ url_for('questions_list') }}">Home page</a>
 </body>
 </html>
