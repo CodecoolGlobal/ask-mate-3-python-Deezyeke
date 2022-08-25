@@ -442,8 +442,8 @@ def get_user_registration_date(cursor, user):
 
 
 @connection_handler
-def get_bonus_questions():
-    pass
+def get_bonus_questions(cursor):
+    return SAMPLE_QUESTIONS
 
 
 # query = sql.SQL("select {field} from {table} where {pkey} = %s").format(

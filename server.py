@@ -384,7 +384,8 @@ def users():
 
 @app.route('/bonus_questions')
 def show_bonus_questions():
-    return render_template('bonus_questions.html')
+    bonus = data_handler.get_bonus_questions()
+    return render_template('bonus_questions.html', questions=bonus)
 
 
 if __name__ == "__main__":
