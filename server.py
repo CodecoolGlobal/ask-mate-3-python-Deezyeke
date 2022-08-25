@@ -204,12 +204,16 @@ def display_question(q_id):
 @app.route('/question/<q_id>/vote/<up_or_down>', methods=['POST'])
 def add_vote(q_id, up_or_down):
     data_handler.change_vote_number(q_id, 'question', up_or_down)
+    user_id = data_handler.get_user_id_by_s_id('question', 'id', q_id)
+    data_handler.change_reputation_number(user_id['user_id'], 'users', up_or_down, 5)
     return redirect(url_for('questions_list', email=session["email"]))
 
 
 @app.route('/question/<q_id>/<answer_id>/vote/<up_or_down>', methods=['POST'])
 def add_answer_vote(q_id, answer_id, up_or_down):
     data_handler.change_vote_number(answer_id, 'answer', up_or_down)
+    user_id = data_handler.get_user_id_by_s_id('answer', 'id', answer_id)
+    data_handler.change_reputation_number(user_id['user_id'], 'users', up_or_down, 10)
     return redirect(url_for('display_question', q_id=q_id))
 
 
@@ -373,7 +377,8 @@ def users():
     for user in all_usermail:
         counts = [
             data_handler.get_user_registration_date(user), data_handler.get_user_question_count(user),
-            data_handler.get_user_answer_count(user), data_handler.get_user_comment_count(user)
+            data_handler.get_user_answer_count(user), data_handler.get_user_comment_count(user),
+            data_handler.get_user_reputation(user)
         ]
         all_info_by_mail[user] = counts
     if 'email' in session:

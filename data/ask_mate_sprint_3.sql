@@ -22,7 +22,8 @@ CREATE TABLE users(
        id SERIAL PRIMARY KEY,
        email TEXT UNIQUE,
        password TEXT,
-       reg_date DATE);
+       reg_date DATE,
+       reputation integer);
 
 
 DROP TABLE IF EXISTS public.question;

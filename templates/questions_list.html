@@ -41,9 +41,10 @@
             <button class="btn" type="submit">Sort now</button>
         </div>
     </form>
-
+    <a href="{{ url_for('get_user_info', email=email) }}">Profil</a>
     <a class="item3" href="{{ url_for('display_all_question') }}"><button>Show All Questions</button></a>
     <a class="item4" href="{{ url_for('users') }}"><button>Show All User</button></a>
+
 </div> <br><br>
 
 <table>
