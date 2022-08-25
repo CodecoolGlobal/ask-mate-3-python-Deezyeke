@@ -6,6 +6,7 @@ from psycopg2 import sql
 from psycopg2._psycopg import cursor
 
 from data_connection import connection_handler
+from bonus_questions import SAMPLE_QUESTIONS
 
 QUESTION_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
 ANSWER_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
@@ -438,6 +439,11 @@ def get_user_registration_date(cursor, user):
     WHERE email = %(usr)s
     """, {'usr': user})
     return cursor.fetchall()
+
+
+@connection_handler
+def get_bonus_questions():
+    pass
 
 
 # query = sql.SQL("select {field} from {table} where {pkey} = %s").format(

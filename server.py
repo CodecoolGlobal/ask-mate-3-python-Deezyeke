@@ -382,6 +382,11 @@ def users():
         return redirect(url_for('index'))
 
 
+@app.route('/bonus_questions')
+def show_bonus_questions():
+    pass
+
+
 if __name__ == "__main__":
     app.run(
         host='0.0.0.0',
