@@ -400,6 +400,12 @@ def users():
         return redirect(url_for('index'))
 
 
+@app.route('/bonus_questions')
+def show_bonus_questions():
+    bonus = data_handler.get_bonus_questions()
+    return render_template('bonus_questions.html', questions=bonus)
+
+
 @app.route('/tags')
 def tags():
     questions_tags = get_questions_tags()

@@ -4,6 +4,7 @@ import psycopg2
 import psycopg2.extras
 from psycopg2 import sql
 from psycopg2._psycopg import cursor
+from bonus_questions import SAMPLE_QUESTIONS
 from data_connection import connection_handler
 
 QUESTION_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
@@ -250,6 +251,11 @@ def read_a_comments(cursor):
             WHERE question_id is null"""
     cursor.execute(query)
     return cursor.fetchall()
+
+
+@connection_handler
+def get_bonus_questions(cursor):
+    return SAMPLE_QUESTIONS
 
 
 @connection_handler

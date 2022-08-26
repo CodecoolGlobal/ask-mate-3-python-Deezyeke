@@ -1,5 +1,13 @@
-a{
+a:link {
     color: white;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:visited {
+    color: aliceblue;
+    background-color: transparent;
+    text-decoration: none;
 }
 
 body {

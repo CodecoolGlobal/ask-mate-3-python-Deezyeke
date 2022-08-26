@@ -1,19 +1,22 @@
+<!DOCTYPE html>
 <html>
+<meta charset="UTF-8">
     <head>
         <script type="text/javascript" src="{{ url_for('static', filename='js/bonusQuestions.js') }}" defer></script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/doNotModifyThisFile.js') }}" defer></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}">
     </head>
     <body>
         <h1>AskMate</h1>
         <h2>All Questions:</h2>
-        <button id="theme-button">Change Theme to Dark</button>
+        <button id="theme-button">Change Theme to Light</button>
         <button id="increase-font-button">Increase page font</button>
         <button id="decrease-font-button">Decrease page font</button>
         <input
                 data-table-body="doNotModifyThisId_QuestionsTableBody"
                 style="width: 500px" id="doNotModifyThisId_QuestionsFilter"
                 type="text"
-                placeholder="filter questions by keywords">
+                placeholder="Filter questions by keywords...">
         <table>
             <thead id="doNotModifyThisId_QuestionsTableHeader">
                 <tr>
@@ -34,5 +37,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        <button type="button">
+            <a href="/"> Back to home </a></button>
     </body>
 </html>
