@@ -1,6 +1,15 @@
-a{
+a:link {
     color: white;
+    background-color: transparent;
+    text-decoration: none;
 }
+
+a:visited {
+    color: aliceblue;
+    background-color: transparent;
+    text-decoration: none;
+}
+
 body {
     background-color: black;
     background-image: linear-gradient(to left, #010101, lightseagreen);

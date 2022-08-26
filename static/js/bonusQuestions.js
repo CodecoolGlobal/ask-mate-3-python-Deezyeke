@@ -7,7 +7,6 @@ function getSortedItems(items, sortField, sortDirection) {
     // === SAMPLE CODE ===
     // if you have not changed the original html uncomment the code below to have an idea of the
     // effect this function has on the table
-    //
     if (sortDirection === "asc") {
         const firstItem = items.shift()
         if (firstItem) {
@@ -25,28 +24,26 @@ function getSortedItems(items, sortField, sortDirection) {
 
 // you receive an array of objects which you must filter by all it's keys to have a value matching "filterValue"
 function getFilteredItems(items, filterValue) {
-    console.log(items)
-    console.log(filterValue)
+    //console.log(items)
+    //console.log(filterValue)
 
     // === SAMPLE CODE ===
     // if you have not changed the original html uncomment the code below to have an idea of the
     // effect this function has on the table
-    //
-    for (let i=0; i<filterValue.length; i++) {
-        items.pop()
-    }
-
-    return items
+    filtered = items.filter(item => {
+        return item.Title.toLowerCase().includes(filterValue.toLowerCase()) || item.Description.toLowerCase().includes(filterValue.toLowerCase())
+    });
+    return filtered
 }
 
 function toggleTheme() {
-    console.log("toggle theme")
+    console.log("toggle theme WIP")
 }
 
 function increaseFont() {
-    console.log("increaseFont")
+    console.log("increaseFont WIP")
 }
 
 function decreaseFont() {
-    console.log("decreaseFont")
+    console.log("decreaseFont WIP")
 }

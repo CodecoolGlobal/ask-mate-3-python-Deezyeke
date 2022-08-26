@@ -4,6 +4,7 @@ import psycopg2
 import psycopg2.extras
 from psycopg2 import sql
 from psycopg2._psycopg import cursor
+from bonus_questions import SAMPLE_QUESTIONS
 from data_connection import connection_handler
 
 QUESTION_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
@@ -253,6 +254,11 @@ def read_a_comments(cursor):
 
 
 @connection_handler
+def get_bonus_questions(cursor):
+    return SAMPLE_QUESTIONS
+
+
+@connection_handler
 def get_question_tags(cursor, question_id):
     query = '''SELECT tag_id, name
             FROM question_tag
@@ -391,7 +397,7 @@ def sort_questions(cursor, order_by):
 
 
 @connection_handler
-def add_new_user(cursor, email, password_hashed_text, reg_date):
+def add_new_user(cursor, email, password_hashed_text, reg_date, reputation):
     query = sql.SQL('INSERT INTO users (email, password, reg_date, reputation) VALUES ({}, {}, {}, {})').format(sql.Literal(email),
                                                                                                 sql.Literal(
                                                                                                     password_hashed_text),
