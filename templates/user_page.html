@@ -46,16 +46,18 @@
             <th>Title</th>
             <th>Message</th>
         </tr>
-        <tr>
+
             {% for info in user_questions %}
-                <td><a href="{{ url_for('display_question', q_id=info['id']) }}">{{ info['id'] }}</a></td>
-                <td>{{ info['submission_time'] }}</td>
-                <td>{{ info['view_number'] }}</td>
-                <td>{{ info['vote_number'] }}</td>
-                <td>{{ info['title'] }}</td>
-                <td>{{ info['message'] }}</td>
+                <tr>
+                    <td><a href="{{ url_for('display_question', q_id=info['id']) }}">{{ info['id'] }}</a></td>
+                    <td>{{ info['submission_time'] }}</td>
+                    <td>{{ info['view_number'] }}</td>
+                    <td>{{ info['vote_number'] }}</td>
+                    <td>{{ info['title'] }}</td>
+                    <td>{{ info['message'] }}</td>
+                </tr>
             {% endfor %}
-        </tr>
+
     </table>
     <h2>Answers:</h2>
     <table>
@@ -65,14 +67,16 @@
             <th>Vote number</th>
             <th>Message</th>
         </tr>
-        <tr>
+
             {% for info in user_answers %}
-                <td><a href="{{ url_for('display_question', q_id=info['question_id']) }}">{{ info['id'] }}</a></td>
-                <td>{{ info['submission_time'] }}</td>
-                <td>{{ info['vote_number'] }}</td>
-                <td>{{ info['message'] }}</td>
+                <tr>
+                    <td><a href="{{ url_for('display_question', q_id=info['question_id']) }}">{{ info['id'] }}</a></td>
+                    <td>{{ info['submission_time'] }}</td>
+                    <td>{{ info['vote_number'] }}</td>
+                    <td>{{ info['message'] }}</td>
+                </tr>
             {% endfor %}
-        </tr>
+
     </table>
     <h2>Comments:</h2>
     <table>

@@ -36,13 +36,15 @@ def registration():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-        session['email'] = email
+
         password_hashed_text = generate_hash(password).decode()
         reg_date = date.today()
         reputation = 0
         print(reg_date)
         try:
             add_new_user(email, password_hashed_text, reg_date, reputation)
+            session['email'] = email
+            session['user_id'] = data_handler.get_user_id_by_email(email)['id']
         except psycopg2.errors.UniqueViolation:
             return render_template('registration.html', already_taken=True)
         else:

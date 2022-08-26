@@ -391,7 +391,7 @@ def sort_questions(cursor, order_by):
 
 
 @connection_handler
-def add_new_user(cursor, email, password_hashed_text, reg_date):
+def add_new_user(cursor, email, password_hashed_text, reg_date, reputation):
     query = sql.SQL('INSERT INTO users (email, password, reg_date, reputation) VALUES ({}, {}, {}, {})').format(sql.Literal(email),
                                                                                                 sql.Literal(
                                                                                                     password_hashed_text),
