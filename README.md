@@ -1,8 +1,37 @@
-# AskMate (sprint 3)
+# Zsaszk! - A forum page web application
 
-## Story
+## Short introduction
 
-Last week you made great progress improving your web application.
+This is the third and last sprint of our team project at our programming school Codecool, it's about creating a web app where anyone can ask anything. You can visit the page as a guest and view questions and answers. If you'd like to, you can create a new user to be able to ask and answer questions, as well as to tag, upvote or downvote them. There are also a number of little inside jokes and easter eggs we've hidden inside the webpage or the code.
+
+## Technologies
+
+- backend, server: Python Flask
+- template design: HTML, CSS, SCSS (grid, flex)
+- template engine: Jinja2
+- database: PostgreSQL
+- encryption, password hashing: Bcrypt
+- Gitflow workflow
+- Javascript basic DOM manipulation
+
+## Installation guide
+
+1. You'll need at least Python 3.8 to be able to run the server. Please install Python 3.8 and a compatible version of pip package manager.
+2. Install the necessary requirements with pip included in the "requirements.txt" file.
+3. Install PostgreSQL (and optionally PgAdmin) and create a new database for this app (database name "zsaszk-3" by default), run "ask_mate_sprint_3.sql" code to set up a database schema.
+4. Modify the ".env" file using your own environment variable for the project
+5. (Optional) Install a Python IDE to be able to open and execute the project files more easily. Jetbrains Pycharm or VS Code is recommended.
+6. Execute the "server.py" file, run as an administrator if necessary.
+7. If the server runs flawlessly, you'll see it responding in the console log.
+8. Navigate to "localhost:5000" in a browser of your choice.
+9. If everything is working as intended, you'll see the homepage of our website.
+10. Have fun!
+
+If you'd like to ask any questions or you have trouble setting up the work environment or the server please contact me, SzimBensze. The project is considered finished and is not going to recieve any updates soon. Contributors: Deezyeke, MiMi0001, ahpmh, WonkeTomi, SzimBensze. Please look for the contirbutors sidebar for more contact information.
+
+## Task description and backstory
+
+"Last week you made great progress improving your web application.
 We need some more features to make it more usable and more appealing to users.
 
 The users requested new features, such as the ability to register and login.
@@ -19,19 +48,9 @@ Just like last week, you have a **prioritized list** of new user stories that yo
 add to the unfinished stories from last week on your product backlog. Try to
 estimate these new stories as well, and, based on the estimations, decide how many
 your team can finish until the demo. As the order is important, you choose
-from the beginning of the list as much as you can.
+from the beginning of the list as much as you can."
 
-## What are you going to learn?
-
-- Web routing and redirects
-- Gitflow workflow
-- Advanced SQL commands (`JOIN`, `GROUP BY`, and aggregate functions)
-- User authentication with sessions
-- Hashed passwords
-- HTML and the Jinja2 templating engine
-- Javascript basics DOM manipulation
-
-## Tasks
+### This week's goals
 
 1. Since you work in a new repository, but also need the code from the previous sprint, add the `ask-mate-3` repository as a new remote to the repository of the previous sprint, then pull (merge) and push your changes into it.
     - There is a merge commit in the project repository that contains code from the previous sprint.
@@ -127,55 +146,6 @@ from the beginning of the list as much as you can.
     - Clicking the `Decrease page font` button decreases the font the page.
     - Clicking the `Decrease page font` button multiple times decreases the font size to a minimum of 3. Further clicks do not result in an decrease.
 
-## General requirements
+## End note
 
-- Use gitflow workflow in your team projects from now on.
-
-## Hints
-
-- Use the `CREATE` and `ALTER TABLE` statements to extend and change the database. For more information, see
-  [this link](https://www.w3schools.com/sql/sql_alter.asp).
-  (Do not forget to set up the foreign keys if you need them.)
-- Use one of the following methods to add a value to the timestamp column of a database.
-    - Use strings in the following format `'1999-01-08 04:05:06'`,
-    - Pass a `datetime` object to the SQL query as a parameter if you use `psycopg2` and the `datetime` module. For more information on date and time handling in psycopg2, see the Background section.
-- Insert data into the tables in the appropriate order to avoid violating foreign
-key constraints (for example, if you insert data into the `question_tag` before inserting
-  the corresponding tag ID in the tag table, the tag you refer to does not exist yet).
-  This is especially important after changing the database structure with new foreign keys.
-  Consider modifying the sample data based on your changes.
-- Optimize your previous queries by applying your knowledge of complex queries and joined tables.
-- Remeber that some user stories have prerequisites.
-
-## Background materials
-
-### Git
-
-- <i class="far fa-exclamation"></i> [Working with the `git remote` command](https://git-scm.com/docs/git-remote)
-- <i class="far fa-book-open"></i> [Merge vs rebase](project/curriculum/materials/pages/git/merge-vs-rebase.md)
-- <i class="far fa-book-open"></i> [Mastering git](project/curriculum/materials/pages/git/mastering-git.md)
-
-### SQL
-
-- <i class="far fa-exclamation"></i> [Working with more complex data](project/curriculum/materials/pages/sql/sql-working-with-data.md)
-- [SQL injection](project/curriculum/materials/pages/web-security/sql-injection.md)
-- [Best practices for Python/Psycopg/Postgres](project/curriculum/materials/pages/python/tips-python-psycopg-postgres.md)
-- [Date/Time handling in psycopg2](https://www.psycopg.org/docs/usage.html?highlight=gunpoint#date-time-objects-adaptation)
-- <i class="far fa-book-open"></i> [PostgreSQL documentation page on Queries](https://www.postgresql.org/docs/current/queries.html)
-- <i class="far fa-book-open"></i> [PostgreSQL documentation page Data Manipulation](https://www.postgresql.org/docs/current/dml.html)
-
-### Workflow
-
-- <i class="far fa-exclamation"></i> [Gitflow workflow](project/curriculum/materials/pages/git/git-branching.md)
-
-### Web basics (Sessions/Flask)
-
-- <i class="far fa-exclamation"></i> [Sessions](project/curriculum/materials/pages/web/authentication-sessions.md)
-- <i class="far fa-exclamation"></i> [Salted password hashing](project/curriculum/materials/pages/web-security/salted-password-hashing.md)
-- <i class="far fa-exclamation"></i> [Flask documentation](http://flask.palletsprojects.com/) (especially the quickstart#the-request-object and quickstart#sessions part)
-- [Flask/Jinja Tips & Tricks](project/curriculum/materials/pages/web/web-with-python-tips.md)
-- [Passing data from browser](project/curriculum/materials/pages/web/passing-data-from-browser.md)
-- <i class="far fa-book-open"></i> [HTTP is stateless](project/curriculum/materials/pages/web/authentication-http-stateless.md)
-- <i class="far fa-book-open"></i> [Cookies](project/curriculum/materials/pages/web/authentication-cookies.md)
-- <i class="far fa-book-open"></i> [Jinja2 documentation](https://jinja.palletsprojects.com/en/2.10.x/templates/)
-- <i class="far fa-book-open"></i> [Collection of web resources](project/curriculum/materials/pages/web/resources.md)
+The project is public, but please do not copy and reshare the source without permission! Only use for personal or educational purposes.
