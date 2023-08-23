@@ -2,7 +2,7 @@
 
 ## Short introduction
 
-This is the third and last sprint of our team project at our programming school Codecool, it's about creating a web app where anyone can ask anything. You can visit the page as a guest and view questions and answers. If you'd like to, you can create a new user to be able to ask and answer questions, as well as to tag, upvote or downvote them. There are also a number of little inside jokes and easter eggs we've hidden inside the webpage or the code.
+This is the third and last sprint of our team project named "Zsaszk!" at our programming school Codecool, it's about creating a web app where anyone can ask anything. You can visit the page as a guest and view questions and answers. If you'd like to, you can create a new user to be able to ask and answer questions, as well as to tag, upvote or downvote them. There are also a number of little inside jokes and easter eggs we've hidden inside the webpage or the code.
 
 ## Technologies
 
@@ -23,11 +23,11 @@ This is the third and last sprint of our team project at our programming school 
 5. (Optional) Install a Python IDE to be able to open and execute the project files more easily. Jetbrains Pycharm or VS Code is recommended.
 6. Execute the "server.py" file, run as an administrator if necessary.
 7. If the server runs flawlessly, you'll see it responding in the console log.
-8. Navigate to "localhost:5000" in a browser of your choice.
-9. If everything is working as intended, you'll see the homepage of our website.
+8. Navigate to "localhost:5000" in a web browser of your choice.
+9. If everything is working as intended, you'll see the homepage of our website. Press Ctrl+F5 to reload the page, if necessary.
 10. Have fun!
 
-If you'd like to ask any questions or you have trouble setting up the work environment or the server please contact me, SzimBensze. The project is considered finished and is not going to recieve any updates soon. Contributors: Deezyeke, MiMi0001, ahpmh, WonkeTomi, SzimBensze. Please look for the contirbutors sidebar for more contact information.
+If you'd like to ask any questions or you have trouble setting up the work environment or the server please contact me, SzimBensze. The project is considered finished and is not going to recieve any updates soon. Contributors: Deezyeke, MiMi0001, ahpmh, WonkeTomi, SzimBensze. Please look for the contributors sidebar for more contact information.
 
 ## Task description and backstory
 
@@ -148,4 +148,4 @@ from the beginning of the list as much as you can."
 
 ## End note
 
-The project is public, but please do not copy and reshare the source without permission! Only use for personal or educational purposes.
+The project is public, but please do not copy and reshare the source without permission! Only use for personal or educational purposes. Thank you for checking out our repo!
